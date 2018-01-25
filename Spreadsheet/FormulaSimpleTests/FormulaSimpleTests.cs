@@ -123,5 +123,16 @@ namespace FormulaTestCases
                 default: throw new UndefinedVariableException(v);
             }
         }
+
+
+        //MY TESTS
+        [TestMethod]
+        public void TestTheGetTokens()
+        {
+            Console.WriteLine("ok");
+            Formula f = new Formula("x+2");
+            f.TestGetTokens("(x + y) * (z / x) * 1.0");
+            Console.WriteLine("hellopksdjfa;lksdfj");
+        }
     }
 }

@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Linq;
 
 namespace Formulas
 {
@@ -15,6 +16,7 @@ namespace Formulas
     /// </summary>
     public class Formula
     {
+        IEnumerable<string> theFormula;
         /// <summary>
         /// Creates a Formula from a string that consists of a standard infix expression composed
         /// from non-negative floating-point numbers (using C#-like syntax for double/int literals), 
@@ -37,7 +39,88 @@ namespace Formulas
         /// </summary>
         public Formula(String formula)
         {
+            int tokenCount = 0, lParenCt = 0, rParenCt = 0;
+            String lpPattern = @"^\($";
+            String rpPattern = @"^\)$";
+            String opPattern = @"^[\+\-*/]$";
+            String varPattern = @"^[a-zA-Z][0-9a-zA-Z]*$";
+            String dbPattern = @"^-?\d+(?:\.\d+)?$";
+            Boolean wasOP = false, wasNVC = false;
+            IEnumerable<string> theTokens = GetTokens(formula);
+            
+            foreach (string s in theTokens)
+            {
+                if (wasOP) // if token follows opening parenth or operator
+                {
+                    if (!Regex.IsMatch(s, lpPattern) && !Regex.IsMatch(s, varPattern)
+                        && !Regex.IsMatch(s, @"^\d+$") && !Regex.IsMatch(s, dbPattern))
+                    {
+                        throw new FormulaFormatException("Opening parentheses and operators must be followed by a number, " +
+                            "variable, or opening parenthesis.");
+                    }
+                    wasOP = false;
+                }
+                if (wasNVC) // if token follows num, var, or closing parenth
+                {
+                    if (!Regex.IsMatch(s, opPattern) && !Regex.IsMatch(s, rpPattern))
+                    {
+                        throw new FormulaFormatException("Number, variable, or closing parenthesis must be followed " +
+                            "by an operator or closing parenthesis");
+                    }
+                    wasNVC = false;
+                }
+
+                if (s.Equals("("))
+                {
+                    lParenCt++;
+                    wasOP = true;
+                }
+                else if (s.Equals(")"))
+                {
+                    rParenCt++;
+                    wasNVC = true;
+                }
+                if (rParenCt > lParenCt)
+                {
+                    throw new FormulaFormatException("More right parentheses than left parentheses");
+                }
+                
+                if (Regex.IsMatch(s, opPattern))
+                {
+                    wasOP = true;
+                }
+
+                if (Regex.IsMatch(s, @"^\d+$") || Regex.IsMatch(s, dbPattern) || Regex.IsMatch(s, varPattern))
+                {
+                    wasNVC = true;
+                }
+
+                tokenCount++;
+            }
+            if (tokenCount < 1)
+            {
+                throw new FormulaFormatException("At least one token is required.");
+            }
+            if (rParenCt != lParenCt)
+            {
+                throw new FormulaFormatException("Unequal numbers of right and left parentheses");
+            }
+
+            // Check first and last
+            if (!Regex.IsMatch(theTokens.First(), lpPattern) && !Regex.IsMatch(theTokens.First(), varPattern)
+                && !Regex.IsMatch(theTokens.First(), @"^\d+$") && !Regex.IsMatch(theTokens.First(), dbPattern))
+            {
+                throw new FormulaFormatException("First token must be a number, variable, or an opening parenthesis");
+            }
+            if (!Regex.IsMatch(theTokens.Last(), rpPattern) && !Regex.IsMatch(theTokens.Last(), varPattern)
+                && !Regex.IsMatch(theTokens.Last(), @"^\d+$") && !Regex.IsMatch(theTokens.Last(), dbPattern))
+            {
+                throw new FormulaFormatException("Last token must be a number, variable, or a closing parenthesis");
+            }
+
+            theFormula = theTokens;
         }
+
         /// <summary>
         /// Evaluates this Formula, using the Lookup delegate to determine the values of variables.  (The
         /// delegate takes a variable name as a parameter and returns its value (if it has one) or throws
@@ -49,7 +132,148 @@ namespace Formulas
         /// </summary>
         public double Evaluate(Lookup lookup)
         {
-            return 0;
+            Stack<double> val = new Stack<double>();
+            Stack<string> op = new Stack<string>();
+            String dbPattern = @"^-?\d+(?:\.\d+)?$";
+
+            foreach (string s in theFormula)
+            {
+                if (Regex.IsMatch(s, @"^\d+$") || Regex.IsMatch(s, dbPattern)) // token is double
+                {
+                    double sDb = Convert.ToDouble(s);
+                    if (op.Count > 0 && op.Peek().Equals("*")) {
+                        op.Pop();
+                        double newVal = val.Pop() * sDb;
+                        val.Push(newVal);
+                    }
+                    else if (op.Count > 0 && op.Peek().Equals("/"))
+                    {
+                        if (sDb == 0)
+                        {
+                            throw new FormulaEvaluationException("Cannot divide by zero");
+                        }
+                        op.Pop();
+                        double newVal = val.Pop() / sDb;
+                        val.Push(newVal);
+                    }
+                    else
+                    {
+                        val.Push(sDb);
+                    }
+                }
+                else if (Regex.IsMatch(s, @"^[a-zA-Z][0-9a-zA-Z]*$")) // token is a variable
+                {
+                    double sDb;
+                    try
+                    {
+                        sDb = lookup(s);
+                    }
+                    catch (UndefinedVariableException)
+                    {
+                        throw new FormulaEvaluationException("Variable has no value");
+                    }
+
+
+                    if (op.Count > 0 && op.Peek().Equals("*"))
+                    {
+                        op.Pop();
+                        double newVal = val.Pop() * sDb;
+                        val.Push(newVal);
+                    }
+                    else if (op.Count > 0 && op.Peek().Equals("/"))
+                    {
+                        if (sDb == 0)
+                        {
+                            throw new FormulaEvaluationException("Cannot divide by zero");
+                        }
+                        op.Pop();
+                        double newVal = val.Pop() / sDb;
+                        val.Push(newVal);
+                    }
+                    else
+                    {
+                        val.Push(sDb);
+                    }
+                }
+                else if (s.Equals("+") || s.Equals("-")) // token is a + or -
+                {
+                    if (op.Count > 0 && op.Peek().Equals("+"))
+                    {
+                        op.Pop();
+                        double sum = val.Pop() + val.Pop();
+                        val.Push(sum);
+                    }
+                    else if (op.Count > 0 && op.Peek().Equals("-"))
+                    {
+                        op.Pop();
+                        double dif = Math.Abs(val.Pop() - val.Pop());
+                        val.Push(dif);
+                    }
+                    op.Push(s);
+                }
+                else if (s.Equals("*") || s.Equals("/") || s.Equals("("))
+                {
+                    op.Push(s);
+                }
+                else if (s.Equals(")"))
+                {
+                    if (op.Count > 0 && op.Peek().Equals("+"))
+                    {
+                        op.Pop();
+                        double sum = val.Pop() + val.Pop();
+                        val.Push(sum);
+                    }
+                    else if (op.Count > 0 && op.Peek().Equals("-"))
+                    {
+                        op.Pop();
+                        double dif = Math.Abs(val.Pop() - val.Pop());
+                        val.Push(dif);
+                    }
+                    op.Pop();
+                    if (op.Count > 0 && op.Peek().Equals("*"))
+                    {
+                        op.Pop();
+                        double prod = val.Pop() * val.Pop();
+                        val.Push(prod);
+                    }
+                    else if (op.Count > 0 && op.Peek().Equals("/"))
+                    {
+                        op.Pop();
+                        double val2 = val.Pop();
+                        double val1 = val.Pop();
+                        val.Push(val1 / val2);
+
+                    }
+                }
+            }
+
+            if (op.Count == 0)
+            {
+                return val.Pop();
+            }
+            else
+            {
+                double toReturn;
+                if (op.Count > 0 && op.Peek().Equals("+"))
+                {
+                    toReturn = val.Pop() + val.Pop();
+                }
+                else
+                {
+                    toReturn = Math.Abs(val.Pop() - val.Pop());
+                }
+                return toReturn;
+            }
+        }
+
+        //TEST METHOD DELETE
+        public void TestGetTokens(String formula)
+        {
+            IEnumerable<string> theTokens = GetTokens(formula);
+            foreach(string s in theTokens)
+            {
+                Console.WriteLine(s);
+            }
         }
 
         /// <summary>
