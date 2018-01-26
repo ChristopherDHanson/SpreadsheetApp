@@ -126,12 +126,160 @@ namespace FormulaTestCases
 
 
         //MY TESTS
+        /// <summary>
+        /// Empty formula passed into constructor
+        /// </summary>
         [TestMethod]
-        public void TestTheGetTokens()
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void TestNoTokens()
         {
-            Console.WriteLine("ok");
-            Formula f = new Formula("x+2");
-            Console.WriteLine("hellopksdjfa;lksdfj");
+            Formula f = new Formula("");
+        }
+
+        /// <summary>
+        /// Begin formula string with invalid first token
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void TestInvalidFirst()
+        {
+            Formula f = new Formula(")x-y)");
+        }
+
+        /// <summary>
+        /// Invalid last token
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void TestInvalidLast()
+        {
+            Formula f = new Formula("(5*x)-y!");
+        }
+
+        /// <summary>
+        /// Test constructor with formula consisting of '()'
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void TestJustParentheses()
+        {
+            Formula f = new Formula("()");
+        }
+
+        /// <summary>
+        /// Formula with more opening parantheses than closing; invalid
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void TestMoreOpeningPars()
+        {
+            Formula f = new Formula("((x+y)");
+        }
+
+        /// <summary>
+        /// Formula with more closing parentheses than opening; invalid
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void TestMoreClosingPars()
+        {
+            Formula f = new Formula("(x+y))");
+        }
+
+        /// <summary>
+        /// Formula has more closing parentheses than opening at one point, but finishes
+        /// with equal numbers of op and clos.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void TestMoreClosingAtOnePoint()
+        {
+            Formula f = new Formula("(x+y))-((5)");
+        }
+
+        /// <summary>
+        /// Two consecutive tokens of type variable; invalid
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void TestVarToVar()
+        {
+            Formula f = new Formula("(x - y y)");
+        }
+
+        /// <summary>
+        /// Uses example formula with double literals (containing 'e')
+        /// </summary>
+        [TestMethod]
+        public void TestExampleFormula()
+        {
+            Formula f = new Formula("2.5e9 + x5 / 17");
+        }
+
+        /// <summary>
+        /// Tests Evaluate() with a division by zero in the formula
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(FormulaEvaluationException))]
+        public void TestEvalWithDivByZero()
+        {
+            Formula f = new Formula("(2 / 0) + 5");
+            f.Evaluate(v => 7);
+        }
+
+        /// <summary>
+        /// Tests subtraction
+        /// </summary>
+        [TestMethod]
+        public void TestEvalWithSubtraction()
+        {
+            Formula f = new Formula("4949494-5574999");
+            double result = f.Evaluate(v => 7);
+            Assert.AreEqual(4949494 - 5574999, result);
+        }
+
+        /// <summary>
+        /// Division of doubles
+        /// </summary>
+        [TestMethod]
+        public void TestDivisionOfDoubles()
+        {
+            Formula f = new Formula("(4949494/5574999)");
+            double result = f.Evaluate(v => 7);
+            Assert.AreEqual((4949494.0 / 5574999.0), result);
+        }
+        
+        /// <summary>
+        /// Somewhat complicated switching operators
+        /// </summary>
+        [TestMethod]
+        public void TestSubFollowedByAddOperators()
+        {
+            Formula f = new Formula("((4-3+9)-5)");
+            double result = f.Evaluate(v => 7);
+            Assert.AreEqual((4-3+9)-5, result);
+        }
+
+        /// <summary>
+        /// Many divisions repeatedly
+        /// </summary>
+        [TestMethod]
+        public void TestDoubleDivisionTwice()
+        {
+            Formula f = new Formula("(494/94/94/5574999)");
+            double result = f.Evaluate(v => 7);
+            Assert.AreEqual((494.0 / 94.0 / 94.0 / 5574999.0), result);
+        }
+
+        /// <summary>
+        /// Add thrice
+        /// </summary>
+        [TestMethod]
+        public void TestDoubleAddThrice()
+        {
+            Formula f = new Formula("(494+94+94+5574999)");
+            double result = f.Evaluate(v => 7);
+            Assert.AreEqual((494.0 + 94.0 + 94.0 + 5574999.0), result);
         }
     }
 }

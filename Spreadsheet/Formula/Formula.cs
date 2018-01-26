@@ -45,7 +45,7 @@ namespace Formulas
             String rpPattern = @"^\)$";
             String opPattern = @"^[\+\-*/]$";
             String varPattern = @"^[a-zA-Z][0-9a-zA-Z]*$";
-            String dbPattern = @"^-?\d+(?:\.\d+)?$";
+            String doublePattern = @"^(?: \d+\.\d* | \d*\.\d+ | \d+ ) (?: e[\+-]?\d+)?$";
             Boolean wasOP = false, wasNVC = false; // booleans act as switches to show whether last token was a certain type
             IEnumerable<string> theTokens = GetTokens(formula);
             
@@ -54,7 +54,7 @@ namespace Formulas
                 if (wasOP) // if token follows opening parenth or operator
                 {
                     if (!Regex.IsMatch(s, lpPattern) && !Regex.IsMatch(s, varPattern)
-                        && !Regex.IsMatch(s, @"^\d+$") && !Regex.IsMatch(s, dbPattern))
+                        && !Regex.IsMatch(s, @"^\d+$") && !Regex.IsMatch(s, doublePattern, RegexOptions.IgnorePatternWhitespace))
                     {
                         throw new FormulaFormatException("Opening parentheses and operators must be followed by a number, " +
                             "variable, or opening parenthesis.");
@@ -91,7 +91,8 @@ namespace Formulas
                     wasOP = true; // token was operator, so switch on Boolean
                 }
 
-                if (Regex.IsMatch(s, @"^\d+$") || Regex.IsMatch(s, dbPattern) || Regex.IsMatch(s, varPattern))
+                if (Regex.IsMatch(s, @"^\d+$") || Regex.IsMatch(s, doublePattern, RegexOptions.IgnorePatternWhitespace)
+                    || Regex.IsMatch(s, varPattern))
                 {
                     wasNVC = true; // doken was int, double, or variable, so switch on Boolean
                 }
@@ -109,12 +110,14 @@ namespace Formulas
 
             // Check first and last
             if (!Regex.IsMatch(theTokens.First(), lpPattern) && !Regex.IsMatch(theTokens.First(), varPattern)
-                && !Regex.IsMatch(theTokens.First(), @"^\d+$") && !Regex.IsMatch(theTokens.First(), dbPattern))
+                && !Regex.IsMatch(theTokens.First(), @"^\d+$")
+                && !Regex.IsMatch(theTokens.First(), doublePattern, RegexOptions.IgnorePatternWhitespace))
             {
                 throw new FormulaFormatException("First token must be a number, variable, or an opening parenthesis");
             }
             if (!Regex.IsMatch(theTokens.Last(), rpPattern) && !Regex.IsMatch(theTokens.Last(), varPattern)
-                && !Regex.IsMatch(theTokens.Last(), @"^\d+$") && !Regex.IsMatch(theTokens.Last(), dbPattern))
+                && !Regex.IsMatch(theTokens.Last(), @"^\d+$")
+                && !Regex.IsMatch(theTokens.Last(), doublePattern, RegexOptions.IgnorePatternWhitespace))
             {
                 throw new FormulaFormatException("Last token must be a number, variable, or a closing parenthesis");
             }
@@ -135,11 +138,11 @@ namespace Formulas
         {
             Stack<double> val = new Stack<double>(); // stack holds values of tokens that are doubles, including var -> double
             Stack<string> op = new Stack<string>(); // holds tokens that are operators
-            String dbPattern = @"^-?\d+(?:\.\d+)?$"; // regular expression used to detect tokens that are doubles
+            String doublePattern = @"^(?: \d+\.\d* | \d*\.\d+ | \d+ ) (?: e[\+-]?\d+)?$"; // detects tokens that are doubles
 
             foreach (string s in theFormula)
             {
-                if (Regex.IsMatch(s, @"^\d+$") || Regex.IsMatch(s, dbPattern)) // token is double
+                if (Regex.IsMatch(s, @"^\d+$") || Regex.IsMatch(s, doublePattern, RegexOptions.IgnorePatternWhitespace)) // token is double
                 {
                     double sDb = Convert.ToDouble(s); // token value in type double
                     if (op.Count > 0 && op.Peek().Equals("*")) {
@@ -207,7 +210,9 @@ namespace Formulas
                     else if (op.Count > 0 && op.Peek().Equals("-"))
                     {
                         op.Pop();
-                        double dif = Math.Abs(val.Pop() - val.Pop());
+                        double val2 = val.Pop();
+                        double val1 = val.Pop();
+                        double dif = val1 - val2;
                         val.Push(dif);
                     }
                     op.Push(s);
@@ -227,7 +232,9 @@ namespace Formulas
                     else if (op.Count > 0 && op.Peek().Equals("-")) // if there is a '-' on top of op stack
                     {
                         op.Pop();
-                        double dif = Math.Abs(val.Pop() - val.Pop());
+                        double val2 = val.Pop();
+                        double val1 = val.Pop();
+                        double dif = val1 - val2;
                         val.Push(dif);
                     }
                     op.Pop();
@@ -261,21 +268,13 @@ namespace Formulas
                 }
                 else
                 {
-                    toReturn = Math.Abs(val.Pop() - val.Pop());
+                    double val2 = val.Pop();
+                    double val1 = val.Pop();
+                    toReturn = val1 - val2;
                 }
                 return toReturn;
             }
         }
-
-        ////TEST METHOD DELETE
-        //public void TestGetTokens(String formula)
-        //{
-        //    IEnumerable<string> theTokens = GetTokens(formula);
-        //    foreach(string s in theTokens)
-        //    {
-        //        Console.WriteLine(s);
-        //    }
-        //}
 
         /// <summary>
         /// Given a formula, enumerates the tokens that compose it.  Tokens are left paren,
