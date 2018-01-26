@@ -1,5 +1,5 @@
 ﻿// Written by Joe Zachary for CS 3500, January 2017.
-// More tests written by Christopher Hanson for CS 300, January 2017.
+// More tests written by Christopher Hanson for CS 3500, January 2017.
 
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
