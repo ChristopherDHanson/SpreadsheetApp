@@ -1,4 +1,5 @@
 ﻿// Skeleton written by Joe Zachary for CS 3500, January 2017
+// Formula and Evaluate methods written by Christopher Hanson (u1130422) for CS 3500, January 2017
 
 using System;
 using System.Collections.Generic;
@@ -39,13 +40,13 @@ namespace Formulas
         /// </summary>
         public Formula(String formula)
         {
-            int tokenCount = 0, lParenCt = 0, rParenCt = 0;
+            int tokenCount = 0, lParenCt = 0, rParenCt = 0; // total tokens, total '(', and total ')'
             String lpPattern = @"^\($";
             String rpPattern = @"^\)$";
             String opPattern = @"^[\+\-*/]$";
             String varPattern = @"^[a-zA-Z][0-9a-zA-Z]*$";
             String dbPattern = @"^-?\d+(?:\.\d+)?$";
-            Boolean wasOP = false, wasNVC = false;
+            Boolean wasOP = false, wasNVC = false; // booleans act as switches to show whether last token was a certain type
             IEnumerable<string> theTokens = GetTokens(formula);
             
             foreach (string s in theTokens)
@@ -58,7 +59,7 @@ namespace Formulas
                         throw new FormulaFormatException("Opening parentheses and operators must be followed by a number, " +
                             "variable, or opening parenthesis.");
                     }
-                    wasOP = false;
+                    wasOP = false; // turn switch off, as the case has been dealt with
                 }
                 if (wasNVC) // if token follows num, var, or closing parenth
                 {
@@ -67,18 +68,18 @@ namespace Formulas
                         throw new FormulaFormatException("Number, variable, or closing parenthesis must be followed " +
                             "by an operator or closing parenthesis");
                     }
-                    wasNVC = false;
+                    wasNVC = false; // turn switch off, case has been dealt with
                 }
 
                 if (s.Equals("("))
                 {
                     lParenCt++;
-                    wasOP = true;
+                    wasOP = true; // this token is an opening parenthesis, so change the corresponding Boolean
                 }
                 else if (s.Equals(")"))
                 {
                     rParenCt++;
-                    wasNVC = true;
+                    wasNVC = true; // token is a closing parenthesis, so change corresponding Boolean
                 }
                 if (rParenCt > lParenCt)
                 {
@@ -87,12 +88,12 @@ namespace Formulas
                 
                 if (Regex.IsMatch(s, opPattern))
                 {
-                    wasOP = true;
+                    wasOP = true; // token was operator, so switch on Boolean
                 }
 
                 if (Regex.IsMatch(s, @"^\d+$") || Regex.IsMatch(s, dbPattern) || Regex.IsMatch(s, varPattern))
                 {
-                    wasNVC = true;
+                    wasNVC = true; // doken was int, double, or variable, so switch on Boolean
                 }
 
                 tokenCount++;
@@ -118,7 +119,7 @@ namespace Formulas
                 throw new FormulaFormatException("Last token must be a number, variable, or a closing parenthesis");
             }
 
-            theFormula = theTokens;
+            theFormula = theTokens; // save the token data to the instance for future use
         }
 
         /// <summary>
@@ -132,15 +133,15 @@ namespace Formulas
         /// </summary>
         public double Evaluate(Lookup lookup)
         {
-            Stack<double> val = new Stack<double>();
-            Stack<string> op = new Stack<string>();
-            String dbPattern = @"^-?\d+(?:\.\d+)?$";
+            Stack<double> val = new Stack<double>(); // stack holds values of tokens that are doubles, including var -> double
+            Stack<string> op = new Stack<string>(); // holds tokens that are operators
+            String dbPattern = @"^-?\d+(?:\.\d+)?$"; // regular expression used to detect tokens that are doubles
 
             foreach (string s in theFormula)
             {
                 if (Regex.IsMatch(s, @"^\d+$") || Regex.IsMatch(s, dbPattern)) // token is double
                 {
-                    double sDb = Convert.ToDouble(s);
+                    double sDb = Convert.ToDouble(s); // token value in type double
                     if (op.Count > 0 && op.Peek().Equals("*")) {
                         op.Pop();
                         double newVal = val.Pop() * sDb;
@@ -163,12 +164,12 @@ namespace Formulas
                 }
                 else if (Regex.IsMatch(s, @"^[a-zA-Z][0-9a-zA-Z]*$")) // token is a variable
                 {
-                    double sDb;
+                    double sDb; // will hold the double value of the token
                     try
                     {
                         sDb = lookup(s);
                     }
-                    catch (UndefinedVariableException)
+                    catch (UndefinedVariableException) // catch naturally thrown exception, throw desired
                     {
                         throw new FormulaEvaluationException("Variable has no value");
                     }
@@ -211,47 +212,47 @@ namespace Formulas
                     }
                     op.Push(s);
                 }
-                else if (s.Equals("*") || s.Equals("/") || s.Equals("("))
+                else if (s.Equals("*") || s.Equals("/") || s.Equals("(")) // if token is one of these, push onto op stack
                 {
                     op.Push(s);
                 }
                 else if (s.Equals(")"))
                 {
-                    if (op.Count > 0 && op.Peek().Equals("+"))
+                    if (op.Count > 0 && op.Peek().Equals("+")) // if there is a '+' on top of op stack
                     {
                         op.Pop();
                         double sum = val.Pop() + val.Pop();
                         val.Push(sum);
                     }
-                    else if (op.Count > 0 && op.Peek().Equals("-"))
+                    else if (op.Count > 0 && op.Peek().Equals("-")) // if there is a '-' on top of op stack
                     {
                         op.Pop();
                         double dif = Math.Abs(val.Pop() - val.Pop());
                         val.Push(dif);
                     }
                     op.Pop();
-                    if (op.Count > 0 && op.Peek().Equals("*"))
+                    if (op.Count > 0 && op.Peek().Equals("*")) // if there is a '*' on top of op stack
                     {
                         op.Pop();
                         double prod = val.Pop() * val.Pop();
                         val.Push(prod);
                     }
-                    else if (op.Count > 0 && op.Peek().Equals("/"))
+                    else if (op.Count > 0 && op.Peek().Equals("/")) // if there is a "/" on top of op stack
                     {
                         op.Pop();
                         double val2 = val.Pop();
                         double val1 = val.Pop();
-                        val.Push(val1 / val2);
+                        val.Push(val1 / val2); // push quotient of top two values onto value stack
 
                     }
                 }
             }
 
-            if (op.Count == 0)
+            if (op.Count == 0) // if there are no operators left in the stack
             {
-                return val.Pop();
+                return val.Pop(); // return the final value
             }
-            else
+            else // otherwise, there will be one operator and two values
             {
                 double toReturn;
                 if (op.Count > 0 && op.Peek().Equals("+"))
@@ -266,15 +267,15 @@ namespace Formulas
             }
         }
 
-        //TEST METHOD DELETE
-        public void TestGetTokens(String formula)
-        {
-            IEnumerable<string> theTokens = GetTokens(formula);
-            foreach(string s in theTokens)
-            {
-                Console.WriteLine(s);
-            }
-        }
+        ////TEST METHOD DELETE
+        //public void TestGetTokens(String formula)
+        //{
+        //    IEnumerable<string> theTokens = GetTokens(formula);
+        //    foreach(string s in theTokens)
+        //    {
+        //        Console.WriteLine(s);
+        //    }
+        //}
 
         /// <summary>
         /// Given a formula, enumerates the tokens that compose it.  Tokens are left paren,
