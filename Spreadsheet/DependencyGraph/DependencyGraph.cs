@@ -77,11 +77,15 @@ namespace Dependencies
         /// </summary>
         public bool HasDependents(string s)
         {
-            Dependency whatWeAreTesting = (Dependency) depGraph.GetByIndex(depGraph.IndexOfKey(s));
-            String[] dependentsArr = whatWeAreTesting.dents;
-            if (dependentsArr != null && dependentsArr.Length > 0)
+            int ind = depGraph.IndexOfKey(s);
+            if (ind > -1)
             {
-                return true;
+                Dependency whatWeAreTesting = (Dependency)depGraph.GetByIndex(ind);
+                List<String> dependents = whatWeAreTesting.dents;
+                if (dependents.Count > 0)
+                {
+                    return true;
+                }
             }
 
             return false;
@@ -92,6 +96,17 @@ namespace Dependencies
         /// </summary>
         public bool HasDependees(string s)
         {
+            int ind = depGraph.IndexOfKey(s);
+            if (ind > -1)
+            {
+                Dependency whatWeAreTesting = (Dependency)depGraph.GetByIndex(ind);
+                List<String> dependees = whatWeAreTesting.dees;
+                if (dependees.Count > 0)
+                {
+                    return true;
+                }
+            }
+
             return false;
         }
 
@@ -100,6 +115,11 @@ namespace Dependencies
         /// </summary>
         public IEnumerable<string> GetDependents(string s)
         {
+            if (s == null)
+            {
+                throw new 
+            }
+
             return null;
         }
 
@@ -150,8 +170,8 @@ namespace Dependencies
         private class Dependency
         {
             internal String name;
-            internal String[] dents;
-            internal String[] dees;
+            internal List<String> dents;
+            internal List<String> dees;
         }
     }
 }
