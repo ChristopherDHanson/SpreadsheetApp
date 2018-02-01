@@ -1,6 +1,7 @@
 ﻿// Skeleton implementation written by Joe Zachary for CS 3500, January 2018.
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Dependencies
@@ -48,11 +49,19 @@ namespace Dependencies
     /// </summary>
     public class DependencyGraph
     {
+        SortedList depGraph;
+
         /// <summary>
         /// Creates a DependencyGraph containing no dependencies.
         /// </summary>
         public DependencyGraph()
         {
+            depGraph = new SortedList();
+            SortedList kk = new SortedList();
+            kk.Add(1, "one");
+            kk.Add(2, "two");
+            int ind = kk.IndexOfKey("two");
+            kk.GetByIndex(ind);
         }
 
         /// <summary>
@@ -60,7 +69,7 @@ namespace Dependencies
         /// </summary>
         public int Size
         {
-            get { return 0; }
+            get { return depGraph.Count; }
         }
 
         /// <summary>
@@ -68,6 +77,13 @@ namespace Dependencies
         /// </summary>
         public bool HasDependents(string s)
         {
+            Dependency whatWeAreTesting = (Dependency) depGraph.GetByIndex(depGraph.IndexOfKey(s));
+            String[] dependentsArr = whatWeAreTesting.dents;
+            if (dependentsArr != null && dependentsArr.Length > 0)
+            {
+                return true;
+            }
+
             return false;
         }
 
@@ -129,6 +145,13 @@ namespace Dependencies
         /// </summary>
         public void ReplaceDependees(string t, IEnumerable<string> newDependees)
         {
+        }
+
+        private class Dependency
+        {
+            internal String name;
+            internal String[] dents;
+            internal String[] dees;
         }
     }
 }
