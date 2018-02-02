@@ -1,4 +1,5 @@
 ﻿// Skeleton implementation written by Joe Zachary for CS 3500, January 2018.
+// Dependency class, method bodies written by Christopher Hanson for CS 3500, January 2018.
 
 using System;
 using System.Collections;
@@ -49,7 +50,7 @@ namespace Dependencies
     /// </summary>
     public class DependencyGraph
     {
-        SortedList depGraph;
+        Dictionary<String, Dependency> depGraph;
         int depCount = 0;
 
         /// <summary>
@@ -57,12 +58,7 @@ namespace Dependencies
         /// </summary>
         public DependencyGraph()
         {
-            depGraph = new SortedList();
-            SortedList kk = new SortedList();
-            kk.Add(1, "one");
-            kk.Add(2, "two");
-            int ind = kk.IndexOfKey("two");
-            kk.GetByIndex(ind);
+            depGraph = new Dictionary<string, Dependency>();
         }
 
         /// <summary>
@@ -78,12 +74,9 @@ namespace Dependencies
         /// </summary>
         public bool HasDependents(string s)
         {
-            int ind = depGraph.IndexOfKey(s);
-            if (ind > -1)
+            if (depGraph.TryGetValue(s, out Dependency halfDep))
             {
-                Dependency whatWeAreTesting = (Dependency)depGraph.GetByIndex(ind);
-                List<String> dependents = whatWeAreTesting.GetDents();
-                if (dependents.Count > 0)
+                if (halfDep.GetDents().Count > 0)
                 {
                     return true;
                 }
@@ -97,12 +90,9 @@ namespace Dependencies
         /// </summary>
         public bool HasDependees(string s)
         {
-            int ind = depGraph.IndexOfKey(s);
-            if (ind > -1)
+            if (depGraph.TryGetValue(s, out Dependency halfDep))
             {
-                Dependency whatWeAreTesting = (Dependency)depGraph.GetByIndex(ind);
-                List<String> dependees = whatWeAreTesting.GetDees();
-                if (dependees.Count > 0)
+                if (halfDep.GetDees().Count > 0)
                 {
                     return true;
                 }
@@ -121,11 +111,9 @@ namespace Dependencies
                 throw new InvalidParameterException("Parameter must not be null");
             }
 
-            int ind = depGraph.IndexOfKey(s);
-            if (ind > -1)
+            if (depGraph.TryGetValue(s, out Dependency halfDep))
             {
-                Dependency whatWeAreTesting = (Dependency)depGraph.GetByIndex(ind);
-                return whatWeAreTesting.GetDents();
+                return halfDep.GetDents();
             }
 
             return null;
@@ -141,11 +129,9 @@ namespace Dependencies
                 throw new InvalidParameterException("Parameter must not be null");
             }
 
-            int ind = depGraph.IndexOfKey(s);
-            if (ind > -1)
+            if (depGraph.TryGetValue(s, out Dependency halfDep))
             {
-                Dependency whatWeAreTesting = (Dependency)depGraph.GetByIndex(ind);
-                return whatWeAreTesting.GetDees();
+                return halfDep.GetDees();
             }
 
             return null;
@@ -158,15 +144,35 @@ namespace Dependencies
         /// </summary>
         public void AddDependency(string s, string t)
         {
-            Dependency sDep = new Dependency(s);
-            Dependency tDep = new Dependency(t);
-            sDep.AddDependent(t);
-            tDep.AddDependee(s);
+            if (s == null || t == null)
+            {
+                throw new InvalidParameterException("Strings cannot be null");
+            }
 
-            depGraph.Add(s, sDep);
-            depGraph.Add(t, tDep);
+            Dependency sDep, tDep;
+            if (depGraph.TryGetValue(s, out sDep))
+            {
+            }
+            else
+            {
+                sDep = new Dependency(s);
+                depGraph.Add(s, sDep);
+            }
 
-            depCount++;
+            if (depGraph.TryGetValue(t, out tDep))
+            {
+            }
+            else
+            {
+                tDep = new Dependency(t);
+                depGraph.Add(t, tDep);
+            }
+
+            if (sDep.AddDependent(t))
+            {
+                tDep.AddDependee(s);
+                depCount++;
+            }
         }
 
         /// <summary>
@@ -180,25 +186,22 @@ namespace Dependencies
                 throw new InvalidParameterException("Parameters must not be null");
             }
 
-            int ind = depGraph.IndexOfKey(s);
-            if (ind > -1)
+            if (depGraph.TryGetValue(s, out Dependency halfDepS))
             {
-                Dependency whatWeAreTesting = (Dependency)depGraph.GetByIndex(ind);
-                ind = whatWeAreTesting.IndexOfDependent(t);
+                int ind = halfDepS.IndexOfDependent(t);
                 if (ind > -1)
                 {
-                    whatWeAreTesting.RemoveFromDependents(ind);
+                    halfDepS.RemoveFromDependents(ind);
 
-                    if (whatWeAreTesting.GetDents().Count == 0 && whatWeAreTesting.GetDees().Count == 0)
+                    if (halfDepS.GetDents().Count == 0 && halfDepS.GetDees().Count == 0)
                     {
                         depGraph.Remove(s);
                     }
 
-                    ind = depGraph.IndexOfKey(t);
-                    whatWeAreTesting = (Dependency)depGraph.GetByIndex(ind);
-                    whatWeAreTesting.RemoveFromDependees(s);
+                    depGraph.TryGetValue(t, out Dependency halfDepT);
+                    halfDepT.RemoveFromDependees(halfDepT.IndexOfDependee(s));
 
-                    if (whatWeAreTesting.GetDents().Count == 0 && whatWeAreTesting.GetDees().Count == 0)
+                    if (halfDepT.GetDents().Count == 0 && halfDepT.GetDees().Count == 0)
                     {
                         depGraph.Remove(t);
                     }
@@ -216,6 +219,29 @@ namespace Dependencies
         /// </summary>
         public void ReplaceDependents(string s, IEnumerable<string> newDependents)
         {
+            if (s == null || newDependents == null)
+            {
+                throw new InvalidParameterException("Parameter must not be null");
+            }
+
+            if (depGraph.TryGetValue(s, out Dependency halfDep))
+            {
+                foreach (string x in halfDep.GetDents())
+                {
+                    depGraph.TryGetValue(x, out Dependency dependentOfS);
+                    dependentOfS.RemoveFromDependees(dependentOfS.IndexOfDependee(s));
+                    depCount--;
+                }
+                halfDep.ClearDependents();
+
+                foreach (string t in newDependents)
+                {
+                    if (t != null)
+                    {
+                        AddDependency(s, t);
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -225,6 +251,29 @@ namespace Dependencies
         /// </summary>
         public void ReplaceDependees(string t, IEnumerable<string> newDependees)
         {
+            if (t == null || newDependees == null)
+            {
+                throw new InvalidParameterException("Parameter must not be null");
+            }
+
+            if (depGraph.TryGetValue(t, out Dependency halfDep))
+            {
+                foreach (string x in halfDep.GetDees())
+                {
+                    depGraph.TryGetValue(x, out Dependency dependeeOfT);
+                    dependeeOfT.RemoveFromDependents(dependeeOfT.IndexOfDependent(t));
+                    depCount--;
+                }
+                halfDep.ClearDependents();
+
+                foreach (string s in newDependees)
+                {
+                    if (s != null)
+                    {
+                        AddDependency(s, t);
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -241,14 +290,22 @@ namespace Dependencies
                 name = n;
             }
 
-            internal void AddDependent (string dent)
+            internal bool AddDependent (string dent)
             {
-                dents.Add(dent);
+                if (!dents.Contains(dent))
+                {
+                    dents.Add(dent);
+                    return true;
+                }
+                return false;
             }
 
             internal void AddDependee (string dee)
             {
-                dees.Add(dee);
+                if (!dees.Contains(dee))
+                {
+                    dees.Add(dee);
+                }
             }
 
             internal List<String> GetDents ()
@@ -279,6 +336,16 @@ namespace Dependencies
             internal void RemoveFromDependees(int index)
             {
                 dees.RemoveAt(index);
+            }
+
+            internal void ClearDependents()
+            {
+                dents.Clear();
+            }
+
+            internal void ClearDependees()
+            {
+                dees.Clear();
             }
         }
     }
