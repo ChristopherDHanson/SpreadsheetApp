@@ -306,6 +306,23 @@ namespace DependencyGraphTestCases
         }
 
         /// <summary>
+        /// Removing a dependency that does not exist
+        /// </summary>
+        [TestMethod]
+        public void RemoveNonexistentDependency()
+        {
+            DependencyGraph testGraph = new DependencyGraph();
+            testGraph.AddDependency("a", "b");
+            testGraph.AddDependency("b", "c");
+            testGraph.AddDependency("a", "c");
+            testGraph.AddDependency("d", "c");
+
+            testGraph.RemoveDependency("doesn't", "exist");
+            int size = testGraph.Size;
+            Assert.AreEqual(4, size);
+        }
+
+        /// <summary>
         /// Test basic ReplaceDependents for fatal errors
         /// </summary>
         [TestMethod]
@@ -392,6 +409,17 @@ namespace DependencyGraphTestCases
         }
 
         /// <summary>
+        /// HasDependees with null argument passed in
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(InvalidParameterException))]
+        public void HasDependeesNullParameterCheck()
+        {
+            DependencyGraph testGraph = new DependencyGraph();
+            testGraph.HasDependees(null);
+        }
+
+        /// <summary>
         /// GetDependents with null argument passed in
         /// </summary>
         [TestMethod]
@@ -436,7 +464,7 @@ namespace DependencyGraphTestCases
         }
 
         /// <summary>
-        /// Add a dependency with a null first parameter
+        /// Remove a dependency with a null first parameter
         /// </summary>
         [TestMethod]
         [ExpectedException(typeof(InvalidParameterException))]
@@ -517,6 +545,71 @@ namespace DependencyGraphTestCases
             {
                 testGraph.AddDependency(i.ToString(), (i * 3).ToString());
             }
+        }
+
+        /// <summary>
+        /// AddOneHundredThousandDependencies, see if fatal error occurs
+        /// </summary>
+        [TestMethod]
+        public void AddOneHundredThousandDependencies()
+        {
+            DependencyGraph testGraph = new DependencyGraph();
+
+            for (int i = 0; i < 100000; i++)
+            {
+                testGraph.AddDependency(i.ToString(), (i * 3).ToString());
+            }
+        }
+
+        /// <summary>
+        /// AddOneThousandDependencies with same dependent
+        /// see if fatal error occurs
+        /// </summary>
+        [TestMethod]
+        public void AddOneThousandDependenciesSameDent()
+        {
+            DependencyGraph testGraph = new DependencyGraph();
+
+            for (int i = 0; i < 1000; i++)
+            {
+                testGraph.AddDependency(i.ToString(), "lo mismo");
+            }
+
+            IEnumerable<string> dependees = testGraph.GetDependees("lo mismo");
+            int length = 0;
+            foreach (string s in dependees)
+            {
+                length++;
+            }
+            Assert.AreEqual(1000, length);
+        }
+
+        /// <summary>
+        /// AddOneThousandDependencies with same dependent,
+        /// replace all of dependees with one single string,
+        /// see if fatal error occurs
+        /// </summary>
+        [TestMethod]
+        public void AddOneThousandDependenciesSameDentAndMore()
+        {
+            DependencyGraph testGraph = new DependencyGraph();
+
+            for (int i = 0; i < 1000; i++)
+            {
+                testGraph.AddDependency(i.ToString(), "lo mismo");
+            }
+
+            String[] replacement = { "soy" };
+            testGraph.ReplaceDependees("lo mismo", replacement);
+
+            IEnumerable<string> dependees = testGraph.GetDependees("lo mismo");
+            int length = 0;
+            foreach (string s in dependees)
+            {
+                Console.WriteLine(s);
+                length++;
+            }
+            Assert.AreEqual(1, length);
         }
     }
 }

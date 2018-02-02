@@ -1,5 +1,5 @@
-﻿// Skeleton implementation written by Joe Zachary for CS 3500, January 2018.
-// Dependency class, method bodies written by Christopher Hanson for CS 3500, January 2018.
+﻿// Dependency class, method bodies written by Christopher Hanson for CS 3500, January 2018.
+// Skeleton implementation written by Joe Zachary for CS 3500, January 2018.
 
 using System;
 using System.Collections;
@@ -50,8 +50,8 @@ namespace Dependencies
     /// </summary>
     public class DependencyGraph
     {
-        Dictionary<String, Dependency> depGraph;
-        int depCount = 0;
+        Dictionary<String, Dependency> depGraph; // A Dictionary<> object to hold the graph. (note: Count != size)
+        int depCount = 0; // Holds the size of the Dependency Graph
 
         /// <summary>
         /// Creates a DependencyGraph containing no dependencies.
@@ -74,7 +74,7 @@ namespace Dependencies
         /// </summary>
         public bool HasDependents(string s)
         {
-            if (depGraph.TryGetValue(s, out Dependency halfDep))
+            if (depGraph.TryGetValue(s, out Dependency halfDep)) // Try to get target value, 's'
             {
                 if (halfDep.GetDents().Count > 0)
                 {
@@ -90,9 +90,14 @@ namespace Dependencies
         /// </summary>
         public bool HasDependees(string s)
         {
-            if (depGraph.TryGetValue(s, out Dependency halfDep))
+            if (s == null)
             {
-                if (halfDep.GetDees().Count > 0)
+                throw new InvalidParameterException("Parameter must not be null");
+            }
+
+            if (depGraph.TryGetValue(s, out Dependency halfDep)) // See if 's' is in the graph
+            {
+                if (halfDep.GetDees().Count > 0) // If so, see if 's' has any dependees
                 {
                     return true;
                 }
@@ -111,12 +116,12 @@ namespace Dependencies
                 throw new InvalidParameterException("Parameter must not be null");
             }
 
-            if (depGraph.TryGetValue(s, out Dependency halfDep))
+            if (depGraph.TryGetValue(s, out Dependency halfDep)) // If 's' is in the graph,
             {
-                return halfDep.GetDents();
+                return halfDep.GetDents(); // Return all of its dependents using a helper method
             }
 
-            return new String[0];
+            return new String[0]; // Otherwise, return a new empty IEnumerable
         }
 
         /// <summary>
@@ -129,12 +134,12 @@ namespace Dependencies
                 throw new InvalidParameterException("Parameter must not be null");
             }
 
-            if (depGraph.TryGetValue(s, out Dependency halfDep))
+            if (depGraph.TryGetValue(s, out Dependency halfDep)) // If 's' is in the graph,
             {
-                return halfDep.GetDees();
+                return halfDep.GetDees(); // Return all of its dependees using a helper method
             }
 
-            return new String[0];
+            return new String[0]; // Else, return a new empty IEnumerable
         }
 
         /// <summary>
@@ -150,28 +155,28 @@ namespace Dependencies
             }
 
             Dependency sDep, tDep;
-            if (depGraph.TryGetValue(s, out sDep))
+            if (depGraph.TryGetValue(s, out sDep)) // If 's' is in the graph, put it in sDep
             {
             }
-            else
+            else // Else, make a new Dependency named 's' and add it to graph
             {
                 sDep = new Dependency(s);
                 depGraph.Add(s, sDep);
             }
 
-            if (depGraph.TryGetValue(t, out tDep))
+            if (depGraph.TryGetValue(t, out tDep)) // If 't' is in graph, put it in tDep
             {
             }
-            else
+            else // Else make new Dependency named 't', add it to graph
             {
                 tDep = new Dependency(t);
                 depGraph.Add(t, tDep);
             }
 
-            if (sDep.AddDependent(t))
+            if (sDep.AddDependent(t)) // If 't' is not already a dependent of 's', add it
             {
-                tDep.AddDependee(s);
-                depCount++;
+                tDep.AddDependee(s); // and add 's' as a dependee of 't'
+                depCount++; // Increase size of graph
             }
         }
 
@@ -186,27 +191,27 @@ namespace Dependencies
                 throw new InvalidParameterException("Parameters must not be null");
             }
 
-            if (depGraph.TryGetValue(s, out Dependency halfDepS))
+            if (depGraph.TryGetValue(s, out Dependency halfDepS)) // If 's' is in the graph
             {
-                int ind = halfDepS.IndexOfDependent(t);
-                if (ind > -1)
+                int ind = halfDepS.IndexOfDependent(t); // Find index of 't' in 's'' List of dependents
+                if (ind > -1) // If 't' is a dependent of 's'
                 {
-                    halfDepS.RemoveFromDependents(ind);
+                    halfDepS.RemoveFromDependents(ind);  // Remove it from 's'' List of dependents
 
-                    if (halfDepS.GetDents().Count == 0 && halfDepS.GetDees().Count == 0)
+                    if (halfDepS.GetDents().Count == 0 && halfDepS.GetDees().Count == 0) // If 's' has no dees/dents
                     {
-                        depGraph.Remove(s);
+                        depGraph.Remove(s); // Remove it from the graph to save memory
                     }
 
-                    depGraph.TryGetValue(t, out Dependency halfDepT);
-                    halfDepT.RemoveFromDependees(halfDepT.IndexOfDependee(s));
+                    depGraph.TryGetValue(t, out Dependency halfDepT); // Get value of 't', put it in Dependency
+                    halfDepT.RemoveFromDependees(halfDepT.IndexOfDependee(s)); // Remove 's' from Dependees of 't'
 
-                    if (halfDepT.GetDents().Count == 0 && halfDepT.GetDees().Count == 0)
+                    if (halfDepT.GetDents().Count == 0 && halfDepT.GetDees().Count == 0) // If 't' has no dees/dents
                     {
-                        depGraph.Remove(t);
+                        depGraph.Remove(t); // Remove it from the graph to save memory
                     }
 
-                    depCount--;
+                    depCount--; // Decrease size of graph
                 }
             }
 
@@ -224,21 +229,21 @@ namespace Dependencies
                 throw new InvalidParameterException("Parameter must not be null");
             }
 
-            if (depGraph.TryGetValue(s, out Dependency halfDep))
+            if (depGraph.TryGetValue(s, out Dependency halfDep)) // Is 's' in the graph?
             {
-                foreach (string x in halfDep.GetDents())
+                foreach (string x in halfDep.GetDents()) // If so, for each of its dependents,
                 {
-                    depGraph.TryGetValue(x, out Dependency dependentOfS);
-                    dependentOfS.RemoveFromDependees(dependentOfS.IndexOfDependee(s));
-                    depCount--;
+                    depGraph.TryGetValue(x, out Dependency dependentOfS); // Obtain the dependent
+                    dependentOfS.RemoveFromDependees(dependentOfS.IndexOfDependee(s)); // Remove 's' from dees
+                    depCount--; // Decrease size of graph
                 }
-                halfDep.ClearDependents();
+                halfDep.ClearDependents(); // Clear 's' of all dependents
 
                 foreach (string t in newDependents)
                 {
                     if (t != null)
                     {
-                        AddDependency(s, t);
+                        AddDependency(s, t); // Add the new dependencies
                     }
                 }
             }
@@ -256,93 +261,145 @@ namespace Dependencies
                 throw new InvalidParameterException("Parameter must not be null");
             }
 
-            if (depGraph.TryGetValue(t, out Dependency halfDep))
+            if (depGraph.TryGetValue(t, out Dependency halfDep)) // Is 't' in the graph?
             {
-                foreach (string x in halfDep.GetDees())
+                foreach (string x in halfDep.GetDees()) // If so, for each dependee of 't',
                 {
-                    depGraph.TryGetValue(x, out Dependency dependeeOfT);
-                    dependeeOfT.RemoveFromDependents(dependeeOfT.IndexOfDependent(t));
-                    depCount--;
+                    depGraph.TryGetValue(x, out Dependency dependeeOfT); // Obtain the dependee
+                    dependeeOfT.RemoveFromDependents(dependeeOfT.IndexOfDependent(t)); // Remove 't' from dent
+                    depCount--; // Decrement size of graph
                 }
-                halfDep.ClearDependees();
+                halfDep.ClearDependees(); // Clear 't' of all dependees
 
                 foreach (string s in newDependees)
                 {
                     if (s != null)
                     {
-                        AddDependency(s, t);
+                        AddDependency(s, t); // Add replacement dependencies
                     }
                 }
             }
         }
 
         /// <summary>
-        /// Technically each is only half of a dependency
+        /// Objects of the Dependency class represent "half"
+        /// of a dependency within the DependencyGraph. Each
+        /// string added to the graph as part of a dependency
+        /// will have a Dependency object. Each holds a list of
+        /// dependents and dependees.
         /// </summary>
         private class Dependency
         {
-            internal String name;
-            List<String> dents = new List<string>();
-            List<String> dees = new List<string>();
+            internal String name; // The string this Dependency is for
+            List<String> dents = new List<string>(); // List of dependents of 'name'
+            List<String> dees = new List<string>(); // List of dependees of 'name'
 
+            /// <summary>
+            /// Create new dependency named 'n'
+            /// </summary>
+            /// <param name="n"></param>
             internal Dependency(string n)
             {
                 name = n;
             }
 
-            internal bool AddDependent (string dent)
+            /// <summary>
+            /// Add a dependent to this 'dependency'
+            /// </summary>
+            /// <param name="dent"></param>
+            /// <returns></returns>
+            internal bool AddDependent (string dent) // Add an item to 'dents'
             {
-                if (!dents.Contains(dent))
+                if (!dents.Contains(dent)) // if it is not there already
                 {
                     dents.Add(dent);
-                    return true;
+                    return true; // return true if add was successful
                 }
-                return false;
+                return false; // or false otherwise
             }
 
-            internal void AddDependee (string dee)
+            /// <summary>
+            /// Add a dependee to this 'dependency'
+            /// </summary>
+            /// <param name="dee"></param>
+            internal void AddDependee(string dee) // Add an item to 'dees'
             {
-                if (!dees.Contains(dee))
+                if (!dees.Contains(dee)) // If it is not there already
                 {
                     dees.Add(dee);
                 }
             }
 
+            /// <summary>
+            /// Return all dependents of the string in name ('dependency')
+            /// </summary>
+            /// <returns></returns>
             internal List<String> GetDents ()
             {
                 return dents;
             }
 
+            /// <summary>
+            /// Return all dependees of the string in name (the 'dependency')
+            /// </summary>
+            /// <returns></returns>
             internal List<String> GetDees ()
             {
                 return dees;
             }
 
+            /// <summary>
+            /// Return the index of a target dependent in the array of
+            /// dependents, 'dents', in this Dependency
+            /// </summary>
+            /// <param name="target"></param>
+            /// <returns></returns>
             internal int IndexOfDependent (String target)
             {
                 return dents.IndexOf(target);
             }
 
+            /// <summary>
+            /// Return the index of a target dependee in the array of
+            /// dependees, 'dees', in this Dependency
+            /// </summary>
+            /// <param name="target"></param>
+            /// <returns></returns>
             internal int IndexOfDependee(String target)
             {
                 return dees.IndexOf(target);
             }
 
+            /// <summary>
+            /// Remove item at certain index (of 'dents') from dependents
+            /// of 'name'
+            /// </summary>
+            /// <param name="index"></param>
             internal void RemoveFromDependents (int index)
             {
                 dents.RemoveAt(index);
             }
 
+            /// <summary>
+            /// Remove dependee of 'name' by index (removes from 'dees')
+            /// </summary>
+            /// <param name="index"></param>
             internal void RemoveFromDependees(int index)
             {
                 dees.RemoveAt(index);
             }
 
+            /// <summary>
+            /// Removes all dependents of 'name'
+            /// </summary>
             internal void ClearDependents()
             {
                 dents.Clear();
             }
 
+            /// <summary>
+            /// Removes all dependees of 'name'
+            /// </summary>
             internal void ClearDependees()
             {
                 dees.Clear();
@@ -350,6 +407,9 @@ namespace Dependencies
         }
     }
 
+    /// <summary>
+    /// Exception used for invalid parameters; contains message
+    /// </summary>
     [Serializable]
     public class InvalidParameterException : Exception
     {
