@@ -282,8 +282,8 @@ namespace Dependencies
         private class Dependency
         {
             internal String name;
-            List<String> dents;
-            List<String> dees;
+            List<String> dents = new List<string>();
+            List<String> dees = new List<string>();
 
             internal Dependency(string n)
             {
