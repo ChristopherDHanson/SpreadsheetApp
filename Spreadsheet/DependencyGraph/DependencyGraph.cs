@@ -66,7 +66,7 @@ namespace Dependencies
         /// </summary>
         public int Size
         {
-            get { return depGraph.Count; }
+            get { return depCount; }
         }
 
         /// <summary>
@@ -116,7 +116,7 @@ namespace Dependencies
                 return halfDep.GetDents();
             }
 
-            return null;
+            return new String[0];
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace Dependencies
                 return halfDep.GetDees();
             }
 
-            return null;
+            return new String[0];
         }
 
         /// <summary>
@@ -264,7 +264,7 @@ namespace Dependencies
                     dependeeOfT.RemoveFromDependents(dependeeOfT.IndexOfDependent(t));
                     depCount--;
                 }
-                halfDep.ClearDependents();
+                halfDep.ClearDependees();
 
                 foreach (string s in newDependees)
                 {
