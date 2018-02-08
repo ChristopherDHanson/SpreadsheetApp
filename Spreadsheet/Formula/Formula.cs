@@ -249,6 +249,10 @@ namespace Formulas
                         op.Pop();
                         double val2 = val.Pop();
                         double val1 = val.Pop();
+                        if (val2 == 0)
+                        {
+                            throw new FormulaEvaluationException("Cannot divide by zero.");
+                        }
                         val.Push(val1 / val2); // push quotient of top two values onto value stack
 
                     }
