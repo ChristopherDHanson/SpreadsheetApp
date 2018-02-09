@@ -86,13 +86,14 @@ namespace Dependencies
         }
 
         /// <summary>
-        /// Reports whether dependees(s) is non-empty.  Requires s != null.
+        /// Reports whether dependees(s) is non-empty.  Requires s != null. Throws ArgumentNullException 
+        /// otherwise.
         /// </summary>
         public bool HasDependees(string s)
         {
             if (s == null)
             {
-                throw new InvalidParameterException("Parameter must not be null");
+                throw new ArgumentNullException("Parameter must not be null");
             }
 
             if (depGraph.TryGetValue(s, out Dependency halfDep)) // See if 's' is in the graph
@@ -107,13 +108,13 @@ namespace Dependencies
         }
 
         /// <summary>
-        /// Enumerates dependents(s).  Requires s != null.
+        /// Enumerates dependents(s).  Requires s != null. Throws ArgumentNullException otherwise.
         /// </summary>
         public IEnumerable<string> GetDependents(string s)
         {
             if (s == null)
             {
-                throw new InvalidParameterException("Parameter must not be null");
+                throw new ArgumentNullException("Parameter must not be null");
             }
 
             if (depGraph.TryGetValue(s, out Dependency halfDep)) // If 's' is in the graph,
@@ -125,13 +126,13 @@ namespace Dependencies
         }
 
         /// <summary>
-        /// Enumerates dependees(s).  Requires s != null.
+        /// Enumerates dependees(s).  Requires s != null. Throws ArgumentNullException otherwise
         /// </summary>
         public IEnumerable<string> GetDependees(string s)
         {
             if (s == null)
             {
-                throw new InvalidParameterException("Parameter must not be null");
+                throw new ArgumentNullException("Parameter must not be null");
             }
 
             if (depGraph.TryGetValue(s, out Dependency halfDep)) // If 's' is in the graph,
@@ -145,13 +146,13 @@ namespace Dependencies
         /// <summary>
         /// Adds the dependency (s,t) to this DependencyGraph.
         /// This has no effect if (s,t) already belongs to this DependencyGraph.
-        /// Requires s != null and t != null.
+        /// Requires s != null and t != null. Throws Argument Null Exception otherwise.
         /// </summary>
         public void AddDependency(string s, string t)
         {
             if (s == null || t == null)
             {
-                throw new InvalidParameterException("Strings cannot be null");
+                throw new ArgumentNullException("Strings cannot be null");
             }
 
             Dependency sDep, tDep;
@@ -183,12 +184,12 @@ namespace Dependencies
         /// <summary>
         /// Removes the dependency (s,t) from this DependencyGraph.
         /// Does nothing if (s,t) doesn't belong to this DependencyGraph.
-        /// Requires s != null and t != null.
+        /// Requires s != null and t != null. Throws ArgumentNullException otherwise
         /// </summary>
         public void RemoveDependency(string s, string t)
         {
             if (s == null || t == null) {
-                throw new InvalidParameterException("Parameters must not be null");
+                throw new ArgumentNullException("Parameters must not be null");
             }
 
             if (depGraph.TryGetValue(s, out Dependency halfDepS)) // If 's' is in the graph
@@ -220,13 +221,13 @@ namespace Dependencies
         /// <summary>
         /// Removes all existing dependencies of the form (s,r).  Then, for each
         /// t in newDependents, adds the dependency (s,t).
-        /// Requires s != null and t != null.
+        /// Requires s != null and t != null. Throws ArgumentNullException if otherwise
         /// </summary>
         public void ReplaceDependents(string s, IEnumerable<string> newDependents)
         {
             if (s == null || newDependents == null)
             {
-                throw new InvalidParameterException("Parameter must not be null");
+                throw new ArgumentNullException("Parameter must not be null");
             }
 
             if (depGraph.TryGetValue(s, out Dependency halfDep)) // Is 's' in the graph?
@@ -252,13 +253,13 @@ namespace Dependencies
         /// <summary>
         /// Removes all existing dependencies of the form (r,t).  Then, for each 
         /// s in newDependees, adds the dependency (s,t).
-        /// Requires s != null and t != null.
+        /// Requires s != null and t != null. Throws ArgumentNullException if otherwise
         /// </summary>
         public void ReplaceDependees(string t, IEnumerable<string> newDependees)
         {
             if (t == null || newDependees == null)
             {
-                throw new InvalidParameterException("Parameter must not be null");
+                throw new ArgumentNullException("Parameter must not be null");
             }
 
             if (depGraph.TryGetValue(t, out Dependency halfDep)) // Is 't' in the graph?
@@ -404,20 +405,6 @@ namespace Dependencies
             {
                 dees.Clear();
             }
-        }
-    }
-
-    /// <summary>
-    /// Exception used for invalid parameters; contains message
-    /// </summary>
-    [Serializable]
-    public class InvalidParameterException : Exception
-    {
-        /// <summary>
-        /// Constructs a FormulaFormatException containing the explanatory message.
-        /// </summary>
-        public InvalidParameterException(String message) : base(message)
-        {
         }
     }
 }

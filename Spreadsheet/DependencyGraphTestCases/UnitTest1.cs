@@ -401,7 +401,7 @@ namespace DependencyGraphTestCases
         /// GetDependees with null argument passed in
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(InvalidParameterException))]
+        [ExpectedException(typeof(ArgumentNullException))]
         public void GetDependeesNullParameterCheck()
         {
             DependencyGraph testGraph = new DependencyGraph();
@@ -412,7 +412,7 @@ namespace DependencyGraphTestCases
         /// HasDependees with null argument passed in
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(InvalidParameterException))]
+        [ExpectedException(typeof(ArgumentNullException))]
         public void HasDependeesNullParameterCheck()
         {
             DependencyGraph testGraph = new DependencyGraph();
@@ -423,7 +423,7 @@ namespace DependencyGraphTestCases
         /// GetDependents with null argument passed in
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(InvalidParameterException))]
+        [ExpectedException(typeof(ArgumentNullException))]
         public void GetDependentsNullParameterCheck()
         {
             DependencyGraph testGraph = new DependencyGraph();
@@ -434,7 +434,7 @@ namespace DependencyGraphTestCases
         /// Add a dependency with a null second parameter
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(InvalidParameterException))]
+        [ExpectedException(typeof(ArgumentNullException))]
         public void AddDependencyWithNullParam()
         {
             DependencyGraph testGraph = new DependencyGraph();
@@ -445,7 +445,7 @@ namespace DependencyGraphTestCases
         /// Add a dependency with a null first parameter
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(InvalidParameterException))]
+        [ExpectedException(typeof(ArgumentNullException))]
         public void AddDependencyWithNullFirstParam()
         {
             DependencyGraph testGraph = new DependencyGraph();
@@ -456,7 +456,7 @@ namespace DependencyGraphTestCases
         /// Remove a dependency with a null second parameter
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(InvalidParameterException))]
+        [ExpectedException(typeof(ArgumentNullException))]
         public void RemoveDependencyWithNullParam()
         {
             DependencyGraph testGraph = new DependencyGraph();
@@ -467,7 +467,7 @@ namespace DependencyGraphTestCases
         /// Remove a dependency with a null first parameter
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(InvalidParameterException))]
+        [ExpectedException(typeof(ArgumentNullException))]
         public void RemoveDependencyWithNullFirstParam()
         {
             DependencyGraph testGraph = new DependencyGraph();
@@ -478,7 +478,7 @@ namespace DependencyGraphTestCases
         /// Call ReplaceDependents with a null second parameter
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(InvalidParameterException))]
+        [ExpectedException(typeof(ArgumentNullException))]
         public void ReplaceDependentsWithNullParam()
         {
             DependencyGraph testGraph = new DependencyGraph();
@@ -489,7 +489,7 @@ namespace DependencyGraphTestCases
         /// Call ReplaceDependents with a null first parameter
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(InvalidParameterException))]
+        [ExpectedException(typeof(ArgumentNullException))]
         public void ReplaceDependentsWithNullFirstParam()
         {
             DependencyGraph testGraph = new DependencyGraph();
@@ -500,7 +500,7 @@ namespace DependencyGraphTestCases
         /// Call ReplaceDependees with a null second parameter
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(InvalidParameterException))]
+        [ExpectedException(typeof(ArgumentNullException))]
         public void ReplaceDependeesWithNullParam()
         {
             DependencyGraph testGraph = new DependencyGraph();
@@ -511,7 +511,7 @@ namespace DependencyGraphTestCases
         /// Call ReplaceDependees with a null first parameter
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(InvalidParameterException))]
+        [ExpectedException(typeof(ArgumentNullException))]
         public void ReplaceDependeesWithNullFirstParam()
         {
             DependencyGraph testGraph = new DependencyGraph();
