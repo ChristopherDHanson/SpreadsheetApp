@@ -15,12 +15,17 @@ namespace Formulas
     /// the four binary operator symbols +, -, *, and /.  (The unary operators + and -
     /// are not allowed.)
     /// </summary>
-    public class Formula
+    public struct Formula
     {
         /// <summary>
         /// IEnumerable that holds the tokens of formula
         /// </summary>
-        private IEnumerable<string> theFormula;
+        private List<string> theFormula;
+        /// <summary>
+        /// ISet that holds all variables of formula
+        /// </summary>
+        private HashSet<string> theVars;
+
         /// <summary>
         /// Creates a Formula from a string that consists of a standard infix expression composed
         /// from non-negative floating-point numbers (using C#-like syntax for double/int literals), 
@@ -41,8 +46,22 @@ namespace Formulas
         /// If the formula is syntacticaly invalid, throws a FormulaFormatException with an 
         /// explanatory Message.
         /// </summary>
-        public Formula(String formula)
+        public Formula(String formula) : this(formula, s => s, v => true)
         {
+        }
+
+        /// <summary>
+        /// Constructor similar to above, but also has a Normalizer, which will convert any variables to a new format,
+        /// and a Validator, which will determine whether a variable is valid according to rules given by the 
+        /// Validator.
+        /// </summary>
+        public Formula(String formula, Normalizer n, Validator v)
+        {
+            if (formula == null || n == null || v == null)
+            {
+                throw new ArgumentNullException("One or more parameters are null; invalid");
+            }
+
             int tokenCount = 0, lParenCt = 0, rParenCt = 0; // total tokens, total '(', and total ')'
             String lpPattern = @"^\($";
             String rpPattern = @"^\)$";
@@ -51,9 +70,12 @@ namespace Formulas
             String doublePattern = @"^(?: \d+\.\d* | \d*\.\d+ | \d+ ) (?: e[\+-]?\d+)?$";
             Boolean wasOP = false, wasNVC = false; // booleans act as switches to show whether last token was a certain type
             IEnumerable<string> theTokens = GetTokens(formula);
-            
+            theFormula = new List<string>();
+            theVars = new HashSet<string>();
+
             foreach (string s in theTokens)
             {
+                String toAdd = s;
                 if (wasOP) // if token follows opening parenth or operator
                 {
                     if (!Regex.IsMatch(s, lpPattern) && !Regex.IsMatch(s, varPattern)
@@ -88,7 +110,7 @@ namespace Formulas
                 {
                     throw new FormulaFormatException("More right parentheses than left parentheses");
                 }
-                
+
                 if (Regex.IsMatch(s, opPattern))
                 {
                     wasOP = true; // token was operator, so switch on Boolean
@@ -98,8 +120,24 @@ namespace Formulas
                     || Regex.IsMatch(s, varPattern))
                 {
                     wasNVC = true; // doken was int, double, or variable, so switch on Boolean
+
+                    if (Regex.IsMatch(s, varPattern))
+                    {
+                        String normalized = n(s);
+                        if (!Regex.IsMatch(normalized, varPattern)) // If result of Normalizer(s) is still valid
+                        {
+                            throw new FormulaFormatException("Normalized variable is invalid");
+                        }
+                        if (!v(normalized))
+                        {
+                            throw new FormulaFormatException("Validator considers result of Normalizer invalid");
+                        }
+                        theVars.Add(normalized);
+                        toAdd = normalized;
+                    }
                 }
 
+                theFormula.Add(toAdd);
                 tokenCount++;
             }
             if (tokenCount < 1)
@@ -124,8 +162,6 @@ namespace Formulas
             {
                 throw new FormulaFormatException("Last token must be a number, variable, or a closing parenthesis");
             }
-
-            theFormula = theTokens; // save the token data to the instance for future use
         }
 
         /// <summary>
@@ -139,9 +175,20 @@ namespace Formulas
         /// </summary>
         public double Evaluate(Lookup lookup)
         {
+            if (lookup == null)
+            {
+                throw new ArgumentNullException("Lookup is null; invalid");
+            }
+
             Stack<double> val = new Stack<double>(); // stack holds values of tokens that are doubles, including var -> double
             Stack<string> op = new Stack<string>(); // holds tokens that are operators
             String doublePattern = @"^(?: \d+\.\d* | \d*\.\d+ | \d+ ) (?: e[\+-]?\d+)?$"; // detects tokens that are doubles
+
+            if (theFormula == null)
+            {
+                theFormula = new List<string>();
+                theFormula.Add("0");
+            }
 
             foreach (string s in theFormula)
             {
@@ -284,6 +331,30 @@ namespace Formulas
         }
 
         /// <summary>
+        /// Returns all variables that are part of the formula as an ISet of type string
+        /// </summary>
+        /// <returns></returns>
+        public ISet<string> GetVariables()
+        {
+            return theVars;
+        }
+
+        /// <summary>
+        /// Override ToString() so that it returns 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            String toReturn = "";
+            foreach (string s in theFormula)
+            {
+                toReturn += s;
+            }
+
+            return toReturn;
+        }
+
+        /// <summary>
         /// Given a formula, enumerates the tokens that compose it.  Tokens are left paren,
         /// right paren, one of the four operator symbols, a string consisting of a letter followed by
         /// zero or more digits and/or letters, a double literal, and anything that doesn't
@@ -337,6 +408,23 @@ namespace Formulas
     public delegate double Lookup(string var);
 
     /// <summary>
+    /// A Normalizer converts variables to a certain format. Given the variable 's' as a
+    /// a string, the method will return a reformatted version of the variables.
+    /// </summary>
+    /// <param name="s"></param>
+    /// <returns></returns>
+    public delegate string Normalizer(string s);
+
+    /// <summary>
+    /// A Validator method determines whether or not a formula is considered valid after
+    /// an additional set of specified rules. The formula is passed in as a string, 's',
+    /// and a boolean indicating whether or not the formula is valid is returned.
+    /// </summary>
+    /// <param name="s"></param>
+    /// <returns></returns>
+    public delegate bool Validator(string s);
+
+    /// <summary>
     /// Used to report that a Lookup delegate is unable to determine the value
     /// of a variable.
     /// </summary>
@@ -378,6 +466,21 @@ namespace Formulas
         /// Constructs a FormulaEvaluationException containing the explanatory message.
         /// </summary>
         public FormulaEvaluationException(String message) : base(message)
+        {
+        }
+    }
+
+
+    /// <summary>
+    /// Used to report errors that occur when an argument is null.
+    /// </summary>
+    [Serializable]
+    public class ArgumentNullException : Exception
+    {
+        /// <summary>
+        /// Constructs an ArgumentNullException containing the explanatory message.
+        /// </summary>
+        public ArgumentNullException(String message) : base(message)
         {
         }
     }
