@@ -469,19 +469,4 @@ namespace Formulas
         {
         }
     }
-
-
-    /// <summary>
-    /// Used to report errors that occur when an argument is null.
-    /// </summary>
-    [Serializable]
-    public class ArgumentNullException : Exception
-    {
-        /// <summary>
-        /// Constructs an ArgumentNullException containing the explanatory message.
-        /// </summary>
-        public ArgumentNullException(String message) : base(message)
-        {
-        }
-    }
 }
