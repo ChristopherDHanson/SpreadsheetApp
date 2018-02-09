@@ -50,8 +50,14 @@ namespace Dependencies
     /// </summary>
     public class DependencyGraph
     {
-        Dictionary<String, Dependency> depGraph; // A Dictionary<> object to hold the graph. (note: Count != size)
-        int depCount = 0; // Holds the size of the Dependency Graph
+        /// <summary>
+        /// A Dictionary<> object to hold the graph. (note: Count != size)
+        /// </summary>
+        private Dictionary<String, Dependency> depGraph;
+        /// <summary>
+        /// Holds the size of the Dependency Graph
+        /// </summary>
+        private int depCount = 0; 
 
         /// <summary>
         /// Creates a DependencyGraph containing no dependencies.
@@ -59,6 +65,30 @@ namespace Dependencies
         public DependencyGraph()
         {
             depGraph = new Dictionary<string, Dependency>();
+        }
+
+        /// <summary>
+        /// Creates a copy of the DependencyGraph supplied in the constructor. This copy is entirely independent of the
+        /// original.
+        /// </summary>
+        /// <param name="d"></param>
+        public DependencyGraph(DependencyGraph d)
+        {
+            depGraph = new Dictionary<string, Dependency>();
+            foreach (var item in d.depGraph)
+            {
+                Dependency halfDepToAdd = new Dependency(item.Key);
+                foreach (var theDee in item.Value.GetDees())
+                {
+                    halfDepToAdd.AddDependee(theDee);
+                }
+                foreach (var theDent in item.Value.GetDents())
+                {
+                    halfDepToAdd.AddDependent(theDent);
+                }
+                depGraph.Add(item.Key, halfDepToAdd);
+                depCount = d.depCount;
+            }
         }
 
         /// <summary>
@@ -146,7 +176,7 @@ namespace Dependencies
         /// <summary>
         /// Adds the dependency (s,t) to this DependencyGraph.
         /// This has no effect if (s,t) already belongs to this DependencyGraph.
-        /// Requires s != null and t != null. Throws Argument Null Exception otherwise.
+        /// Requires s != null and t != null. Throws ArgumentNullException otherwise.
         /// </summary>
         public void AddDependency(string s, string t)
         {
@@ -246,6 +276,10 @@ namespace Dependencies
                     {
                         AddDependency(s, t); // Add the new dependencies
                     }
+                    else
+                    {
+                        throw new ArgumentNullException("Each String in IEnumerable must not be null");
+                    }
                 }
             }
         }
@@ -277,6 +311,10 @@ namespace Dependencies
                     if (s != null)
                     {
                         AddDependency(s, t); // Add replacement dependencies
+                    }
+                    else
+                    {
+                        throw new ArgumentNullException("Each String in IEnumerable must not be null");
                     }
                 }
             }
