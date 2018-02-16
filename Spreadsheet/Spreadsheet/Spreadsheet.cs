@@ -12,6 +12,12 @@ using Formulas;
 
 namespace SS
 {
+    /// <summary>
+    /// A Spreadsheet is a system of related cells. A Spreadsheet keeps track of
+    /// Cell names and their contents, and also uses a DependencyGraph to store
+    /// relationships between cells. Further explanation is in AbstractSpreadsheet
+    /// class
+    /// </summary>
     public class Spreadsheet : AbstractSpreadsheet
     {
         /// <summary>
@@ -24,7 +30,7 @@ namespace SS
         private DependencyGraph depGraph;
 
         /// <summary>
-        /// Constructor; makes new empty spreadsheet
+        /// Constructor; makes new empty spreadsheet and DependencyGraph
         /// </summary>
         public Spreadsheet()
         {
@@ -154,7 +160,10 @@ namespace SS
 
             test.SetContents(text);
             test.SetName(name);
-            sheet.Add(name, test);
+            if (text != "")
+            {
+                sheet.Add(name, test);
+            }
 
             HashSet<string> toReturn = new HashSet<string>();
             foreach (string s in GetCellsToRecalculate(name))

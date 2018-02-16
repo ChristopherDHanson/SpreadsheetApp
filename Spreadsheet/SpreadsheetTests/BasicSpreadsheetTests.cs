@@ -174,6 +174,32 @@ namespace SpreadsheetTests
         }
 
         /// <summary>
+        /// Check return value of SetCellContents()
+        /// </summary>
+        [TestMethod]
+        public void SSSetCellContentsReturnCheck()
+        {
+            Spreadsheet ss = new Spreadsheet();
+            Formula g = new Formula("A1*2");
+            Formula h = new Formula("B1+A1");
+            ss.SetCellContents("B1", g);
+            ss.SetCellContents("C1", h);
+            ISet<string> result = ss.SetCellContents("A1", 0.6);
+            String[] expected = { "A1", "B1", "C1" };
+            foreach (string s in expected)
+            {
+                if (!result.Contains<string>(s))
+                {
+                    Assert.Fail();
+                }
+            }
+            if (result.Count() != expected.Length)
+            {
+                Assert.Fail();
+            }
+        }
+
+        /// <summary>
         /// Get names of all nonempty, with three cells nonempty; test correct names
         /// </summary>
         [TestMethod]
