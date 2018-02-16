@@ -247,10 +247,6 @@ namespace SS
         /// </summary>
         protected override IEnumerable<string> GetDirectDependents(string name)
         {
-            if (name == null)
-            {
-                throw new ArgumentNullException("Argument must not be null.");
-            }
             return depGraph.GetDependents(name);
         }
 

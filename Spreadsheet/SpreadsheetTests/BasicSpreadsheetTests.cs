@@ -208,6 +208,22 @@ namespace SpreadsheetTests
             Assert.AreEqual(0.87, result);
         }
 
+        /// <summary>
+        /// Create circular dependency, expect  CircularException
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(CircularException))]
+        public void SSCircularExceptionTest()
+        {
+            Spreadsheet ss = new Spreadsheet();
+            Formula f = new Formula("A1-4");
+            Formula g = new Formula("a1-4");
+            Formula h = new Formula("a2+3");
+            ss.SetCellContents("a1", f);
+            ss.SetCellContents("a2", g);
+            ss.SetCellContents("A1", h);
+        }
+
         // NULL CHECKS
         /// <summary>
         /// Get cell contents with null param
