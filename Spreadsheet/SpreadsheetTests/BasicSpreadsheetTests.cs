@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Written by Christopher Hanson for CS 3500, February 2018
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Formulas;

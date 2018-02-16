@@ -44,11 +44,11 @@ namespace SS
         public override IEnumerable<string> GetNamesOfAllNonemptyCells()
         {
             List<string> names = new List<string>();
-            foreach (var s in sheet)
+            foreach (var s in sheet) // For each key/value pair in sheet
             {
-                if (s.Value.GetContents() != null)
-                {
-                    names.Add(s.Value.GetName());
+                if (s.Value.GetContents() != null) // If is technically unnecessary in this implementation,
+                {                                   // but could have use under slightly different circ.
+                    names.Add(s.Value.GetName()); // Add the name to List
                 }
             }
             return names;
@@ -62,16 +62,16 @@ namespace SS
         /// </summary>
         public override object GetCellContents(string name)
         {
-            String validCellNamePattern = @"^[a-zA-Z]*[1-9]\d*$";
+            String validCellNamePattern = @"^[a-zA-Z]*[1-9]\d*$"; // One or more letters followed by nonzero, more digits
             if (name == null || !Regex.IsMatch(name, validCellNamePattern))
             {
                 throw new InvalidNameException();
             }
-            if (sheet.TryGetValue(name, out Cell theCell))
+            if (sheet.TryGetValue(name, out Cell theCell)) // If the Dictionary contains name/Cell
             {
-                return theCell.GetContents();
+                return theCell.GetContents(); // Return the Cell's contents
             }
-            return "";
+            return ""; // Otherwise cell is empty, so return empty string
         }
 
         /// <summary>
@@ -86,22 +86,22 @@ namespace SS
         /// </summary>
         public override ISet<string> SetCellContents(string name, double number)
         {
-            String validCellNamePattern = @"^[a-zA-Z]*[1-9]\d*$";
+            String validCellNamePattern = @"^[a-zA-Z]*[1-9]\d*$"; // One or more letters followed by nonzero, more digits
             if (name == null || !Regex.IsMatch(name, validCellNamePattern))
             {
                 throw new InvalidNameException();
             }
 
-            Cell test = new Cell();
-            if (sheet.TryGetValue(name, out test))
+            Cell test = new Cell(); // Create the new cell that will be added
+            if (sheet.TryGetValue(name, out test)) // If the Cell 'name' already has contents
             {
-                sheet.Remove(name);
+                sheet.Remove(name); // Remove the pair from sheet
             }
-            Object oldContents = test.GetContents();
+            Object oldContents = test.GetContents(); // Get the contents already in the cell
             if (oldContents is Formula) // If old contents are formula, remove relevant dependencies
             {
                 Formula oldFormula = (Formula)oldContents;
-                foreach (var v in oldFormula.GetVariables())
+                foreach (var v in oldFormula.GetVariables()) // All variables in the cell are dependees of the cell
                 {
                     depGraph.RemoveDependency(v, name);
                 }
@@ -112,7 +112,7 @@ namespace SS
             sheet.Add(name, test);
 
             HashSet<string> toReturn = new HashSet<string>();
-            foreach (string s in GetCellsToRecalculate(name))
+            foreach (string s in GetCellsToRecalculate(name)) // Each directly or indirectly dependent cell
             {
                 toReturn.Add(s);
             }
@@ -137,16 +137,16 @@ namespace SS
             {
                 throw new ArgumentNullException("");
             }
-            String validCellNamePattern = @"^[a-zA-Z]*[1-9]\d*$";
+            String validCellNamePattern = @"^[a-zA-Z]*[1-9]\d*$"; // One or more letters followed by nonzero, more digits
             if (name == null || !Regex.IsMatch(name, validCellNamePattern))
             {
                 throw new InvalidNameException();
             }
 
-            Cell test = new Cell();
-            if (sheet.TryGetValue(name, out test))
+            Cell test = new Cell(); // Create new cell to add
+            if (sheet.TryGetValue(name, out test)) // If cell already has contents
             {
-                sheet.Remove(name);
+                sheet.Remove(name); // Remove the contents
             }
             Object oldContents = test.GetContents();
             if (oldContents is Formula) // If old contents are formula, remove relevant dependencies
@@ -160,7 +160,7 @@ namespace SS
 
             test.SetContents(text);
             test.SetName(name);
-            if (text != "")
+            if (text != "") // Only add the Cell back into the sheet if the contents are not empty str
             {
                 sheet.Add(name, test);
             }
@@ -190,13 +190,13 @@ namespace SS
         /// </summary>
         public override ISet<string> SetCellContents(string name, Formula formula)
         {
-            String validCellNamePattern = @"^[a-zA-Z]*[1-9]\d*$";
+            String validCellNamePattern = @"^[a-zA-Z]*[1-9]\d*$"; // One or more letters followed by nonzero, more digits
             if (name == null || !Regex.IsMatch(name, validCellNamePattern))
             {
                 throw new InvalidNameException();
             }
 
-            HashSet<string> vars = (HashSet<string>)formula.GetVariables();
+            HashSet<string> vars = (HashSet<string>)formula.GetVariables(); // Extract variables from formula
             foreach (string s in vars) // for each variable in the formula
             {
                 if (!Regex.IsMatch(s, validCellNamePattern)) // if not valid cell name,
@@ -206,9 +206,9 @@ namespace SS
             }
 
             Cell test = new Cell();
-            if (sheet.TryGetValue(name, out test))
+            if (sheet.TryGetValue(name, out test)) // If cell has contents
             {
-                sheet.Remove(name);
+                sheet.Remove(name); // Remove contents
             }
             Object oldContents = test.GetContents();
             if (oldContents is Formula) // If old contents are formula, remove relevant dependencies
@@ -219,10 +219,10 @@ namespace SS
                     depGraph.RemoveDependency(v, name);
                 }
             }
-            test.SetContents(formula);
 
+            test.SetContents(formula);
             test.SetName(name);
-            sheet.Add(name, test);
+            sheet.Add(name, test); // Add the new Cell
 
             foreach (string s in vars) { // Add new relevant dependencies
                 depGraph.AddDependency(s, name);
@@ -259,26 +259,52 @@ namespace SS
             return depGraph.GetDependents(name);
         }
 
+        /// <summary>
+        /// Cell struct has a name and contents
+        /// </summary>
         private struct Cell
         {
+            /// <summary>
+            /// Name of the cell
+            /// </summary>
             String name;
+            /// <summary>
+            /// Contents of the cell may be Formula, double, or string
+            /// Thus, Object type is used
+            /// </summary>
             Object contents;
 
+            /// <summary>
+            /// Gets name
+            /// </summary>
+            /// <returns></returns>
             public string GetName()
             {
                 return name;
             }
 
+            /// <summary>
+            /// Sets name
+            /// </summary>
+            /// <param name="n"></param>
             internal void SetName(string n)
             {
                 name = n;
             }
 
+            /// <summary>
+            /// Gets contents
+            /// </summary>
+            /// <returns></returns>
             internal object GetContents()
             {
                 return contents;
             }
 
+            /// <summary>
+            /// Sets contents
+            /// </summary>
+            /// <param name="theContents"></param>
             internal void SetContents(Object theContents)
             {
                 contents = theContents;
