@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FormulaExtensionTests", "Fo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spreadsheet", "Spreadsheet\Spreadsheet.csproj", "{9025A594-DF2A-4E6A-B8C2-F087ECC3E203}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PS5GradingTests", "PS5GradingTests\PS5GradingTests.csproj", "{5CE891A3-87AB-409B-874D-AD3622C5F59F}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DependencyGraph", "DependencyGraph\DependencyGraph.csproj", "{862EAD85-346F-4D2B-A53C-98074FF813BA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PS3GradingTests", "PS3GradingTests\PS3GradingTests.csproj", "{0BB0FEFF-986E-496F-9939-8A52E52E083F}"
@@ -56,6 +58,11 @@ Global
 		{2904BB3B-DCD3-4B73-9C38-391209763818}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2904BB3B-DCD3-4B73-9C38-391209763818}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2904BB3B-DCD3-4B73-9C38-391209763818}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9025A594-DF2A-4E6A-B8C2-F087ECC3E203}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CE891A3-87AB-409B-874D-AD3622C5F59F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CE891A3-87AB-409B-874D-AD3622C5F59F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CE891A3-87AB-409B-874D-AD3622C5F59F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CE891A3-87AB-409B-874D-AD3622C5F59F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
