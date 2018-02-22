@@ -228,21 +228,32 @@ namespace SS
                 }
             }
 
-            test.SetContents(formula);
-            test.SetName(name);
-            sheet.Add(name, test); // Add the new Cell
-
-            foreach (string s in vars) { // Add new relevant dependencies
-                depGraph.AddDependency(s, name);
-            }
-
-            HashSet<string> toReturn = new HashSet<string>();
-            foreach (string s in GetCellsToRecalculate(name))
+            try
             {
-                toReturn.Add(s);
-            }
+                test.SetContents(formula);
+                test.SetName(name);
+                sheet.Add(name, test); // Add the new Cell
 
-            return toReturn;
+                foreach (string s in vars)
+                { // Add new relevant dependencies
+                    depGraph.AddDependency(s, name);
+                }
+
+                HashSet<string> toReturn = new HashSet<string>();
+                foreach (string s in GetCellsToRecalculate(name))
+                {
+                    toReturn.Add(s);
+                }
+
+                return toReturn;
+            }
+            catch (CircularException e)
+            {
+                sheet.Remove(name);
+                test.SetContents(oldContents);
+                sheet.Add(name, test);
+                throw e;
+            }
         }
 
         /// <summary>
