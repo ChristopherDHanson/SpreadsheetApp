@@ -3,6 +3,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -28,6 +29,8 @@ namespace SS
         /// DependencyGraph stores relationships b/w Cells
         /// </summary>
         private DependencyGraph depGraph;
+
+        public override bool Changed { get => throw new NotImplementedException(); protected set => throw new NotImplementedException(); }
 
         /// <summary>
         /// Constructor; makes new empty spreadsheet and DependencyGraph
@@ -84,7 +87,7 @@ namespace SS
         /// For example, if name is A1, B1 contains A1*2, and C1 contains B1+A1, the
         /// set {A1, B1, C1} is returned.
         /// </summary>
-        public override ISet<string> SetCellContents(string name, double number)
+        protected override ISet<string> SetCellContents(string name, double number)
         {
             String validCellNamePattern = @"^[a-zA-Z]*[1-9]\d*$"; // One or more letters followed by nonzero, more digits
             if (name == null || !Regex.IsMatch(name, validCellNamePattern))
@@ -131,7 +134,7 @@ namespace SS
         /// For example, if name is A1, B1 contains A1*2, and C1 contains B1+A1, the
         /// set {A1, B1, C1} is returned.
         /// </summary>
-        public override ISet<string> SetCellContents(string name, string text)
+        protected override ISet<string> SetCellContents(string name, string text)
         {
             if (text == null)
             {
@@ -188,7 +191,7 @@ namespace SS
         /// For example, if name is A1, B1 contains A1*2, and C1 contains B1+A1, the
         /// set {A1, B1, C1} is returned.
         /// </summary>
-        public override ISet<string> SetCellContents(string name, Formula formula)
+        protected override ISet<string> SetCellContents(string name, Formula formula)
         {
             String validCellNamePattern = @"^[a-zA-Z]*[1-9]\d*$"; // One or more letters followed by nonzero, more digits
             if (name == null || !Regex.IsMatch(name, validCellNamePattern))
@@ -257,6 +260,80 @@ namespace SS
         protected override IEnumerable<string> GetDirectDependents(string name)
         {
             return depGraph.GetDependents(name);
+        }
+
+        // PS6
+        /// <summary>
+        /// Writes the contents of this spreadsheet to dest using an XML format.
+        /// The XML elements should be structured as follows:
+        ///
+        /// <spreadsheet IsValid="IsValid regex goes here">
+        ///   <cell name="cell name goes here" contents="cell contents go here"></cell>
+        ///   <cell name="cell name goes here" contents="cell contents go here"></cell>
+        ///   <cell name="cell name goes here" contents="cell contents go here"></cell>
+        /// </spreadsheet>
+        ///
+        /// The value of the IsValid attribute should be IsValid.ToString()
+        /// 
+        /// There should be one cell element for each non-empty cell in the spreadsheet.
+        /// If the cell contains a string, the string (without surrounding double quotes) should be written as the contents.
+        /// If the cell contains a double d, d.ToString() should be written as the contents.
+        /// If the cell contains a Formula f, f.ToString() with "=" prepended should be written as the contents.
+        ///
+        /// If there are any problems writing to dest, the method should throw an IOException.
+        /// </summary>
+        public override void Save(TextWriter dest)
+        {
+            throw new NotImplementedException();
+        }
+
+        // ADDED FOR PS6
+        /// <summary>
+        /// If name is null or invalid, throws an InvalidNameException.
+        ///
+        /// Otherwise, returns the value (as opposed to the contents) of the named cell.  The return
+        /// value should be either a string, a double, or a FormulaError.
+        /// </summary>
+        public override object GetCellValue(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        // ADDED FOR PS6
+        /// <summary>
+        /// If content is null, throws an ArgumentNullException.
+        ///
+        /// Otherwise, if name is null or invalid, throws an InvalidNameException.
+        ///
+        /// Otherwise, if content parses as a double, the contents of the named
+        /// cell becomes that double.
+        ///
+        /// Otherwise, if content begins with the character '=', an attempt is made
+        /// to parse the remainder of content into a Formula f using the Formula
+        /// constructor with s => s.ToUpper() as the normalizer and a validator that
+        /// checks that s is a valid cell name as defined in the AbstractSpreadsheet
+        /// class comment.  There are then three possibilities:
+        ///
+        ///   (1) If the remainder of content cannot be parsed into a Formula, a
+        ///       Formulas.FormulaFormatException is thrown.
+        ///
+        ///   (2) Otherwise, if changing the contents of the named cell to be f
+        ///       would cause a circular dependency, a CircularException is thrown.
+        ///
+        ///   (3) Otherwise, the contents of the named cell becomes f.
+        ///
+        /// Otherwise, the contents of the named cell becomes content.
+        ///
+        /// If an exception is not thrown, the method returns a set consisting of
+        /// name plus the names of all other cells whose value depends, directly
+        /// or indirectly, on the named cell.
+        ///
+        /// For example, if name is A1, B1 contains A1*2, and C1 contains B1+A1, the
+        /// set {A1, B1, C1} is returned.
+        /// </summary>
+        public override ISet<string> SetContentsOfCell(string name, string content)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
