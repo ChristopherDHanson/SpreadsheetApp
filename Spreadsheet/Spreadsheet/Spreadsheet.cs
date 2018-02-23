@@ -29,21 +29,78 @@ namespace SS
         /// DependencyGraph stores relationships b/w Cells
         /// </summary>
         private DependencyGraph depGraph;
+        /// <summary>
+        /// IsValid; Defines valid cell names
+        /// </summary>
+        private String validCellNamePattern = @"^[a-zA-Z]*[1-9]\d*$"; // One or more letters followed by nonzero, more digits
+        /// <summary>
+        /// Regex used to define valid cell beyond class definition; specified by parameter constructor
+        /// </summary>
+        private Regex IsValid;
 
         // ADDED FOR PS6
         /// <summary>
         /// True if this spreadsheet has been modified since it was created or saved
         /// (whichever happened most recently); false otherwise.
         /// </summary>
-        public override bool Changed { get => throw new NotImplementedException(); protected set => throw new NotImplementedException(); }
+        public override bool Changed { get; protected set; }
 
         /// <summary>
-        /// Constructor; makes new empty spreadsheet and DependencyGraph
+        /// Creates an empty Spreadsheet whose IsValid regular expression accepts every string.
         /// </summary>
         public Spreadsheet()
         {
             sheet = new Dictionary<string, Cell>();
             depGraph = new DependencyGraph();
+            IsValid = new Regex(@"(.* )?");
+            Changed = false;
+        }
+
+        /// <summary>
+        /// Creates an empty Spreadsheet whose IsValid regular expression is provided as the parameter
+        /// </summary>
+        public Spreadsheet(Regex isValid)
+        {
+            sheet = new Dictionary<string, Cell>();
+            depGraph = new DependencyGraph();
+            IsValid = isValid;
+            Changed = false;
+        }
+
+        /// <summary>
+        /// Creates a Spreadsheet that is a duplicate of the spreadsheet saved in source.
+        ///
+        /// See the AbstractSpreadsheet.Save method and Spreadsheet.xsd for the file format 
+        /// specification.  
+        ///
+        /// If there's a problem reading source, throws an IOException.
+        ///
+        /// Else if the contents of source are not consistent with the schema in Spreadsheet.xsd, 
+        /// throws a SpreadsheetReadException.  
+        ///
+        /// Else if the IsValid string contained in source is not a valid C# regular expression, throws
+        /// a SpreadsheetReadException.  (If the exception is not thrown, this regex is referred to
+        /// below as oldIsValid.)
+        ///
+        /// Else if there is a duplicate cell name in the source, throws a SpreadsheetReadException.
+        /// (Two cell names are duplicates if they are identical after being converted to upper case.)
+        ///
+        /// Else if there is an invalid cell name or an invalid formula in the source, throws a 
+        /// SpreadsheetReadException.  (Use oldIsValid in place of IsValid in the definition of 
+        /// cell name validity.)
+        ///
+        /// Else if there is an invalid cell name or an invalid formula in the source, throws a
+        /// SpreadsheetVersionException.  (Use newIsValid in place of IsValid in the definition of
+        /// cell name validity.)
+        ///
+        /// Else if there's a formula that causes a circular dependency, throws a SpreadsheetReadException. 
+        ///
+        /// Else, create a Spreadsheet that is a duplicate of the one encoded in source except that
+        /// the new Spreadsheet's IsValid regular expression should be newIsValid.
+        /// </summary>
+        public Spreadsheet(TextReader source, Regex newIsValid)
+        {
+            Changed = false;
         }
 
         /// <summary>
@@ -70,7 +127,6 @@ namespace SS
         /// </summary>
         public override object GetCellContents(string name)
         {
-            String validCellNamePattern = @"^[a-zA-Z]*[1-9]\d*$"; // One or more letters followed by nonzero, more digits
             if (name == null || !Regex.IsMatch(name, validCellNamePattern))
             {
                 throw new InvalidNameException();
@@ -94,7 +150,6 @@ namespace SS
         /// </summary>
         protected override ISet<string> SetCellContents(string name, double number)
         {
-            String validCellNamePattern = @"^[a-zA-Z]*[1-9]\d*$"; // One or more letters followed by nonzero, more digits
             if (name == null || !Regex.IsMatch(name, validCellNamePattern))
             {
                 throw new InvalidNameException();
@@ -114,7 +169,7 @@ namespace SS
                     depGraph.RemoveDependency(v, name);
                 }
             }
-                
+
             test.SetContents(number);
             test.SetName(name);
             sheet.Add(name, test);
@@ -145,7 +200,6 @@ namespace SS
             {
                 throw new ArgumentNullException("");
             }
-            String validCellNamePattern = @"^[a-zA-Z]*[1-9]\d*$"; // One or more letters followed by nonzero, more digits
             if (name == null || !Regex.IsMatch(name, validCellNamePattern))
             {
                 throw new InvalidNameException();
@@ -198,7 +252,6 @@ namespace SS
         /// </summary>
         protected override ISet<string> SetCellContents(string name, Formula formula)
         {
-            String validCellNamePattern = @"^[a-zA-Z]*[1-9]\d*$"; // One or more letters followed by nonzero, more digits
             if (name == null || !Regex.IsMatch(name, validCellNamePattern))
             {
                 throw new InvalidNameException();
@@ -300,7 +353,27 @@ namespace SS
         /// </summary>
         public override void Save(TextWriter dest)
         {
-            throw new NotImplementedException();
+            dest.WriteLine("<spreadsheet IsValid=\""+IsValid.ToString()+"\">");
+            foreach (var s in sheet)
+            {
+                String contentsToSave;
+                Object theContents = s.Value.GetContents();
+                if (theContents is double)
+                {
+                    contentsToSave = theContents.ToString();
+                }
+                else if (theContents is Formula)
+                {
+                    contentsToSave = ((Formula)theContents).ToString();
+                }
+                else
+                {
+                    contentsToSave = (string)theContents;
+                }
+                dest.WriteLine("<cell name=\""+s+"\" contents=\""+contentsToSave+"\"></cell>");
+            }
+            dest.WriteLine("</spreadsheet>");
+            Changed = false;
         }
 
         // ADDED FOR PS6
@@ -312,7 +385,11 @@ namespace SS
         /// </summary>
         public override object GetCellValue(string name)
         {
-            throw new NotImplementedException();
+            if (name == null || !IsValid.IsMatch(name))
+            {
+                throw new InvalidNameException();
+            }
+            return sheet[name].GetValue();
         }
 
         // ADDED FOR PS6
@@ -349,7 +426,48 @@ namespace SS
         /// </summary>
         public override ISet<string> SetContentsOfCell(string name, string content)
         {
-            throw new NotImplementedException();
+            if (content == null)
+            {
+                throw new ArgumentNullException();
+            }
+            ISet<string> toReturn;
+            if (double.TryParse(content, out double result))
+            {
+                sheet[name].SetValue(result);
+                toReturn = SetCellContents(name, result);
+            }
+            else if (content[0].Equals('='))
+            {
+                Formula contentFormula = new Formula(content.Substring(1), s => s.ToUpper(), s => Regex.IsMatch(s, validCellNamePattern));
+                toReturn = SetCellContents(name, contentFormula);
+                Lookup lookup = CellDoubleLookup;
+                foreach(string s in GetCellsToRecalculate(name))
+                {
+                    sheet[s].SetValue(((Formula)sheet[s].GetContents()).Evaluate(lookup));
+                }
+            }
+            else
+            {
+                sheet[name].SetValue(content);
+                toReturn = SetCellContents(name, content);
+            }
+
+            Changed = true;
+            return toReturn;
+        }
+
+        /// <summary>
+        /// To be used as a Lookup, will return double associated with string in
+        /// the sheet, or UndefinedVariablException otherwises
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        private double CellDoubleLookup(string s)
+        {
+            if (!(GetCellValue(s) is double)) {
+                throw new UndefinedVariableException("s");
+            }
+            return (double)GetCellValue(s);
         }
 
         /// <summary>
@@ -360,12 +478,16 @@ namespace SS
             /// <summary>
             /// Name of the cell
             /// </summary>
-            String name;
+            private String name;
             /// <summary>
             /// Contents of the cell may be Formula, double, or string
             /// Thus, Object type is used
             /// </summary>
-            Object contents;
+            private Object contents;
+            /// <summary>
+            /// Value of cell may be double, string, or FormulaError
+            /// </summary>
+            private Object value;
 
             /// <summary>
             /// Gets name
@@ -401,6 +523,24 @@ namespace SS
             internal void SetContents(Object theContents)
             {
                 contents = theContents;
+            }
+
+            /// <summary>
+            /// Set value
+            /// </summary>
+            /// <param name="theValue"></param>
+            internal void SetValue(Object theValue)
+            {
+                value = theValue;
+            }
+
+            /// <summary>
+            /// Gets value
+            /// </summary>
+            /// <returns></returns>
+            internal object GetValue()
+            {
+                return value;
             }
         }
     }
