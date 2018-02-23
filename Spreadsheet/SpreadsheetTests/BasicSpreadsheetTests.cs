@@ -2,7 +2,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using Formulas;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SS;
@@ -313,6 +316,65 @@ namespace SpreadsheetTests
             Spreadsheet ss = new Spreadsheet();
             Formula f = new Formula("A99+B5");
             ss.SetContentsOfCell(null, "A99+B5");
+        }
+
+
+        // ADDED FOR PS6
+        /// <summary>
+        /// Get Changed after changing
+        /// </summary>
+        [TestMethod]
+        public void GetChangedAfterChanging()
+        {
+            Spreadsheet ss = new Spreadsheet();
+            if (ss.Changed != false)
+                Assert.Fail();
+            ss.SetContentsOfCell("a1", "A99+B5");
+            if (ss.Changed != true)
+                Assert.Fail();
+        }
+
+        /// <summary>
+        /// Create spreadsheet using constructor with isValid param
+        /// </summary>
+        [TestMethod]
+        public void SecondConstructorTest()
+        {
+            Regex r = new Regex(".*");
+            Spreadsheet ss = new Spreadsheet(r);
+            if (ss.Changed != false)
+                Assert.Fail();
+        }
+
+        /// <summary>
+        /// Create spreadsheet using third constructor
+        /// </summary>
+        [TestMethod]
+        public void ThirdConstructorTest()
+        {
+            Regex r = new Regex(".*");
+            TextReader reader = new StringReader("<spreadsheet IsValid = \".*\" ><cell name =" +
+                " \"A1\" contents = \"0.67\"></cell></spreadsheet>");
+            Spreadsheet ss = new Spreadsheet(reader, r);
+            if (ss.Changed != false)
+                Assert.Fail();
+        }
+
+        /// <summary>
+        /// Create spreadsheet using third constructor, check its values
+        /// </summary>
+        [TestMethod]
+        public void ThirdConstructorTestExtraChecks()
+        {
+            Regex r = new Regex(".*");
+            TextReader reader = new StringReader("<spreadsheet IsValid = \".*\" ><cell name =" +
+                " \"A1\" contents = \"0.67\"></cell></spreadsheet>");
+            Spreadsheet ss = new Spreadsheet(reader, r);
+            if (ss.Changed != false)
+                Assert.Fail();
+            if (!(ss.GetCellValue("A1") is double) || (double)ss.GetCellValue("A1") != 0.67)
+                Assert.Fail();
+
         }
     }
 }

@@ -233,10 +233,14 @@ namespace SS
                 throw new InvalidNameException();
             }
 
-            Cell test = new Cell(); // Create the new cell that will be added
+            Cell test; // Create the new cell that will be added
             if (sheet.TryGetValue(name, out test)) // If the Cell 'name' already has contents
             {
                 sheet.Remove(name); // Remove the pair from sheet
+            }
+            else
+            {
+                test = new Cell();
             }
             Object oldContents = test.GetContents(); // Get the contents already in the cell
             if (oldContents is Formula) // If old contents are formula, remove relevant dependencies
@@ -283,10 +287,14 @@ namespace SS
                 throw new InvalidNameException();
             }
 
-            Cell test = new Cell(); // Create new cell to add
+            Cell test; // Create new cell to add
             if (sheet.TryGetValue(name, out test)) // If cell already has contents
             {
                 sheet.Remove(name); // Remove the contents
+            }
+            else
+            {
+                test = new Cell();
             }
             Object oldContents = test.GetContents();
             if (oldContents is Formula) // If old contents are formula, remove relevant dependencies
@@ -344,10 +352,14 @@ namespace SS
                 }
             }
 
-            Cell test = new Cell();
+            Cell test;
             if (sheet.TryGetValue(name, out test)) // If cell has contents
             {
                 sheet.Remove(name); // Remove contents
+            }
+            else
+            {
+                test = new Cell();
             }
             Object oldContents = test.GetContents();
             if (oldContents is Formula) // If old contents are formula, remove relevant dependencies
@@ -575,7 +587,7 @@ namespace SS
         /// <summary>
         /// Cell struct has a name and contents
         /// </summary>
-        private struct Cell
+        private class Cell
         {
             /// <summary>
             /// Name of the cell
@@ -590,6 +602,13 @@ namespace SS
             /// Value of cell may be double, string, or FormulaError
             /// </summary>
             private Object value;
+
+            public Cell()
+            {
+                name = null;
+                contents = null;
+                value = null;
+            }
 
             /// <summary>
             /// Gets name
