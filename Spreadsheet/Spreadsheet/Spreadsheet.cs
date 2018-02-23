@@ -33,6 +33,7 @@ namespace SS
         /// IsValid; Defines valid cell names
         /// </summary>
         private String validCellNamePattern = @"^[a-zA-Z]*[1-9]\d*$"; // One or more letters followed by nonzero, more digits
+
         /// <summary>
         /// Regex used to define valid cell beyond class definition; specified by parameter constructor
         /// </summary>
@@ -52,7 +53,7 @@ namespace SS
         {
             sheet = new Dictionary<string, Cell>();
             depGraph = new DependencyGraph();
-            IsValid = new Regex(@"(.* )?");
+            IsValid = new Regex(".*");
             Changed = false;
         }
 
@@ -127,10 +128,12 @@ namespace SS
         /// </summary>
         public override object GetCellContents(string name)
         {
-            if (name == null || !Regex.IsMatch(name, validCellNamePattern))
+            if (name == null || !Regex.IsMatch(name, validCellNamePattern)
+                || !IsValid.IsMatch(name.ToUpper()))
             {
                 throw new InvalidNameException();
             }
+            name = name.ToUpper();
             if (sheet.TryGetValue(name, out Cell theCell)) // If the Dictionary contains name/Cell
             {
                 return theCell.GetContents(); // Return the Cell's contents
@@ -385,9 +388,14 @@ namespace SS
         /// </summary>
         public override object GetCellValue(string name)
         {
-            if (name == null || !IsValid.IsMatch(name))
+            if (name == null || !IsValid.IsMatch(name.ToUpper()))
             {
                 throw new InvalidNameException();
+            }
+            name = name.ToUpper();
+            if (!sheet.ContainsKey(name))
+            {
+                return "";
             }
             return sheet[name].GetValue();
         }
@@ -430,11 +438,16 @@ namespace SS
             {
                 throw new ArgumentNullException();
             }
+            else if (name == null || !IsValid.IsMatch(name.ToUpper()))
+            {
+                throw new InvalidNameException();
+            }
+            name = name.ToUpper();
             ISet<string> toReturn;
             if (double.TryParse(content, out double result))
             {
-                sheet[name].SetValue(result);
                 toReturn = SetCellContents(name, result);
+                sheet[name].SetValue(result);
             }
             else if (content[0].Equals('='))
             {
@@ -443,13 +456,20 @@ namespace SS
                 Lookup lookup = CellDoubleLookup;
                 foreach(string s in GetCellsToRecalculate(name))
                 {
-                    sheet[s].SetValue(((Formula)sheet[s].GetContents()).Evaluate(lookup));
+                    try
+                    {
+                        sheet[s].SetValue(((Formula)sheet[s].GetContents()).Evaluate(lookup));
+                    }
+                    catch (FormulaEvaluationException)
+                    {
+                        sheet[s].SetValue(new FormulaError());
+                    }
                 }
             }
             else
             {
-                sheet[name].SetValue(content);
                 toReturn = SetCellContents(name, content);
+                sheet[name].SetValue(content);
             }
 
             Changed = true;

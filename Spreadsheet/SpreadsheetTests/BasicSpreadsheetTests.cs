@@ -39,7 +39,7 @@ namespace SpreadsheetTests
         public void SSBasicSetAndGetNumber()
         {
             Spreadsheet ss = new Spreadsheet();
-            ss.SetCellContents("a1", 0.98);
+            ss.SetContentsOfCell("a1", "0.98");
             Object result = ss.GetCellContents("a1");
             Assert.AreEqual(0.98, result);
         }
@@ -51,7 +51,7 @@ namespace SpreadsheetTests
         public void SSBasicSetAndGetString()
         {
             Spreadsheet ss = new Spreadsheet();
-            ss.SetCellContents("a1", "Cook's");
+            ss.SetContentsOfCell("a1", "Cook's");
             Object result = ss.GetCellContents("a1");
             Assert.AreEqual("Cook's", result);
         }
@@ -64,21 +64,23 @@ namespace SpreadsheetTests
         {
             Spreadsheet ss = new Spreadsheet();
             Formula f = new Formula("A2-2");
-            ss.SetCellContents("a1", f);
-            Object result = ss.GetCellContents("a1");
-            Assert.AreEqual(f, result);
+            ss.SetContentsOfCell("a1", "=A2-2");
+            Object result = ss.GetCellContents("A1");
+            if (!(result is Formula))
+            {
+                Assert.Fail();
+            }
         }
 
         /// <summary>
-        /// Set cell contents to a Formula with invalid cell name vars, get contents
+        /// Set cell contents to a Formula with invalid cell name vars, expect FFE
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(InvalidNameException))]
+        [ExpectedException(typeof(FormulaFormatException))]
         public void SSBasicSetFormulaWithInvalidVars()
         {
             Spreadsheet ss = new Spreadsheet();
-            Formula f = new Formula("X-2");
-            ss.SetCellContents("a1", f);
+            ss.SetContentsOfCell("a1", "=X-2");
         }
 
         /// <summary>
@@ -88,8 +90,8 @@ namespace SpreadsheetTests
         public void SSBasicSetAndOverrideDouble()
         {
             Spreadsheet ss = new Spreadsheet();
-            ss.SetCellContents("a1", 0.1);
-            ss.SetCellContents("a1", 0.9);
+            ss.SetContentsOfCell("a1", "0.1");
+            ss.SetContentsOfCell("a1", "0.9");
             Object result = ss.GetCellContents("a1");
             Assert.AreEqual(0.9, result);
         }
@@ -101,14 +103,14 @@ namespace SpreadsheetTests
         public void SSBasicSetAndOverrideString()
         {
             Spreadsheet ss = new Spreadsheet();
-            ss.SetCellContents("a1", "Lake");
-            ss.SetCellContents("a1", "Leelanau");
+            ss.SetContentsOfCell("a1", "Lake");
+            ss.SetContentsOfCell("a1", "Leelanau");
             Object result = ss.GetCellContents("a1");
             Assert.AreEqual("Leelanau", result);
         }
 
         /// <summary>
-        /// Set cell contents, then set same cell contents again (formula); check for result
+        /// Set cell contents to formula, then check to see if it contains valid formula
         /// </summary>
         [TestMethod]
         public void SSBasicSetAndOverrideFormula()
@@ -116,10 +118,19 @@ namespace SpreadsheetTests
             Spreadsheet ss = new Spreadsheet();
             Formula f = new Formula("A1-4");
             Formula g = new Formula("A2-4");
-            ss.SetCellContents("a1", f);
-            ss.SetCellContents("a1", g);
+            ss.SetContentsOfCell("a1", "=29-b1");
+            ss.SetContentsOfCell("b1", "=5-4");
             Object result = ss.GetCellContents("a1");
-            Assert.AreEqual(g, result);
+            if (!(result is Formula))
+            {
+                Assert.Fail();
+            }
+            Formula resultFormula = (Formula)result;
+
+            if (!resultFormula.GetVariables().Contains("B1"))
+            {
+                Assert.Fail();
+            }
         }
 
         /// <summary>
@@ -130,8 +141,8 @@ namespace SpreadsheetTests
         {
             Spreadsheet ss = new Spreadsheet();
             Formula f = new Formula("A1-4");
-            ss.SetCellContents("a1", f);
-            ss.SetCellContents("a1", 5.10);
+            ss.SetContentsOfCell("a1", "A1-4");
+            ss.SetContentsOfCell("a1", "5.10");
             Object result = ss.GetCellContents("a1");
             Assert.AreEqual(5.10, result);
         }
@@ -144,8 +155,8 @@ namespace SpreadsheetTests
         {
             Spreadsheet ss = new Spreadsheet();
             Formula f = new Formula("A1-4");
-            ss.SetCellContents("a1", f);
-            ss.SetCellContents("a1", "Grand Haven");
+            ss.SetContentsOfCell("a1", "A1-4");
+            ss.SetContentsOfCell("a1", "Grand Haven");
             Object result = ss.GetCellContents("a1");
             Assert.AreEqual("Grand Haven", result);
         }
@@ -168,9 +179,9 @@ namespace SpreadsheetTests
         public void SSGetAllNonEmptyThreeFilledTestNum()
         {
             Spreadsheet ss = new Spreadsheet();
-            ss.SetCellContents("a1", "apple");
-            ss.SetCellContents("a2", 3.14159);
-            ss.SetCellContents("a3", "<3");
+            ss.SetContentsOfCell("a1", "apple");
+            ss.SetContentsOfCell("a2", "3.14159");
+            ss.SetContentsOfCell("a3", "<3");
             IEnumerable<string> result = ss.GetNamesOfAllNonemptyCells();
             Assert.AreEqual(3, result.Count());
         }
@@ -182,11 +193,9 @@ namespace SpreadsheetTests
         public void SSSetCellContentsReturnCheck()
         {
             Spreadsheet ss = new Spreadsheet();
-            Formula g = new Formula("A1*2");
-            Formula h = new Formula("B1+A1");
-            ss.SetCellContents("B1", g);
-            ss.SetCellContents("C1", h);
-            ISet<string> result = ss.SetCellContents("A1", 0.6);
+            ss.SetContentsOfCell("B1", "=A1*2");
+            ss.SetContentsOfCell("C1", "=B1+A1");
+            ISet<string> result = ss.SetContentsOfCell("A1", "0.6");
             String[] expected = { "A1", "B1", "C1" };
             foreach (string s in expected)
             {
@@ -208,11 +217,11 @@ namespace SpreadsheetTests
         public void SSGetAllNonEmptyThreeFilledNames()
         {
             Spreadsheet ss = new Spreadsheet();
-            ss.SetCellContents("a1", "apple");
-            ss.SetCellContents("a2", 3.14159);
-            ss.SetCellContents("a3", "<3");
+            ss.SetContentsOfCell("a1", "apple");
+            ss.SetContentsOfCell("a2", "3.14159");
+            ss.SetContentsOfCell("a3", "<3");
             IEnumerable<string> result = ss.GetNamesOfAllNonemptyCells();
-            String[] expected = { "a1", "a2", "a3" };
+            String[] expected = { "A1", "A2", "A3" };
             foreach (string s in result)
             {
                 if (!expected.Contains<string>(s))
@@ -229,27 +238,24 @@ namespace SpreadsheetTests
             Spreadsheet ss = new Spreadsheet();
             Formula f = new Formula("A1-4");
             Formula g = new Formula("A1-4");
-            ss.SetCellContents("a1", f);
-            ss.SetCellContents("a2", g);
-            ss.SetCellContents("A1", 0.87);
+            ss.SetContentsOfCell("a1", "A1-4");
+            ss.SetContentsOfCell("a2", "A1-4");
+            ss.SetContentsOfCell("A1", "0.87");
             Object result = ss.GetCellContents("A1");
             Assert.AreEqual(0.87, result);
         }
 
         /// <summary>
-        /// Create circular dependency, expect  CircularException
+        /// Create circular dependency, expect CircularException
         /// </summary>
         [TestMethod]
         [ExpectedException(typeof(CircularException))]
         public void SSCircularExceptionTest()
         {
             Spreadsheet ss = new Spreadsheet();
-            Formula f = new Formula("A1-4");
-            Formula g = new Formula("a1-4");
-            Formula h = new Formula("a2+3");
-            ss.SetCellContents("a1", f);
-            ss.SetCellContents("a2", g);
-            ss.SetCellContents("A1", h);
+            ss.SetContentsOfCell("B1", "=C1*2");
+            ss.SetContentsOfCell("C1", "=A1*2");
+            ss.SetContentsOfCell("A1", "=B1*2");
         }
 
         // NULL CHECKS
@@ -272,7 +278,7 @@ namespace SpreadsheetTests
         public void SSSetCellContentsTestOnNullParam()
         {
             Spreadsheet ss = new Spreadsheet();
-            ss.SetCellContents(null, 0.999);
+            ss.SetContentsOfCell(null, "0.999");
         }
 
         /// <summary>
@@ -283,7 +289,7 @@ namespace SpreadsheetTests
         public void SSSetCellContentsToStringTestOnNullText()
         {
             Spreadsheet ss = new Spreadsheet();
-            ss.SetCellContents("a1", null);
+            ss.SetContentsOfCell("a1", null);
         }
 
         /// <summary>
@@ -294,7 +300,7 @@ namespace SpreadsheetTests
         public void SSSetCellContentsToStringTestOnNullName()
         {
             Spreadsheet ss = new Spreadsheet();
-            ss.SetCellContents(null, "Unreachable");
+            ss.SetContentsOfCell(null, "Unreachable");
         }
 
         /// <summary>
@@ -306,7 +312,7 @@ namespace SpreadsheetTests
         {
             Spreadsheet ss = new Spreadsheet();
             Formula f = new Formula("A99+B5");
-            ss.SetCellContents(null, f);
+            ss.SetContentsOfCell(null, "A99+B5");
         }
     }
 }
