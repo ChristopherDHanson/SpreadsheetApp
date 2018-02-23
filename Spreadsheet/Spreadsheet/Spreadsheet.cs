@@ -228,11 +228,6 @@ namespace SS
         /// </summary>
         protected override ISet<string> SetCellContents(string name, double number)
         {
-            if (name == null || !Regex.IsMatch(name, validCellNamePattern))
-            {
-                throw new InvalidNameException();
-            }
-
             Cell test; // Create the new cell that will be added
             if (sheet.TryGetValue(name, out test)) // If the Cell 'name' already has contents
             {
@@ -443,33 +438,35 @@ namespace SS
         /// </summary>
         public override void Save(TextWriter dest)
         {
-            XmlWriter writer = XmlWriter.Create(dest);
-            writer.WriteStartDocument();
-            writer.WriteStartElement("spreadsheet");
-            writer.WriteAttributeString("IsValid", IsValid.ToString());
-            foreach (var s in sheet)
+            using (XmlWriter writer = XmlWriter.Create(dest))
             {
-                String contentsToSave;
-                Object theContents = s.Value.GetContents();
-                if (theContents is double)
+                writer.WriteStartDocument();
+                writer.WriteStartElement("spreadsheet");
+                writer.WriteAttributeString("IsValid", IsValid.ToString());
+                foreach (var s in sheet)
                 {
-                    contentsToSave = theContents.ToString();
+                    String contentsToSave;
+                    Object theContents = s.Value.GetContents();
+                    if (theContents is double)
+                    {
+                        contentsToSave = theContents.ToString();
+                    }
+                    else if (theContents is Formula)
+                    {
+                        contentsToSave = ((Formula)theContents).ToString();
+                    }
+                    else
+                    {
+                        contentsToSave = (string)theContents;
+                    }
+                    writer.WriteStartElement("cell");
+                    writer.WriteAttributeString("name", s.Key);
+                    writer.WriteAttributeString("contents", contentsToSave);
+                    writer.WriteFullEndElement();
                 }
-                else if (theContents is Formula)
-                {
-                    contentsToSave = ((Formula)theContents).ToString();
-                }
-                else
-                {
-                    contentsToSave = (string)theContents;
-                }
-                writer.WriteStartElement("cell");
-                writer.WriteAttributeString("name", s.ToString());
-                writer.WriteAttributeString("contents", contentsToSave);
-                writer.WriteEndElement();
+                writer.WriteFullEndElement();
+                writer.WriteEndDocument();
             }
-            writer.WriteEndElement();
-            writer.WriteEndDocument();
             Changed = false;
         }
 

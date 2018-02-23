@@ -374,7 +374,118 @@ namespace SpreadsheetTests
                 Assert.Fail();
             if (!(ss.GetCellValue("A1") is double) || (double)ss.GetCellValue("A1") != 0.67)
                 Assert.Fail();
+        }
 
+        /// <summary>
+        /// Create spreadsheet using third constructor, with invalid IsValid
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(SpreadsheetReadException))]
+        public void ThirdConstructorTestInvalidIsValid()
+        {
+            Regex r = new Regex(".*");
+            TextReader reader = new StringReader("<spreadsheet IsValid = \"poo[\" ><cell name =" +
+                " \"A1\" contents = \"0.67\"></cell></spreadsheet>");
+            Spreadsheet ss = new Spreadsheet(reader, r);
+        }
+
+        /// <summary>
+        /// Create spreadsheet using third constructor, with duplicate cells
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(SpreadsheetReadException))]
+        public void ThirdConstructorTestHasDuplicateCells()
+        {
+            Regex r = new Regex(".*");
+            TextReader reader = new StringReader("<spreadsheet IsValid = \".*\" ><cell name =" +
+                " \"A1\" contents = \"0.67\"></cell><cell name =" +
+                " \"A1\" contents = \"0.76\"></cell></spreadsheet>");
+            Spreadsheet ss = new Spreadsheet(reader, r);
+        }
+
+        /// <summary>
+        /// Create spreadsheet using third constructor, with invalid according to old
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(SpreadsheetReadException))]
+        public void ThirdConstructorTestInvalidCellNameAccToOld()
+        {
+            Regex r = new Regex(".*");
+            TextReader reader = new StringReader("<spreadsheet IsValid = \"[a-z]\" ><cell name =" +
+                " \"A1\" contents = \"0.67\"><cell name =" +
+                " \"A1\" contents = \"0.76\"></cell></spreadsheet>");
+            Spreadsheet ss = new Spreadsheet(reader, r);
+        }
+
+        /// <summary>
+        /// Create spreadsheet using third constructor, with invalid according to new
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(SpreadsheetReadException))]
+        public void ThirdConstructorTestInvalidCellNameAccToNew()
+        {
+            Regex r = new Regex("[a]");
+            TextReader reader = new StringReader("<spreadsheet IsValid = \".*\" ><cell name =" +
+                " \"A1\" contents = \"0.67\"></cell></spreadsheet>");
+            Spreadsheet ss = new Spreadsheet(reader, r);
+        }
+
+        /// <summary>
+        /// Create spreadsheet using third constructor, with CircularException
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(SpreadsheetReadException))]
+        public void ThirdConstructorTestCircularException()
+        {
+            Regex r = new Regex(".*");
+            TextReader reader = new StringReader("<spreadsheet IsValid = \".*\" ><cell name =" +
+                " \"A1\" contents = \"=B1*2\"></cell><cell name =" +
+                " \"B1\" contents = \"=C1*2\"></cell><cell name =" +
+                " \"C1\" contents = \"=A1*2\"></cell></spreadsheet>");
+            Spreadsheet ss = new Spreadsheet(reader, r);
+        }
+
+        /// <summary>
+        /// Create spreadsheet using third constructor, with ValidationError
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(SpreadsheetReadException))]
+        public void ThirdConstructorTestValidationError()
+        {
+            Regex r = new Regex(".*");
+            TextReader reader = new StringReader("<spreadsheetx IsValid = \".*\" ><cell name =" +
+                " \"A1\" contents = \"=B1*2\"></cell><cell name =" +
+                " \"B1\" contents = \"=C1*2\"></cell><cell name =" +
+                " \"C1\" contents = \"=A1*2\"></cell></spreadsheet>");
+            Spreadsheet ss = new Spreadsheet(reader, r);
+        }
+
+        /// <summary>
+        /// Create spreadsheet, have double replace formula as contents
+        /// </summary>
+        [TestMethod]
+        public void DoubleReplacesFormulaContents()
+        {
+            Spreadsheet ss = new Spreadsheet();
+            ss.SetContentsOfCell("B1", "0.99");
+            ss.SetContentsOfCell("A1", "=B2-4");
+            ss.SetContentsOfCell("A1", "0.01");
+            if (!(ss.GetCellValue("A1") is double)|| (double)ss.GetCellValue("A1") != 0.01)
+                Assert.Fail();
+        }
+
+        [TestMethod]
+        public void SaveTestBasic()
+        {
+            StringBuilder result = new StringBuilder();
+            StringWriter writer = new StringWriter(result);
+            Spreadsheet ss = new Spreadsheet();
+            ss.SetContentsOfCell("B1", "0.99");
+            ss.SetContentsOfCell("A1", "=B2-4");
+            ss.SetContentsOfCell("A1", "0.01");
+            ss.Save(writer);
+            result.ToString();
+            Console.Write(result);
         }
     }
 }
