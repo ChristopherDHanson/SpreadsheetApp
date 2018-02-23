@@ -421,7 +421,7 @@ namespace SpreadsheetTests
         /// Create spreadsheet using third constructor, with invalid according to new
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(SpreadsheetReadException))]
+        [ExpectedException(typeof(SpreadsheetVersionException))]
         public void ThirdConstructorTestInvalidCellNameAccToNew()
         {
             Regex r = new Regex("[a]");
@@ -474,6 +474,111 @@ namespace SpreadsheetTests
                 Assert.Fail();
         }
 
+        /// <summary>
+        /// Create spreadsheet, have string replace formula as contents
+        /// </summary>
+        [TestMethod]
+        public void StringReplacesFormulaContents()
+        {
+            Spreadsheet ss = new Spreadsheet();
+            ss.SetContentsOfCell("B1", "0.99");
+            ss.SetContentsOfCell("A1", "=B2-4");
+            ss.SetContentsOfCell("A1", "Sleeping Bear");
+            if (!(ss.GetCellValue("A1") is string) || (string)ss.GetCellValue("A1") != "Sleeping Bear")
+                Assert.Fail();
+        }
+
+        /// <summary>
+        /// Create spreadsheet, have string replace formula as contents
+        /// </summary>
+        [TestMethod]
+        public void FormulaReplacesFormulaContents()
+        {
+            Spreadsheet ss = new Spreadsheet();
+            ss.SetContentsOfCell("B1", "0.99");
+            ss.SetContentsOfCell("A1", "=B2-4");
+            ss.SetContentsOfCell("A1", "=B1-99");
+            if (!(ss.GetCellValue("A1") is double))
+                Assert.Fail();
+        }
+
+        /// <summary>
+        /// Create spreadsheet, have double set to invalid cell name
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(InvalidNameException))]
+        public void DoubleSetInvalidCellName()
+        {
+            Spreadsheet ss = new Spreadsheet();
+            ss.SetContentsOfCell("B01", "0.99");
+            ss.SetContentsOfCell("A1", "=B2-4");
+            ss.SetContentsOfCell("A1", "Sleeping Bear");
+        }
+
+        /// <summary>
+        /// Create spreadsheet, have string set to invalid cell name
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(InvalidNameException))]
+        public void StringSetInvalidCellName()
+        {
+            Spreadsheet ss = new Spreadsheet();
+            ss.SetContentsOfCell("B1", "0.99");
+            ss.SetContentsOfCell("A1", "=B2-4");
+            ss.SetContentsOfCell("A01", "Monroe Center");
+        }
+
+        /// <summary>
+        /// Create spreadsheet, have Formula set to invalid cell name
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(InvalidNameException))]
+        public void FormulaSetInvalidCellName()
+        {
+            Spreadsheet ss = new Spreadsheet();
+            ss.SetContentsOfCell("B1", "0.99");
+            ss.SetContentsOfCell("A01", "=B2-4");
+            ss.SetContentsOfCell("A1", "The GRAM");
+        }
+
+        /// <summary>
+        /// Create spreadsheet, have Formula variable points to invalid cell name
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void FormulaVarIsInvalidCellName()
+        {
+            Spreadsheet ss = new Spreadsheet();
+            ss.SetContentsOfCell("B1", "0.99");
+            ss.SetContentsOfCell("A21", "=B02-4");
+            ss.SetContentsOfCell("A1", "The GRAM");
+        }
+
+        /// <summary>
+        /// Get cell value of invalid name
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(InvalidNameException))]
+        public void GetValueInvalidCellName()
+        {
+            Spreadsheet ss = new Spreadsheet();
+            ss.GetCellValue("A001");
+        }
+
+        /// <summary>
+        /// Get cell value of null name
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(InvalidNameException))]
+        public void GetValueNullCellName()
+        {
+            Spreadsheet ss = new Spreadsheet();
+            ss.GetCellValue(null);
+        }
+
+        /// <summary>
+        /// Save basic spreadsheet, view output manually
+        /// </summary>
         [TestMethod]
         public void SaveTestBasic()
         {
@@ -486,6 +591,46 @@ namespace SpreadsheetTests
             ss.Save(writer);
             result.ToString();
             Console.Write(result);
+            Assert.AreEqual('<', result[0]);
+        }
+
+        /// <summary>
+        /// Save basic spreadsheet, construct from save
+        /// </summary>
+        [TestMethod]
+        public void SaveTestBasicThenCreateFromSave()
+        {
+            StringBuilder result = new StringBuilder();
+            StringWriter writer = new StringWriter(result);
+            Spreadsheet ss = new Spreadsheet();
+            ss.SetContentsOfCell("B1", "0.99");
+            ss.SetContentsOfCell("A1", "=B2-4");
+            ss.SetContentsOfCell("A1", "0.01");
+            ss.Save(writer);
+            String resultStr = result.ToString();
+
+            TextReader reader = new StringReader(resultStr);
+            Regex r = new Regex(".*");
+            Spreadsheet newSS = new Spreadsheet(reader, r);
+            Assert.AreEqual(newSS.GetCellContents("A1"), 0.01);
+        }
+
+        /// <summary>
+        /// Save spreadsheet with all three types of contents
+        /// </summary>
+        [TestMethod]
+        public void SaveTestAllTypesOfContents()
+        {
+            StringBuilder result = new StringBuilder();
+            StringWriter writer = new StringWriter(result);
+            Spreadsheet ss = new Spreadsheet();
+            ss.SetContentsOfCell("B1", "0.99");
+            ss.SetContentsOfCell("A1", "=B2-4");
+            ss.SetContentsOfCell("C1", "Breckenridge");
+            ss.Save(writer);
+            result.ToString();
+            Console.Write(result);
+            Assert.AreEqual('<', result[0]);
         }
     }
 }

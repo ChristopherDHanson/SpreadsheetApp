@@ -155,7 +155,7 @@ namespace SS
                                 }
                                 if (!newIsValid.IsMatch(name))
                                 {
-                                    throw new SpreadsheetReadException("Invalid cell name according to newIsValid");
+                                    throw new SpreadsheetVersionException("Invalid cell name according to newIsValid");
                                 }
                                 try
                                 {
@@ -228,6 +228,11 @@ namespace SS
         /// </summary>
         protected override ISet<string> SetCellContents(string name, double number)
         {
+            if (name == null || !Regex.IsMatch(name, validCellNamePattern))
+            {
+                throw new InvalidNameException();
+            }
+
             Cell test; // Create the new cell that will be added
             if (sheet.TryGetValue(name, out test)) // If the Cell 'name' already has contents
             {
@@ -273,10 +278,6 @@ namespace SS
         /// </summary>
         protected override ISet<string> SetCellContents(string name, string text)
         {
-            if (text == null)
-            {
-                throw new ArgumentNullException("");
-            }
             if (name == null || !Regex.IsMatch(name, validCellNamePattern))
             {
                 throw new InvalidNameException();
@@ -479,7 +480,8 @@ namespace SS
         /// </summary>
         public override object GetCellValue(string name)
         {
-            if (name == null || !IsValid.IsMatch(name.ToUpper()))
+            if (name == null || !IsValid.IsMatch(name.ToUpper()) ||
+                !Regex.IsMatch(name, validCellNamePattern))
             {
                 throw new InvalidNameException();
             }
@@ -553,7 +555,7 @@ namespace SS
                     }
                     catch (FormulaEvaluationException)
                     {
-                        sheet[s].SetValue(new FormulaError());
+                        sheet[s].SetValue(new FormulaError("Formula cannot evaluate."));
                     }
                 }
             }
