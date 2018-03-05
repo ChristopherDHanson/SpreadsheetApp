@@ -390,7 +390,14 @@ namespace SS
             {
                 sheet.Remove(name);
                 test.SetContents(oldContents);
-                sheet.Add(name, test);
+                if (oldContents == null) { // If the cell did not exist before exception
+                    foreach (string s in vars) // Remove dependencies that were added
+                    {
+                        depGraph.RemoveDependency(s, name);
+                    }
+                }
+                else // Otherwise, add in the cell in its previous state, so as not to allow ss to have circexcep.
+                    sheet.Add(name, test);
                 throw e;
             }
         }
@@ -454,7 +461,7 @@ namespace SS
                     }
                     else if (theContents is Formula)
                     {
-                        contentsToSave = ((Formula)theContents).ToString();
+                        contentsToSave = "=" + ((Formula)theContents).ToString();
                     }
                     else
                     {
@@ -537,32 +544,46 @@ namespace SS
             }
             name = name.ToUpper();
             ISet<string> toReturn;
+            Lookup lookup = CellDoubleLookup;
             if (double.TryParse(content, out double result))
             {
                 toReturn = SetCellContents(name, result);
                 sheet[name].SetValue(result);
             }
-            else if (content[0].Equals('='))
+            else if (content.Length > 0 && content[0].Equals('='))
             {
-                Formula contentFormula = new Formula(content.Substring(1), s => s.ToUpper(), s => Regex.IsMatch(s, validCellNamePattern));
+                Formula contentFormula = new Formula(content.Substring(1), s => s.ToUpper(),
+                    s => (Regex.IsMatch(s, validCellNamePattern) && IsValid.IsMatch(s)));
                 toReturn = SetCellContents(name, contentFormula);
-                Lookup lookup = CellDoubleLookup;
-                foreach(string s in GetCellsToRecalculate(name))
+                try // Set this cell's value, possibly to a FormulaError
                 {
-                    try
-                    {
-                        sheet[s].SetValue(((Formula)sheet[s].GetContents()).Evaluate(lookup));
-                    }
-                    catch (FormulaEvaluationException)
-                    {
-                        sheet[s].SetValue(new FormulaError("Formula cannot evaluate."));
-                    }
+                    sheet[name].SetValue(((Formula)sheet[name].GetContents()).Evaluate(lookup));
+                }
+                catch (FormulaEvaluationException)
+                {
+                    sheet[name].SetValue(new FormulaError("Formula cannot evaluate."));
                 }
             }
-            else
+            else // If content is a plain old string
             {
                 toReturn = SetCellContents(name, content);
-                sheet[name].SetValue(content);
+                if (content.Length > 0) // If it is not an empty string, set the value to content
+                    sheet[name].SetValue(content);
+            }
+
+            List<string> toRecalc = GetCellsToRecalculate(name).ToList<string>();
+            if (toRecalc.Count > 0)
+                toRecalc.RemoveAt(0); // Remove this cell (name) from list, then set values of relevant cells
+            foreach (string s in toRecalc)
+            {
+                try // Take FormulaError possibilities into account.
+                {
+                    sheet[s].SetValue(((Formula)sheet[s].GetContents()).Evaluate(lookup));
+                }
+                catch (FormulaEvaluationException)
+                {
+                    sheet[s].SetValue(new FormulaError("Formula cannot evaluate."));
+                }
             }
 
             Changed = true;
