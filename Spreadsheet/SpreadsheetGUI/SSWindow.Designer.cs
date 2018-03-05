@@ -28,12 +28,44 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.TheSpreadsheetPanel = new SSGui.SpreadsheetPanel();
+            this.EditBox = new System.Windows.Forms.TextBox();
+            this.SuspendLayout();
+            // 
+            // TheSpreadsheetPanel
+            // 
+            this.TheSpreadsheetPanel.Location = new System.Drawing.Point(12, 69);
+            this.TheSpreadsheetPanel.Name = "TheSpreadsheetPanel";
+            this.TheSpreadsheetPanel.Size = new System.Drawing.Size(747, 352);
+            this.TheSpreadsheetPanel.TabIndex = 0;
+            this.TheSpreadsheetPanel.SelectionChanged += new SSGui.SelectionChangedHandler(this.TheSpreadsheetPanel_SelectionChanged);
+            this.TheSpreadsheetPanel.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TheSpreadsheetPanel_KeyPress);
+            // 
+            // EditBox
+            // 
+            this.EditBox.Location = new System.Drawing.Point(12, 41);
+            this.EditBox.Name = "EditBox";
+            this.EditBox.Size = new System.Drawing.Size(352, 22);
+            this.EditBox.TabIndex = 1;
+            // 
+            // SSWindow
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Text = "Form1";
+            this.ClientSize = new System.Drawing.Size(771, 376);
+            this.Controls.Add(this.EditBox);
+            this.Controls.Add(this.TheSpreadsheetPanel);
+            this.Name = "SSWindow";
+            this.Text = "Spreadsheet";
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         #endregion
+
+        private SSGui.SpreadsheetPanel TheSpreadsheetPanel;
+        private System.Windows.Forms.TextBox EditBox;
     }
 }
 
