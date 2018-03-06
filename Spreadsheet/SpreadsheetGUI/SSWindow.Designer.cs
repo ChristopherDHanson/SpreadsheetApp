@@ -39,6 +39,7 @@
             this.TheSpreadsheetPanel.Size = new System.Drawing.Size(747, 352);
             this.TheSpreadsheetPanel.TabIndex = 0;
             this.TheSpreadsheetPanel.SelectionChanged += new SSGui.SelectionChangedHandler(this.TheSpreadsheetPanel_SelectionChanged);
+            this.TheSpreadsheetPanel.Load += new System.EventHandler(this.TheSpreadsheetPanel_Load);
             // 
             // EditBox
             // 

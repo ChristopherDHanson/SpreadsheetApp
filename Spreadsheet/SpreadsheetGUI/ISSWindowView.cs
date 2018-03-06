@@ -11,6 +11,7 @@ namespace SpreadsheetGUI
     {
         event Action<SpreadsheetPanel> ChangeCurrentEvent;
         event Action<string> ChangeCellContentEvent;
+        event Action<string> ChangeCellContentToFormulaEvent;
         event Action SaveEvent;
         event Action DirectionPressEvent;
         event Action LoadEvent;

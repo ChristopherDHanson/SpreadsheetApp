@@ -33,6 +33,7 @@ namespace SpreadsheetGUI
             //window.CountEvent += HandleCount;
             window.ChangeCurrentEvent += ChangeCurrent;
             window.ChangeCellContentEvent += ChangeCellContent;
+            window.ChangeCellContentToFormulaEvent += ChangeCellContentToFormula;
         }
 
         private void ChangeCurrent(SpreadsheetPanel sender)
@@ -45,17 +46,22 @@ namespace SpreadsheetGUI
 
         private void ChangeCellContent(string content)
         {
-            model.SetContentsOfCell(currentName, content);
-            object valueTemp = model.GetCellValue(currentName);
-            String value;
-            if (valueTemp is string)
+            String value = "";
+            if (!content.Equals("="))
             {
-                value = (string)valueTemp;
+                model.SetContentsOfCell(currentName, content);
+                object valueTemp = model.GetCellValue(currentName);
+                if (valueTemp is string)
+                {
+                    value = (string)valueTemp;
+                }
+                else if (valueTemp is double)
+                {
+                    value = valueTemp.ToString();
+                }
+                else if (valueTemp is FormulaError)
+                    value = "Formula Error";
             }
-            else if (valueTemp is FormulaError)
-                value = "Formula Error";
-            else
-                value = "";
             currentPanel.SetValue(col, row, value);
         }
     }
