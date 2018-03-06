@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using SSGui;
 using SS;
 
@@ -18,6 +19,7 @@ namespace SpreadsheetGUI
         private SpreadsheetPanel currentPanel;
         private char[] alphabet = {'A','B','C','D','E','F','G','H','I','J','K','L',
             'M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
+        private string currentValue;
 
         /// <summary>
         /// Begins controlling window.
@@ -40,6 +42,8 @@ namespace SpreadsheetGUI
             currentPanel = sender;
             sender.GetSelection(out col, out row);
             currentName = (alphabet[col] + (row+1).ToString());
+            
+
         }
 
         private void ChangeCellContent(string content)

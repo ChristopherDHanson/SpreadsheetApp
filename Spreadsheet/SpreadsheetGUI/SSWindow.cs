@@ -49,8 +49,6 @@ namespace SpreadsheetGUI
             {
                 ChangeCurrentEvent(sender);
             }
-
-            EditBox.Text = "";
         }
 
         private void EditBox_TextChanged(object sender, EventArgs e)
