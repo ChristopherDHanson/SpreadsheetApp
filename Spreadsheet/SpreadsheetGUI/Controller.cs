@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using SSGui;
 using SS;
+using System.Windows.Forms;
 
 namespace SpreadsheetGUI
 {
@@ -35,6 +36,7 @@ namespace SpreadsheetGUI
             //window.CountEvent += HandleCount;
             window.ChangeCurrentEvent += ChangeCurrent;
             window.ChangeCellContentEvent += ChangeCellContent;
+            window.RetrieveEditBoxValueEvent += RetrieveEditBoxValue;
         }
 
         private void ChangeCurrent(SpreadsheetPanel sender)
@@ -42,8 +44,7 @@ namespace SpreadsheetGUI
             currentPanel = sender;
             sender.GetSelection(out col, out row);
             currentName = (alphabet[col] + (row+1).ToString());
-            
-
+            sender.GetValue(col, row, out currentValue);
         }
 
         private void ChangeCellContent(string content)
@@ -63,6 +64,11 @@ namespace SpreadsheetGUI
             else
                 value = "";
             currentPanel.SetValue(col, row, value);
+        }
+
+        private void RetrieveEditBoxValue (TextBox t)
+        {
+            t.Text = currentValue;
         }
     }
 }

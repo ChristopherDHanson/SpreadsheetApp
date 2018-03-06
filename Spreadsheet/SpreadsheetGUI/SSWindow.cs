@@ -15,6 +15,7 @@ namespace SpreadsheetGUI
     {
         public event Action<SpreadsheetPanel> ChangeCurrentEvent;
         public event Action<string> ChangeCellContentEvent;
+        public event Action<TextBox> RetrieveEditBoxValueEvent;
         public event Action SaveEvent;
         public event Action DirectionPressEvent;
         public event Action LoadEvent;
@@ -39,15 +40,17 @@ namespace SpreadsheetGUI
 
         private void TheSpreadsheetPanel_SelectionChanged(SpreadsheetPanel sender)
         {
-
             if (ChangeCellContentEvent != null)
             {
                 ChangeCellContentEvent(EditBox.Text);
             }
-
             if (ChangeCurrentEvent != null)
             {
                 ChangeCurrentEvent(sender);
+            }
+            if (RetrieveEditBoxValueEvent != null)
+            {
+                RetrieveEditBoxValueEvent(EditBox);
             }
         }
 
