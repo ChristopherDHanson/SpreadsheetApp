@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SSGui;
 using SS;
+using System.Windows.Forms;
 
 namespace SpreadsheetGUI
 {
@@ -18,6 +19,7 @@ namespace SpreadsheetGUI
         private SpreadsheetPanel currentPanel;
         private char[] alphabet = {'A','B','C','D','E','F','G','H','I','J','K','L',
             'M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
+        private string currentValue;
 
         /// <summary>
         /// Begins controlling window.
@@ -33,7 +35,7 @@ namespace SpreadsheetGUI
             //window.CountEvent += HandleCount;
             window.ChangeCurrentEvent += ChangeCurrent;
             window.ChangeCellContentEvent += ChangeCellContent;
-            window.ChangeCellContentToFormulaEvent += ChangeCellContentToFormula;
+            window.RetrieveEditBoxValueEvent += RetrieveEditBoxValue;
         }
 
         private void ChangeCurrent(SpreadsheetPanel sender)
@@ -41,28 +43,31 @@ namespace SpreadsheetGUI
             currentPanel = sender;
             sender.GetSelection(out col, out row);
             currentName = (alphabet[col] + (row+1).ToString());
-            
+            sender.GetValue(col, row, out currentValue);
         }
 
         private void ChangeCellContent(string content)
         {
-            String value = "";
-            if (!content.Equals("="))
+            model.SetContentsOfCell(currentName, content);
+            object valueTemp = model.GetCellValue(currentName);
+            String value;
+            if (valueTemp is string)
             {
-                model.SetContentsOfCell(currentName, content);
-                object valueTemp = model.GetCellValue(currentName);
-                if (valueTemp is string)
-                {
-                    value = (string)valueTemp;
-                }
-                else if (valueTemp is double)
-                {
-                    value = valueTemp.ToString();
-                }
-                else if (valueTemp is FormulaError)
-                    value = "Formula Error";
+                value = (string)valueTemp;
+            } else if (valueTemp is double)
+            {
+                value = valueTemp.ToString();
             }
+            else if (valueTemp is FormulaError)
+                value = "Formula Error";
+            else
+                value = "";
             currentPanel.SetValue(col, row, value);
+        }
+
+        private void RetrieveEditBoxValue (TextBox t)
+        {
+            t.Text = currentValue;
         }
     }
 }

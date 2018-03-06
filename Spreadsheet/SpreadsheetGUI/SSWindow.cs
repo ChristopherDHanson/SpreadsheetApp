@@ -15,7 +15,7 @@ namespace SpreadsheetGUI
     {
         public event Action<SpreadsheetPanel> ChangeCurrentEvent;
         public event Action<string> ChangeCellContentEvent;
-        public event Action<string> ChangeCellContentToFormulaEvent;
+        public event Action<TextBox> RetrieveEditBoxValueEvent;
         public event Action SaveEvent;
         public event Action DirectionPressEvent;
         public event Action LoadEvent;
@@ -40,16 +40,23 @@ namespace SpreadsheetGUI
 
         private void TheSpreadsheetPanel_SelectionChanged(SpreadsheetPanel sender)
         {
+            if (ChangeCellContentEvent != null)
+            {
+                ChangeCellContentEvent(EditBox.Text);
+            }
             if (ChangeCurrentEvent != null)
             {
                 ChangeCurrentEvent(sender);
             }
-            EditBox.Text = "";
+            if (RetrieveEditBoxValueEvent != null)
+            {
+                RetrieveEditBoxValueEvent(EditBox);
+            }
         }
 
         private void EditBox_TextChanged(object sender, EventArgs e)
         {
-            if (ChangeCellContentEvent != null)
+            if (ChangeCellContentEvent != null && !EditBox.Text.StartsWith("="))
             {
                 ChangeCellContentEvent(EditBox.Text);
             }
@@ -59,7 +66,7 @@ namespace SpreadsheetGUI
         {
             if (ChangeCurrentEvent != null)
             {
-                ChangeCurrentEvent((SpreadsheetPanel)sender);
+                ChangeCurrentEvent((SpreadsheetPanel) sender);
             }
         }
     }

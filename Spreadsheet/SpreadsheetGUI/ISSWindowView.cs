@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace SpreadsheetGUI
 {
@@ -11,7 +12,7 @@ namespace SpreadsheetGUI
     {
         event Action<SpreadsheetPanel> ChangeCurrentEvent;
         event Action<string> ChangeCellContentEvent;
-        event Action<string> ChangeCellContentToFormulaEvent;
+        event Action<TextBox> RetrieveEditBoxValueEvent;
         event Action SaveEvent;
         event Action DirectionPressEvent;
         event Action LoadEvent;
