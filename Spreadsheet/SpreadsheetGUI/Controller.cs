@@ -16,8 +16,8 @@ namespace SpreadsheetGUI
         private int col;
         private int row;
         private SpreadsheetPanel currentPanel;
-        private char[] alphabet = {'a','b','c','d','e','f','g','h','i','j','k','l',
-            'm','n','o','p','q','r','s','t','u','v','w','x','y','z'};
+        private char[] alphabet = {'A','B','C','D','E','F','G','H','I','J','K','L',
+            'M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
 
         /// <summary>
         /// Begins controlling window.
@@ -26,6 +26,7 @@ namespace SpreadsheetGUI
         {
             this.window = window;
             this.model = new Spreadsheet();
+            currentName = "A1";
             //window.FileChosenEvent += HandleFileChosen;
             //window.CloseEvent += HandleClose;
             //window.NewEvent += HandleNew;
@@ -38,8 +39,7 @@ namespace SpreadsheetGUI
         {
             currentPanel = sender;
             sender.GetSelection(out col, out row);
-            sender.SetValue(col, row, "ok");
-            currentName = (alphabet[col] + row.ToString());
+            currentName = (alphabet[col] + (row+1).ToString());
             
         }
 
