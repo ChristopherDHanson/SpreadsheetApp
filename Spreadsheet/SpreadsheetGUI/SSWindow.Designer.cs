@@ -39,7 +39,6 @@
             this.TheSpreadsheetPanel.Size = new System.Drawing.Size(747, 352);
             this.TheSpreadsheetPanel.TabIndex = 0;
             this.TheSpreadsheetPanel.SelectionChanged += new SSGui.SelectionChangedHandler(this.TheSpreadsheetPanel_SelectionChanged);
-            this.TheSpreadsheetPanel.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TheSpreadsheetPanel_KeyPress);
             // 
             // EditBox
             // 
@@ -47,6 +46,7 @@
             this.EditBox.Name = "EditBox";
             this.EditBox.Size = new System.Drawing.Size(352, 22);
             this.EditBox.TabIndex = 1;
+            this.EditBox.TextChanged += new System.EventHandler(this.EditBox_TextChanged);
             // 
             // SSWindow
             // 

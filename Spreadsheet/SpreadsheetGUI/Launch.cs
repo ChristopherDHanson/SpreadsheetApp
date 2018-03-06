@@ -16,7 +16,11 @@ namespace SpreadsheetGUI
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new SSWindow());
+
+            // Get the application context and run one form inside it
+            var context = SSWindowApplicationContext.GetContext();
+            SSWindowApplicationContext.GetContext().RunNew();
+            Application.Run(context);
         }
     }
 }

@@ -13,7 +13,8 @@ namespace SpreadsheetGUI
 {
     public partial class SSWindow : Form, ISSWindowView
     {
-        public event Action<SpreadsheetPanel> SelectionChangedEvent;
+        public event Action<SpreadsheetPanel> ChangeCurrentEvent;
+        public event Action<string> ChangeCellContentEvent;
         public event Action SaveEvent;
         public event Action DirectionPressEvent;
         public event Action LoadEvent;
@@ -26,18 +27,29 @@ namespace SpreadsheetGUI
             InitializeComponent();
         }
 
-        private void TheSpreadsheetPanel_KeyPress(object sender, KeyPressEventArgs e)
+        public void DoClose()
         {
-
+            Close();
         }
 
-        private void TheSpreadsheetPanel_SelectionChanged(SpreadsheetPanel sender, EventArgs e)
+        public void OpenNew()
         {
-            //sender.GetSelection(out int column, out int row);
-            //sender.SetValue(column, row, "ok");
-            if (SelectionChangedEvent != null)
+            SSWindowApplicationContext.GetContext().RunNew();
+        }
+
+        private void TheSpreadsheetPanel_SelectionChanged(SpreadsheetPanel sender)
+        {
+            if (ChangeCurrentEvent != null)
             {
-                SelectionChangedEvent(sender);
+                ChangeCurrentEvent(sender);
+            }
+        }
+
+        private void EditBox_TextChanged(object sender, EventArgs e)
+        {
+            if (ChangeCellContentEvent != null)
+            {
+                ChangeCellContentEvent(EditBox.Text);
             }
         }
     }
