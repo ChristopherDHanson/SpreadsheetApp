@@ -40,7 +40,6 @@ namespace SpreadsheetGUI
             currentPanel = sender;
             sender.GetSelection(out col, out row);
             currentName = (alphabet[col] + (row+1).ToString());
-            
         }
 
         private void ChangeCellContent(string content)
@@ -51,6 +50,9 @@ namespace SpreadsheetGUI
             if (valueTemp is string)
             {
                 value = (string)valueTemp;
+            } else if (valueTemp is double)
+            {
+                value = valueTemp.ToString();
             }
             else if (valueTemp is FormulaError)
                 value = "Formula Error";

@@ -39,17 +39,33 @@ namespace SpreadsheetGUI
 
         private void TheSpreadsheetPanel_SelectionChanged(SpreadsheetPanel sender)
         {
+
+            if (ChangeCellContentEvent != null)
+            {
+                ChangeCellContentEvent(EditBox.Text);
+            }
+
             if (ChangeCurrentEvent != null)
             {
                 ChangeCurrentEvent(sender);
             }
+
+            EditBox.Text = "";
         }
 
         private void EditBox_TextChanged(object sender, EventArgs e)
         {
-            if (ChangeCellContentEvent != null)
+            if (ChangeCellContentEvent != null && !EditBox.Text.StartsWith("="))
             {
                 ChangeCellContentEvent(EditBox.Text);
+            }
+        }
+
+        private void TheSpreadsheetPanel_Load(object sender, EventArgs e)
+        {
+            if (ChangeCurrentEvent != null)
+            {
+                ChangeCurrentEvent((SpreadsheetPanel) sender);
             }
         }
     }
