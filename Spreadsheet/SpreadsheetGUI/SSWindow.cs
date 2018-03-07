@@ -16,6 +16,7 @@ namespace SpreadsheetGUI
         public event Action<SpreadsheetPanel> ChangeCurrentEvent;
         public event Action<string> ChangeCellContentEvent;
         public event Action<TextBox> RetrieveEditBoxValueEvent;
+        public event Action UpdateRelevantEvent;
         public event Action SaveEvent;
         public event Action DirectionPressEvent;
         public event Action LoadEvent;
@@ -43,6 +44,10 @@ namespace SpreadsheetGUI
             if (ChangeCellContentEvent != null)
             {
                 ChangeCellContentEvent(EditBox.Text);
+            }
+            if (UpdateRelevantEvent != null)
+            {
+                UpdateRelevantEvent();
             }
             if (ChangeCurrentEvent != null)
             {

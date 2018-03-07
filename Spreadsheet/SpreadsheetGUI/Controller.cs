@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using SSGui;
 using SS;
 using System.Windows.Forms;
+using Formulas;
 
 namespace SpreadsheetGUI
 {
@@ -20,6 +21,8 @@ namespace SpreadsheetGUI
         private char[] alphabet = {'A','B','C','D','E','F','G','H','I','J','K','L',
             'M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
         private string currentValue;
+        private string currentContent;
+        private ISet<string> cellsToChange;
 
         /// <summary>
         /// Begins controlling window.
@@ -29,13 +32,10 @@ namespace SpreadsheetGUI
             this.window = window;
             this.model = new Spreadsheet();
             currentName = "A1";
-            //window.FileChosenEvent += HandleFileChosen;
-            //window.CloseEvent += HandleClose;
-            //window.NewEvent += HandleNew;
-            //window.CountEvent += HandleCount;
             window.ChangeCurrentEvent += ChangeCurrent;
             window.ChangeCellContentEvent += ChangeCellContent;
             window.RetrieveEditBoxValueEvent += RetrieveEditBoxValue;
+            window.UpdateRelevantEvent += UpdateRelevantCells;
         }
 
         private void ChangeCurrent(SpreadsheetPanel sender)
@@ -44,11 +44,19 @@ namespace SpreadsheetGUI
             sender.GetSelection(out col, out row);
             currentName = (alphabet[col] + (row+1).ToString());
             sender.GetValue(col, row, out currentValue);
+            object desiredContent = model.GetCellContents(currentName);
+            if (desiredContent is Formula)
+            {
+                currentContent = "=" + desiredContent.ToString();
+            }
+            else
+                currentContent = desiredContent.ToString();
         }
 
         private void ChangeCellContent(string content)
         {
-            model.SetContentsOfCell(currentName, content);
+            cellsToChange = model.SetContentsOfCell(currentName, content); // Set contents in spreadsheet
+            // Obtain value from cells (calced by above), conv to string, set it to display
             object valueTemp = model.GetCellValue(currentName);
             String value;
             if (valueTemp is string)
@@ -65,9 +73,39 @@ namespace SpreadsheetGUI
             currentPanel.SetValue(col, row, value);
         }
 
-        private void RetrieveEditBoxValue (TextBox t)
+        private void RetrieveEditBoxValue(TextBox t)
         {
-            t.Text = currentValue;
+            t.Text = currentContent;
+        }
+
+        private void UpdateRelevantCells()
+        {
+            foreach (string s in cellsToChange)
+            {
+                int thisCol = s[0] - 65;
+                int thisRow;
+                int.TryParse(s.Substring(1), out thisRow);
+                thisRow--;
+                
+
+                // Get the value in the cell and convert it to appropriate string
+                object valueTemp = model.GetCellValue(s);
+                String value;
+                if (valueTemp is string)
+                {
+                    value = (string)valueTemp;
+                }
+                else if (valueTemp is double)
+                {
+                    value = valueTemp.ToString();
+                }
+                else if (valueTemp is FormulaError)
+                    value = "Formula Error";
+                else
+                    value = "";
+
+                currentPanel.SetValue(thisCol, thisRow, value);
+            }
         }
     }
 }

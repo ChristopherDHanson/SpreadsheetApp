@@ -13,6 +13,7 @@ namespace SpreadsheetGUI
         event Action<SpreadsheetPanel> ChangeCurrentEvent;
         event Action<string> ChangeCellContentEvent;
         event Action<TextBox> RetrieveEditBoxValueEvent;
+        event Action UpdateRelevantEvent;
         event Action SaveEvent;
         event Action DirectionPressEvent;
         event Action LoadEvent;
