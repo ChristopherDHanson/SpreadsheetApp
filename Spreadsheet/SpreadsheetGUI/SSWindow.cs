@@ -25,7 +25,7 @@ namespace SpreadsheetGUI
         public event Action<SpreadsheetPanel> MoveRightEvent;
         public event Action<SpreadsheetPanel> MoveUpEvent;
         public event Action<SpreadsheetPanel> MoveDownEvent;
-        public event Action SaveSpreadsheetEvent;
+        public event Action<string> SaveSpreadsheetEvent;
         public event Action LoadEvent;
         public event Action NewSpreadsheetEvent;
         public event Action<string> OpenSpreadsheetEvent;
@@ -120,6 +120,7 @@ namespace SpreadsheetGUI
                 {
                     UpdateRelevantEvent();
                 }
+                ChangeCurrentEvent(TheSpreadsheetPanel);
             }
         }
 
@@ -145,9 +146,13 @@ namespace SpreadsheetGUI
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (SaveSpreadsheetEvent != null)
+            DialogResult result = saveDialog.ShowDialog();
+            if (result == DialogResult.Yes || result == DialogResult.OK)
             {
-                SaveSpreadsheetEvent();
+                if (SaveSpreadsheetEvent != null)
+                {
+                    SaveSpreadsheetEvent(saveDialog.FileName);
+                }
             }
         }
 

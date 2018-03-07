@@ -8,6 +8,7 @@ using SSGui;
 using SS;
 using System.Windows.Forms;
 using Formulas;
+using System.IO;
 
 namespace SpreadsheetGUI
 {
@@ -167,12 +168,17 @@ namespace SpreadsheetGUI
 
         private void OpenSpreadsheet(string filename)
         {
-            NewSpreadsheet();
+            SSWindow newSpreadsheet = new SSWindow();
+            newSpreadsheet.OpenNew();
         }
 
-        private void SaveSpreadsheet()
+        private void SaveSpreadsheet(string filename)
         {
-
+            StreamWriter f = new StreamWriter(filename);
+            StringWriter sw = new StringWriter();
+            model.Save(sw);
+            f.Write(sw);
+            f.Close();
         }
     }
 }
