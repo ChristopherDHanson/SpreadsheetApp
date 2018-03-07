@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -167,7 +168,8 @@ namespace SpreadsheetGUI
 
         private void OpenSpreadsheet(string filename)
         {
-            NewSpreadsheet();
+            SSWindow newSpreadsheet = new SSWindow();
+            newSpreadsheet.OpenNew();
         }
 
         private void SaveSpreadsheet()

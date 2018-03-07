@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SS;
 using SSGui;
 
 /// <summary>
@@ -120,6 +121,7 @@ namespace SpreadsheetGUI
                 {
                     UpdateRelevantEvent();
                 }
+                ChangeCurrentEvent(TheSpreadsheetPanel);
             }
         }
 
@@ -218,6 +220,11 @@ namespace SpreadsheetGUI
 
                 ChangeCurrentEvent(TheSpreadsheetPanel);
             }
+
+        }
+
+        private void SSWindow_Load(object sender, EventArgs e)
+        {
 
         }
     }
