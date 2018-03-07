@@ -220,5 +220,41 @@ namespace SpreadsheetGUI
             }
 
         }
+
+        private void EditBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Left)
+            {
+                if (MoveLeftEvent != null)
+                {
+                    MoveLeftEvent(TheSpreadsheetPanel);
+                }
+                TheSpreadsheetPanel_SelectionChanged(TheSpreadsheetPanel);
+            }
+            else if (e.KeyCode == Keys.Right)
+            {
+                if (MoveRightEvent != null)
+                {
+                    MoveRightEvent(TheSpreadsheetPanel);
+                }
+                TheSpreadsheetPanel_SelectionChanged(TheSpreadsheetPanel);
+            }
+            else if (e.KeyCode == Keys.Up)
+            {
+                if (MoveUpEvent != null)
+                {
+                    MoveUpEvent(TheSpreadsheetPanel);
+                }
+                TheSpreadsheetPanel_SelectionChanged(TheSpreadsheetPanel);
+            }
+            else if (e.KeyCode == Keys.Down)
+            {
+                if (MoveDownEvent != null)
+                {
+                    MoveDownEvent(TheSpreadsheetPanel);
+                }
+                TheSpreadsheetPanel_SelectionChanged(TheSpreadsheetPanel);
+            }
+        }
     }
 }

@@ -133,23 +133,31 @@ namespace SpreadsheetGUI
 
         private void MoveLeft(SpreadsheetPanel sender)
         {
-            if (sender.SetSelection(col-1, row))
-            col -= 1;
+            if(sender.SetSelection(col - 1, row))
+            {
+                col -= 1;
+            }
         }
         private void MoveRight(SpreadsheetPanel sender)
         {
-            if (sender.SetSelection(col+1, row))
-            col += 1;
+            if (sender.SetSelection(col + 1, row))
+            {
+                col += 1;
+            }
         }
         private void MoveUp(SpreadsheetPanel sender)
         {
-            if (sender.SetSelection(col, row-1))
-            row -= 1;
+            if (sender.SetSelection(col, row - 1))
+            {
+                row -= 1;
+            }
         }
         private void MoveDown(SpreadsheetPanel sender)
         {
-            if (sender.SetSelection(col, row+1))
-            row += 1;
+            if(sender.SetSelection(col, row + 1))
+            {
+                row += 1;
+            }
         }
 
         private void NewSpreadsheet()
