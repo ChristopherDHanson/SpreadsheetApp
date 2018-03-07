@@ -122,43 +122,6 @@ namespace SpreadsheetGUI
             }
         }
 
-        /// <summary>
-        /// Allows a cell to be selected with the direction keys.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void TheSpreadsheetPanel_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (e.KeyChar == (char)Keys.Left)
-            {
-                if (MoveLeftEvent != null)
-                {
-                    MoveLeftEvent((SpreadsheetPanel)sender);
-                }
-            }
-            else if (e.KeyChar == (char)Keys.Right)
-            {
-                if (MoveRightEvent != null)
-                {
-                    MoveRightEvent((SpreadsheetPanel)sender);
-                }
-            }
-            else if (e.KeyChar == (char)Keys.Up)
-            {
-                if (MoveUpEvent != null)
-                {
-                    MoveUpEvent((SpreadsheetPanel)sender);
-                }
-            }
-            else if (e.KeyChar == (char)Keys.Down)
-            {
-                if (MoveDownEvent != null)
-                {
-                    MoveDownEvent((SpreadsheetPanel)sender);
-                }
-            }
-        }
-
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (NewSpreadsheetEvent != null)
@@ -200,6 +163,42 @@ namespace SpreadsheetGUI
         private void SSWindow_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void EditBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Left)
+            {
+                if (MoveLeftEvent != null)
+                {
+                    MoveLeftEvent(TheSpreadsheetPanel);
+                }
+                TheSpreadsheetPanel_SelectionChanged(TheSpreadsheetPanel);
+            }
+            else if (e.KeyCode == Keys.Right)
+            {
+                if (MoveRightEvent != null)
+                {
+                    MoveRightEvent(TheSpreadsheetPanel);
+                }
+                TheSpreadsheetPanel_SelectionChanged(TheSpreadsheetPanel);
+            }
+            else if (e.KeyCode == Keys.Up)
+            {
+                if (MoveUpEvent != null)
+                {
+                    MoveUpEvent(TheSpreadsheetPanel);
+                }
+                TheSpreadsheetPanel_SelectionChanged(TheSpreadsheetPanel);
+            }
+            else if (e.KeyCode == Keys.Down)
+            {
+                if (MoveDownEvent != null)
+                {
+                    MoveDownEvent(TheSpreadsheetPanel);
+                }
+                TheSpreadsheetPanel_SelectionChanged(TheSpreadsheetPanel);
+            }
         }
     }
 }
