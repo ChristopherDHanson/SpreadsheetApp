@@ -14,7 +14,7 @@ namespace SpreadsheetGUI
         event Action<string> ChangeCellContentEvent;
         event Action<TextBox> RetrieveEditBoxValueEvent;
         event Action UpdateRelevantEvent;
-        event Action SaveSpreadsheetEvent;
+        event Action<string> SaveSpreadsheetEvent;
         event Action<SpreadsheetPanel> MoveLeftEvent;
         event Action<SpreadsheetPanel> MoveRightEvent;
         event Action<SpreadsheetPanel> MoveUpEvent;
