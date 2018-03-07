@@ -37,6 +37,10 @@ namespace SpreadsheetGUI
             window.ChangeCellContentEvent += ChangeCellContent;
             window.RetrieveEditBoxValueEvent += RetrieveEditBoxValue;
             window.UpdateRelevantEvent += UpdateRelevantCells;
+            window.SelectLeft += SelectLeft;
+            window.SelectRight += SelectRight;
+            window.SelectDown += SelectDown;
+            window.SelectUp += SelectUp;
         }
 
         /// <summary>
@@ -56,6 +60,9 @@ namespace SpreadsheetGUI
             }
             else
                 currentContent = desiredContent.ToString();
+
+            window.CellNameBoxVal = currentName;
+            window.CellValueBoxVal = currentValue;
         }
 
         /// <summary>
@@ -116,5 +123,26 @@ namespace SpreadsheetGUI
                 currentPanel.SetValue(thisCol, thisRow, value);
             }
         }
+
+        private void SelectUp(SpreadsheetPanel sender)
+        {
+            sender.SetSelection(col-1, row);
+        }
+
+        private void SelectDown(SpreadsheetPanel sender)
+        {
+            sender.SetSelection(col + 1, row);
+        }
+
+        private void SelectRight(SpreadsheetPanel sender)
+        {
+            sender.SetSelection(col, row + 1);
+        }
+
+        private void SelectLeft(SpreadsheetPanel sender)
+        {
+            sender.SetSelection(col, row - 1);
+        }
+
     }
 }
