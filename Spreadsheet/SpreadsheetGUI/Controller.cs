@@ -36,6 +36,13 @@ namespace SpreadsheetGUI
             window.ChangeCellContentEvent += ChangeCellContent;
             window.RetrieveEditBoxValueEvent += RetrieveEditBoxValue;
             window.UpdateRelevantEvent += UpdateRelevantCells;
+            window.MoveLeftEvent += MoveLeft;
+            window.MoveRightEvent += MoveRight;
+            window.MoveUpEvent += MoveUp;
+            window.MoveDownEvent += MoveDown;
+            window.NewSpreadsheetEvent += NewSpreadsheet;
+            window.OpenSpreadsheetEvent += OpenSpreadsheet;
+            window.SaveSpreadsheetEvent += SaveSpreadsheet;
         }
 
         private void ChangeCurrent(SpreadsheetPanel sender)
@@ -51,6 +58,9 @@ namespace SpreadsheetGUI
             }
             else
                 currentContent = desiredContent.ToString();
+
+            window.CellNameBoxVal = currentName;
+            window.CellValueBoxVal = currentValue;
         }
 
         private void ChangeCellContent(string content)
@@ -106,6 +116,38 @@ namespace SpreadsheetGUI
 
                 currentPanel.SetValue(thisCol, thisRow, value);
             }
+        }
+
+        private void MoveLeft(SpreadsheetPanel sender)
+        {
+            sender.SetSelection(col-1, row);
+        }
+        private void MoveRight(SpreadsheetPanel sender)
+        {
+            sender.SetSelection(col+1, row);
+        }
+        private void MoveUp(SpreadsheetPanel sender)
+        {
+            sender.SetSelection(col, row-1);
+        }
+        private void MoveDown(SpreadsheetPanel sender)
+        {
+            sender.SetSelection(col, row+1);
+        }
+
+        private void NewSpreadsheet()
+        {
+            window.OpenNew();
+        }
+
+        private void OpenSpreadsheet(string filename)
+        {
+            NewSpreadsheet();
+        }
+
+        private void SaveSpreadsheet()
+        {
+
         }
     }
 }
