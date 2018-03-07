@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.TheSpreadsheetPanel = new SSGui.SpreadsheetPanel();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -42,26 +41,13 @@
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.CellValueBox = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.TheSpreadsheetPanel = new SSGui.SpreadsheetPanel();
             this.menuStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // TheSpreadsheetPanel
-            // 
-            this.TheSpreadsheetPanel.AutoScroll = true;
-            this.TheSpreadsheetPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.TheSpreadsheetPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TheSpreadsheetPanel.Location = new System.Drawing.Point(2, 2);
-            this.TheSpreadsheetPanel.Margin = new System.Windows.Forms.Padding(2);
-            this.TheSpreadsheetPanel.Name = "TheSpreadsheetPanel";
-            this.TheSpreadsheetPanel.Size = new System.Drawing.Size(774, 467);
-            this.TheSpreadsheetPanel.TabIndex = 0;
-            this.TheSpreadsheetPanel.SelectionChanged += new SSGui.SelectionChangedHandler(this.TheSpreadsheetPanel_SelectionChanged);
-            this.TheSpreadsheetPanel.Load += new System.EventHandler(this.TheSpreadsheetPanel_Load);
-            this.TheSpreadsheetPanel.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TheSpreadsheetPanel_KeyPress);
             // 
             // menuStrip1
             // 
@@ -74,6 +60,7 @@
             this.menuStrip1.Size = new System.Drawing.Size(784, 24);
             this.menuStrip1.TabIndex = 4;
             this.menuStrip1.Text = "menuStrip1";
+            this.menuStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.menuStrip1_ItemClicked);
             // 
             // fileToolStripMenuItem
             // 
@@ -116,6 +103,7 @@
             this.EditBox.Size = new System.Drawing.Size(774, 20);
             this.EditBox.TabIndex = 1;
             this.EditBox.TextChanged += new System.EventHandler(this.EditBox_TextChanged);
+            this.EditBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.EditBox_KeyDown);
             this.EditBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.EditBox_KeyPress);
             // 
             // fileDialog
@@ -208,6 +196,19 @@
             this.tableLayoutPanel3.Size = new System.Drawing.Size(778, 471);
             this.tableLayoutPanel3.TabIndex = 9;
             // 
+            // TheSpreadsheetPanel
+            // 
+            this.TheSpreadsheetPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.TheSpreadsheetPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TheSpreadsheetPanel.Location = new System.Drawing.Point(2, 2);
+            this.TheSpreadsheetPanel.Margin = new System.Windows.Forms.Padding(2);
+            this.TheSpreadsheetPanel.Name = "TheSpreadsheetPanel";
+            this.TheSpreadsheetPanel.Size = new System.Drawing.Size(774, 467);
+            this.TheSpreadsheetPanel.TabIndex = 0;
+            this.TheSpreadsheetPanel.SelectionChanged += new SSGui.SelectionChangedHandler(this.TheSpreadsheetPanel_SelectionChanged);
+            this.TheSpreadsheetPanel.Load += new System.EventHandler(this.TheSpreadsheetPanel_Load);
+            this.TheSpreadsheetPanel.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TheSpreadsheetPanel_KeyDown);
+            // 
             // SSWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -220,7 +221,6 @@
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "SSWindow";
             this.Text = "Spreadsheet";
-            this.Load += new System.EventHandler(this.SSWindow_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
@@ -230,12 +230,11 @@
             this.tableLayoutPanel4.PerformLayout();
             this.tableLayoutPanel3.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
-
-        private SSGui.SpreadsheetPanel TheSpreadsheetPanel;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
@@ -249,6 +248,7 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private System.Windows.Forms.TextBox CellValueBox;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
+        private SSGui.SpreadsheetPanel TheSpreadsheetPanel;
     }
 }
 

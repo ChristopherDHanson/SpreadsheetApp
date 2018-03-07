@@ -109,6 +109,7 @@ namespace SpreadsheetGUI
         /// <param name="e"></param>
         private void EditBox_KeyPress(object sender, KeyPressEventArgs e)
         {
+
             if (e.KeyChar == (char)Keys.Return)
             {
                 if (ChangeCellContentEvent != null)
@@ -118,43 +119,6 @@ namespace SpreadsheetGUI
                 if (UpdateRelevantEvent != null)
                 {
                     UpdateRelevantEvent();
-                }
-            }
-        }
-
-        /// <summary>
-        /// Allows a cell to be selected with the direction keys.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void TheSpreadsheetPanel_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (e.KeyChar == (char)Keys.Left)
-            {
-                if (MoveLeftEvent != null)
-                {
-                    MoveLeftEvent((SpreadsheetPanel)sender);
-                }
-            }
-            else if (e.KeyChar == (char)Keys.Right)
-            {
-                if (MoveRightEvent != null)
-                {
-                    MoveRightEvent((SpreadsheetPanel)sender);
-                }
-            }
-            else if (e.KeyChar == (char)Keys.Up)
-            {
-                if (MoveUpEvent != null)
-                {
-                    MoveUpEvent((SpreadsheetPanel)sender);
-                }
-            }
-            else if (e.KeyChar == (char)Keys.Down)
-            {
-                if (MoveDownEvent != null)
-                {
-                    MoveDownEvent((SpreadsheetPanel)sender);
                 }
             }
         }
@@ -187,18 +151,73 @@ namespace SpreadsheetGUI
             }
         }
 
-        private void CellNameBox_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void CellNameBox_TextChanged_1(object sender, EventArgs e)
         {
 
         }
 
-        private void SSWindow_Load(object sender, EventArgs e)
+        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
+
+        }
+
+        private void TheSpreadsheetPanel_KeyDown(object sender, KeyEventArgs e)
+        {
+            
+                if (e.KeyCode == Keys.Left)
+                {
+                    if (MoveLeftEvent != null)
+                    {
+                        MoveLeftEvent((SpreadsheetPanel) sender);
+                        TheSpreadsheetPanel_SelectionChanged(TheSpreadsheetPanel);
+                    }
+                }
+                else if (e.KeyCode == Keys.Right)
+                {
+                    if (MoveRightEvent != null)
+                    {
+                        MoveRightEvent((SpreadsheetPanel) sender);
+                        TheSpreadsheetPanel_SelectionChanged(TheSpreadsheetPanel);
+                    }
+                }
+                else if (e.KeyCode == Keys.Up)
+                {
+                    if (MoveUpEvent != null)
+                    {
+                        MoveUpEvent((SpreadsheetPanel) sender);
+                        TheSpreadsheetPanel_SelectionChanged(TheSpreadsheetPanel);
+                    }
+                }
+                else if (e.KeyCode == Keys.Down)
+                {
+                    if (MoveDownEvent != null)
+                    {
+                        MoveDownEvent((SpreadsheetPanel) sender);
+                        TheSpreadsheetPanel_SelectionChanged(TheSpreadsheetPanel);
+                    }
+                }
+
+            
+        }
+
+        private void EditBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down || e.KeyCode == Keys.Left || e.KeyCode == Keys.Right)
+            {
+                TheSpreadsheetPanel_KeyDown(TheSpreadsheetPanel, e);
+
+                if (ChangeCellContentEvent != null)
+                {
+                    ChangeCellContentEvent(EditBox.Text);
+                }
+
+                if (UpdateRelevantEvent != null)
+                {
+                    UpdateRelevantEvent();
+                }
+
+                ChangeCurrentEvent(TheSpreadsheetPanel);
+            }
 
         }
     }
