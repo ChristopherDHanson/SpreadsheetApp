@@ -47,7 +47,7 @@ namespace SpreadsheetGUI
         }
 
         /// <summary>
-        /// 
+        /// Takes a speadsheet panel as a parameter and sets the currently selected cell.
         /// </summary>
         /// <param name="sender"></param>
         private void ChangeCurrent(SpreadsheetPanel sender)
@@ -69,7 +69,7 @@ namespace SpreadsheetGUI
         }
 
         /// <summary>
-        /// 
+        /// changes a currently selected cells value.
         /// </summary>
         /// <param name="content"></param>
         private void ChangeCellContent(string content)
@@ -97,6 +97,9 @@ namespace SpreadsheetGUI
             t.Text = currentContent;
         }
 
+        /// <summary>
+        /// Updates dependees of a currently selected cell.
+        /// </summary>
         private void UpdateRelevantCells()
         {
             foreach (string s in cellsToChange)
