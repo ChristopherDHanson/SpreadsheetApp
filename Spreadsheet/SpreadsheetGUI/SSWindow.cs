@@ -17,16 +17,15 @@ namespace SpreadsheetGUI
         public event Action<string> ChangeCellContentEvent;
         public event Action<TextBox> RetrieveEditBoxValueEvent;
         public event Action UpdateRelevantEvent;
-        public event Action SaveEvent;
+        public event Action<SpreadsheetPanel> MoveLeftEvent;
+        public event Action<SpreadsheetPanel> MoveRightEvent;
+        public event Action<SpreadsheetPanel> MoveUpEvent;
+        public event Action<SpreadsheetPanel> MoveDownEvent;
+        public event Action SaveSpreadsheetEvent;
         public event Action LoadEvent;
-        public event Action NewEvent;
-        public event Action OpenEvent;
+        public event Action NewSpreadsheetEvent;
+        public event Action<string> OpenSpreadsheetEvent;
         public event Action CloseEvent;
-        public event Action<SpreadsheetPanel> SelectUp;
-        public event Action<SpreadsheetPanel> SelectDown;
-        public event Action<SpreadsheetPanel> SelectRight;
-        public event Action<SpreadsheetPanel> SelectLeft;
-
 
         public SSWindow()
         {
@@ -38,26 +37,23 @@ namespace SpreadsheetGUI
             Close();
         }
 
-        public string CellNameBoxVal
-        {
-            set { CellNameBox.Text = value; }
-
-        }
-
-        public string CellValueBoxVal
-        {
-            set { ValueBox.Text = value; }
-        }
-
         public void OpenNew()
         {
             SSWindowApplicationContext.GetContext().RunNew();
         }
 
+        public string CellNameBoxVal
+        {
+            set { CellNameBox.Text = value; }
+        }
+
+        public string CellValueBoxVal
+        {
+            set { CellValueBox.Text = value; }
+        }
+
         private void TheSpreadsheetPanel_SelectionChanged(SpreadsheetPanel sender)
         {
-
-
             if (ChangeCellContentEvent != null)
             {
                 ChangeCellContentEvent(EditBox.Text);
@@ -68,7 +64,6 @@ namespace SpreadsheetGUI
             }
             if (ChangeCurrentEvent != null)
             {
-
                 ChangeCurrentEvent(sender);
             }
             if (RetrieveEditBoxValueEvent != null)
@@ -92,12 +87,7 @@ namespace SpreadsheetGUI
                 ChangeCurrentEvent((SpreadsheetPanel) sender);
             }
         }
-
-        private void EditBox_Enter(object sender, EventArgs e)
-        {
-
-        }
-
+        
         private void EditBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Return)
@@ -110,42 +100,67 @@ namespace SpreadsheetGUI
                 {
                     UpdateRelevantEvent();
                 }
-            } 
+            }
         }
 
         private void TheSpreadsheetPanel_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar == (char)Keys.NumPad8)
+            if (e.KeyChar == (char)Keys.Left)
             {
-                SelectUp((SpreadsheetPanel) sender);
+                if (MoveLeftEvent != null)
+                {
+                    MoveLeftEvent((SpreadsheetPanel)sender);
+                }
             }
-            else if (e.KeyChar == (char)Keys.NumPad2)
+            else if (e.KeyChar == (char)Keys.Right)
             {
-                SelectDown((SpreadsheetPanel) sender);
+                if (MoveRightEvent != null)
+                {
+                    MoveRightEvent((SpreadsheetPanel)sender);
+                }
             }
-            else if (e.KeyChar == (char)Keys.NumPad6)
+            else if (e.KeyChar == (char)Keys.Up)
             {
-                SelectRight((SpreadsheetPanel) sender);
+                if (MoveUpEvent != null)
+                {
+                    MoveUpEvent((SpreadsheetPanel)sender);
+                }
             }
-            else if (e.KeyChar == (char)Keys.NumPad4)
+            else if (e.KeyChar == (char)Keys.Down)
             {
-                SelectLeft((SpreadsheetPanel) sender);
+                if (MoveDownEvent != null)
+                {
+                    MoveDownEvent((SpreadsheetPanel)sender);
+                }
             }
         }
 
-        private void splitContainer2_SplitterMoved(object sender, SplitterEventArgs e)
+        private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            if (NewSpreadsheetEvent != null)
+            {
+                NewSpreadsheetEvent();
+            }
         }
 
-        private void splitContainer1_Panel2_Paint(object sender, PaintEventArgs e)
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            DialogResult result = fileDialog.ShowDialog();
+            if (result == DialogResult.Yes || result == DialogResult.OK)
+            {
+                if (OpenSpreadsheetEvent != null)
+                {
+                    OpenSpreadsheetEvent(fileDialog.FileName);
+                }
+            }
         }
 
-        private void SSWindow_Load(object sender, EventArgs e)
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            if (SaveSpreadsheetEvent != null)
+            {
+                SaveSpreadsheetEvent();
+            }
         }
     }
 }

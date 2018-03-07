@@ -37,10 +37,13 @@ namespace SpreadsheetGUI
             window.ChangeCellContentEvent += ChangeCellContent;
             window.RetrieveEditBoxValueEvent += RetrieveEditBoxValue;
             window.UpdateRelevantEvent += UpdateRelevantCells;
-            window.SelectLeft += SelectLeft;
-            window.SelectRight += SelectRight;
-            window.SelectDown += SelectDown;
-            window.SelectUp += SelectUp;
+            window.MoveLeftEvent += MoveLeft;
+            window.MoveRightEvent += MoveRight;
+            window.MoveUpEvent += MoveUp;
+            window.MoveDownEvent += MoveDown;
+            window.NewSpreadsheetEvent += NewSpreadsheet;
+            window.OpenSpreadsheetEvent += OpenSpreadsheet;
+            window.SaveSpreadsheetEvent += SaveSpreadsheet;
         }
 
         /// <summary>
@@ -124,25 +127,36 @@ namespace SpreadsheetGUI
             }
         }
 
-        private void SelectUp(SpreadsheetPanel sender)
+        private void MoveLeft(SpreadsheetPanel sender)
         {
             sender.SetSelection(col-1, row);
         }
-
-        private void SelectDown(SpreadsheetPanel sender)
+        private void MoveRight(SpreadsheetPanel sender)
         {
-            sender.SetSelection(col + 1, row);
+            sender.SetSelection(col+1, row);
+        }
+        private void MoveUp(SpreadsheetPanel sender)
+        {
+            sender.SetSelection(col, row-1);
+        }
+        private void MoveDown(SpreadsheetPanel sender)
+        {
+            sender.SetSelection(col, row+1);
         }
 
-        private void SelectRight(SpreadsheetPanel sender)
+        private void NewSpreadsheet()
         {
-            sender.SetSelection(col, row + 1);
+            window.OpenNew();
         }
 
-        private void SelectLeft(SpreadsheetPanel sender)
+        private void OpenSpreadsheet(string filename)
         {
-            sender.SetSelection(col, row - 1);
+            NewSpreadsheet();
         }
 
+        private void SaveSpreadsheet()
+        {
+
+        }
     }
 }

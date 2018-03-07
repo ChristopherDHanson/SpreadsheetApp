@@ -14,24 +14,21 @@ namespace SpreadsheetGUI
         event Action<string> ChangeCellContentEvent;
         event Action<TextBox> RetrieveEditBoxValueEvent;
         event Action UpdateRelevantEvent;
-        event Action SaveEvent;
+        event Action SaveSpreadsheetEvent;
+        event Action<SpreadsheetPanel> MoveLeftEvent;
+        event Action<SpreadsheetPanel> MoveRightEvent;
+        event Action<SpreadsheetPanel> MoveUpEvent;
+        event Action<SpreadsheetPanel> MoveDownEvent;
         event Action LoadEvent;
-        event Action NewEvent;
-        event Action OpenEvent;
+        event Action NewSpreadsheetEvent;
+        event Action<string> OpenSpreadsheetEvent;
         event Action CloseEvent;
-        event Action<SpreadsheetPanel> SelectUp;
-        event Action<SpreadsheetPanel> SelectDown;
-        event Action<SpreadsheetPanel> SelectRight;
-        event Action<SpreadsheetPanel> SelectLeft;
 
         string CellNameBoxVal { set; }
         string CellValueBoxVal { set; }
 
-
         void DoClose();
 
         void OpenNew();
-
     }
-
 }
