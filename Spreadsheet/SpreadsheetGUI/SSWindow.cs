@@ -9,6 +9,10 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using SSGui;
 
+/// <summary>
+/// GUI for the Spreadsheet application. Handles events and sends them to the controller. 
+/// Writen by Chris Hanson, and Bryce Hansen 3/7/18
+/// </summary>
 namespace SpreadsheetGUI
 {
     public partial class SSWindow : Form, ISSWindowView
@@ -52,6 +56,10 @@ namespace SpreadsheetGUI
             set { CellValueBox.Text = value; }
         }
 
+        /// <summary>
+        /// Sends the event to the controller that sets the values of the cell previous to the one selected.
+        /// </summary>
+        /// <param name="sender"></param>
         private void TheSpreadsheetPanel_SelectionChanged(SpreadsheetPanel sender)
         {
             if (ChangeCellContentEvent != null)
@@ -72,6 +80,11 @@ namespace SpreadsheetGUI
             }
         }
 
+        /// <summary>
+        /// Sends the text of the editor box to be changed to the controller.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void EditBox_TextChanged(object sender, EventArgs e)
         {
             if (ChangeCellContentEvent != null && !EditBox.Text.StartsWith("="))
@@ -88,6 +101,12 @@ namespace SpreadsheetGUI
             }
         }
         
+
+        /// <summary>
+        /// Allows use of the "Enter" key to submit a value to be updated
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void EditBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Return)
@@ -103,6 +122,11 @@ namespace SpreadsheetGUI
             }
         }
 
+        /// <summary>
+        /// Allows a cell to be selected with the direction keys.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TheSpreadsheetPanel_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Left)
@@ -161,6 +185,21 @@ namespace SpreadsheetGUI
             {
                 SaveSpreadsheetEvent();
             }
+        }
+
+        private void CellNameBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void CellNameBox_TextChanged_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void SSWindow_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
