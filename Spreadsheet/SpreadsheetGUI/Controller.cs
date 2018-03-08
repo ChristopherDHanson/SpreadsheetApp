@@ -78,23 +78,31 @@ namespace SpreadsheetGUI
         /// <param name="content"></param>
         private void ChangeCellContent(string content)
         {
-            cellsToChange = model.SetContentsOfCell(currentName, content); // Set contents in spreadsheet
-            // Obtain value from cells (calced by above), conv to string, set it to display
-            object valueTemp = model.GetCellValue(currentName);
-            String value;
-            if (valueTemp is string)
+            try
             {
-                value = (string)valueTemp;
-            } else if (valueTemp is double)
-            {
-                value = valueTemp.ToString();
-            }
-            else if (valueTemp is FormulaError)
-                value = "Formula Error";
-            else
-                value = "";
+                cellsToChange = model.SetContentsOfCell(currentName, content); // Set contents in spreadsheet
+                                                                               // Obtain value from cells (calced by above), conv to string, set it to display
+                object valueTemp = model.GetCellValue(currentName);
+                String value;
+                if (valueTemp is string)
+                {
+                    value = (string)valueTemp;
+                }
+                else if (valueTemp is double)
+                {
+                    value = valueTemp.ToString();
+                }
+                else if (valueTemp is FormulaError)
+                    value = "Formula Error";
+                else
+                    value = "";
 
-            currentPanel.SetValue(col, row, value);
+                currentPanel.SetValue(col, row, value);
+            }
+            catch (Exception e)
+            {
+
+            }
         }
 
         private void RetrieveEditBoxValue(TextBox t)
@@ -135,6 +143,9 @@ namespace SpreadsheetGUI
             }
         }
 
+        /// <summary>
+        /// Move selection to the left
+        /// </summary>
         private void MoveLeft(SpreadsheetPanel sender)
         {
             if(sender.SetSelection(col - 1, row))
@@ -142,6 +153,9 @@ namespace SpreadsheetGUI
                 col -= 1;
             }
         }
+        /// <summary>
+        /// Move selection to the right
+        /// </summary>
         private void MoveRight(SpreadsheetPanel sender)
         {
             if (sender.SetSelection(col + 1, row))
@@ -149,6 +163,9 @@ namespace SpreadsheetGUI
                 col += 1;
             }
         }
+        /// <summary>
+        /// Move selection up
+        /// </summary>
         private void MoveUp(SpreadsheetPanel sender)
         {
             if (sender.SetSelection(col, row - 1))
@@ -156,6 +173,9 @@ namespace SpreadsheetGUI
                 row -= 1;
             }
         }
+        /// <summary>
+        /// Move selection down
+        /// </summary>
         private void MoveDown(SpreadsheetPanel sender)
         {
             if(sender.SetSelection(col, row + 1))
@@ -164,18 +184,30 @@ namespace SpreadsheetGUI
             }
         }
 
+        /// <summary>
+        /// Opens blank spreadsheet in new window, using method in
+        /// SSWindow.
+        /// </summary>
         private void NewSpreadsheet()
         {
             window.OpenNew();
         }
 
+        /// <summary>
+        /// Open new spreadsheet, getting info from path specified in
+        /// 'filename'
+        /// </summary>
+        /// <param name="filename"></param>
         private void OpenSpreadsheet(string filename)
         {
             SSWindow newSpreadsheet = new SSWindow();
             newSpreadsheet.OpenSS();
         }
 
-
+        /// <summary>
+        /// Save spreadsheet to filepath specified by 'filename'
+        /// </summary>
+        /// <param name="filename"></param>
         private void SaveSpreadsheet(string filename)
         {
             StreamWriter f = new StreamWriter(filename);
@@ -186,6 +218,12 @@ namespace SpreadsheetGUI
             theFilename = filename;
         }
 
+        /// <summary>
+        /// Changes the title of window to specified string, or adds asterisk
+        /// is spreadsheet has been changed.
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <param name="window"></param>
         private void UpdateTitleText(string filename, SSWindow window)
         {
             if (model.Changed)

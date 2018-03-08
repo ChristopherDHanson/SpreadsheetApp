@@ -183,7 +183,7 @@ namespace SpreadsheetGUI
         }
 
         /// <summary>
-        /// The 'save' button is clicked from file menu. Spreadsheet will be saved as
+        /// The 'Save To' button is clicked from file menu. Spreadsheet will be saved as
         /// and XML file with location and name as specified in the save dialog.
         /// </summary>
         /// <param name="sender"></param>
@@ -204,17 +204,24 @@ namespace SpreadsheetGUI
             }
         }
 
+        /// <summary>
+        /// The 'Save' button is clicked from file menu. Spreadsheet will be saved to
+        /// previous filepath is one has been selected, or will open save dialog if the
+        /// sheet has not been saved since its inception.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void saveRegularToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (this.Text.Contains(".")) {
+            if (this.Text.Contains(".")) { // If title text is a filepath, meaning sheet has been saved
                 string filepath;
-                if (this.Text.EndsWith("*"))
+                if (this.Text.EndsWith("*")) // If the path defined in title ends with '*',
                 {
-                    filepath = this.Text.Remove(this.Text.Length-1);
+                    filepath = this.Text.Remove(this.Text.Length-1); // Remove it from filepath
                 }
                 else
                 {
-                    filepath = this.Text;
+                    filepath = this.Text; // Otherwise, set the title to filepath
                 }
                 if (SaveSpreadsheetEvent != null)
                 {
@@ -225,7 +232,7 @@ namespace SpreadsheetGUI
                     UpdateTitleTextEvent(filepath, this);
                 }
             }
-            else
+            else // If sheet has not been saved, act as if 'Save To' was pressed (bring up save dialog)
             {
                 saveToolStripMenuItem_Click(sender, e);
             }
@@ -239,7 +246,7 @@ namespace SpreadsheetGUI
         private void TheSpreadsheetPanel_KeyDown(object sender, KeyEventArgs e)
         {
             
-                if (e.KeyCode == Keys.Left)
+                if (e.KeyCode == Keys.Left) // Left arrow pressed
                 {
                     if (MoveLeftEvent != null)
                     {
@@ -247,7 +254,7 @@ namespace SpreadsheetGUI
                         TheSpreadsheetPanel_SelectionChanged(TheSpreadsheetPanel);
                     }
                 }
-                else if (e.KeyCode == Keys.Right)
+                else if (e.KeyCode == Keys.Right) // Right arrow pressed
                 {
                     if (MoveRightEvent != null)
                     {
@@ -255,7 +262,7 @@ namespace SpreadsheetGUI
                         TheSpreadsheetPanel_SelectionChanged(TheSpreadsheetPanel);
                     }
                 }
-                else if (e.KeyCode == Keys.Up)
+                else if (e.KeyCode == Keys.Up) // Up arrow pressed
                 {
                     if (MoveUpEvent != null)
                     {
@@ -263,7 +270,7 @@ namespace SpreadsheetGUI
                         TheSpreadsheetPanel_SelectionChanged(TheSpreadsheetPanel);
                     }
                 }
-                else if (e.KeyCode == Keys.Down)
+                else if (e.KeyCode == Keys.Down) // Down arrow pressed
                 {
                     if (MoveDownEvent != null)
                     {
@@ -276,7 +283,7 @@ namespace SpreadsheetGUI
         }
 
         private void EditBox_KeyDown(object sender, KeyEventArgs e)
-        {
+        {   // If the key down was an arrow key
             if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down || e.KeyCode == Keys.Left || e.KeyCode == Keys.Right)
             {
                 TheSpreadsheetPanel_KeyDown(TheSpreadsheetPanel, e);
@@ -303,7 +310,6 @@ namespace SpreadsheetGUI
 
         private void helpToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            
             MessageBox.Show("Help Instructions: \n" +
                             "\n" +
                             "Select any cell with the mouse or arrow keys. \n" +
