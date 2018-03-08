@@ -32,6 +32,7 @@ namespace SpreadsheetGUI
         public event Action NewSpreadsheetEvent;
         public event Action<string> OpenSpreadsheetEvent;
         public event Action<string, SSWindow> UpdateTitleTextEvent;
+        public event Action UpdateAllNonEmptyEvent;
 
         public SSWindow()
         {
@@ -54,9 +55,9 @@ namespace SpreadsheetGUI
             SSWindowApplicationContext.GetContext().RunNew();
         }
 
-        public void OpenSS()
+        public void OpenSS(string filename)
         {
-            SSWindowApplicationContext.GetContext().RunNew();
+            SSWindowApplicationContext.GetContext().RunNew(filename);
         }
 
         public string TitleTextVal
@@ -306,7 +307,10 @@ namespace SpreadsheetGUI
 
         private void SSWindow_Load(object sender, EventArgs e)
         {
-
+            if (UpdateAllNonEmptyEvent != null)
+            {
+                UpdateAllNonEmptyEvent();
+            }
         }
 
         private void helpToolStripMenuItem_Click(object sender, EventArgs e)

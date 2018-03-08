@@ -11,7 +11,6 @@ using System.Windows.Forms;
 using Formulas;
 using System.IO;
 using System.Text.RegularExpressions;
-using System.Xml;
 
 namespace SpreadsheetGUI
 {
@@ -37,6 +36,31 @@ namespace SpreadsheetGUI
         {
             this.window = window;
             this.model = new Spreadsheet();
+            currentName = "A1";
+            window.ChangeCurrentEvent += ChangeCurrent;
+            window.ChangeCellContentEvent += ChangeCellContent;
+            window.RetrieveEditBoxValueEvent += RetrieveEditBoxValue;
+            window.UpdateRelevantEvent += UpdateRelevantCells;
+            window.MoveLeftEvent += MoveLeft;
+            window.MoveRightEvent += MoveRight;
+            window.MoveUpEvent += MoveUp;
+            window.MoveDownEvent += MoveDown;
+            window.NewSpreadsheetEvent += NewSpreadsheet;
+            window.OpenSpreadsheetEvent += OpenSpreadsheet;
+            window.SaveSpreadsheetEvent += SaveSpreadsheet;
+            window.UpdateTitleTextEvent += UpdateTitleText;
+            window.UpdateAllNonEmptyEvent += UpdateAllNonEmpty;
+        }
+
+        /// <summary>
+        /// Begins controlling window. This constructor takes in a filename
+        /// </summary>
+        public Controller(ISSWindowView window, string filename)
+        {
+            this.window = window;
+            StreamReader sr = new StreamReader(filename);
+            Regex r = new Regex(".*");
+            this.model = new Spreadsheet(sr, r);
             currentName = "A1";
             window.ChangeCurrentEvent += ChangeCurrent;
             window.ChangeCellContentEvent += ChangeCellContent;
@@ -84,7 +108,7 @@ namespace SpreadsheetGUI
             try
             {
                 cellsToChange = model.SetContentsOfCell(currentName, content); // Set contents in spreadsheet
-                                                                               // Obtain value from cells (calced by above), conv to string, set it to display
+                // Obtain value from cells (calced by above), conv to string, set it to display
                 object valueTemp = model.GetCellValue(currentName);
                 if (valueTemp is string)
                 {
@@ -205,7 +229,7 @@ namespace SpreadsheetGUI
         private void OpenSpreadsheet(string filename)
         {
             SSWindow newSpreadsheet = new SSWindow();
-            newSpreadsheet.OpenSS();
+            newSpreadsheet.OpenSS(filename);
         }
 
         /// <summary>
@@ -240,6 +264,17 @@ namespace SpreadsheetGUI
             {
                 window.Text = filename;
             }
+        }
+
+        private void UpdateAllNonEmpty()
+        {
+            ISet<string> set = new HashSet<string>();
+            foreach(string s in model.GetNamesOfAllNonemptyCells())
+            {
+                set.Add(s);
+            }
+            cellsToChange = set;
+            UpdateRelevantCells();
         }
     }
 }
