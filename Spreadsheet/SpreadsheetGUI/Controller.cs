@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,6 +26,7 @@ namespace SpreadsheetGUI
         private string currentValue;
         private string currentContent;
         private ISet<string> cellsToChange;
+        private string theFilename;
 
         /// <summary>
         /// Begins controlling window.
@@ -173,6 +175,7 @@ namespace SpreadsheetGUI
             newSpreadsheet.OpenSS();
         }
 
+
         private void SaveSpreadsheet(string filename)
         {
             StreamWriter f = new StreamWriter(filename);
@@ -180,6 +183,7 @@ namespace SpreadsheetGUI
             model.Save(sw);
             f.Write(sw);
             f.Close();
+            theFilename = filename;
         }
 
         private void UpdateTitleText(string filename, SSWindow window)
