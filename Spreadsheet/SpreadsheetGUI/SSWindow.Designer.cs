@@ -33,6 +33,7 @@
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.EditBox = new System.Windows.Forms.TextBox();
             this.fileDialog = new System.Windows.Forms.OpenFileDialog();
             this.CellNameBox = new System.Windows.Forms.TextBox();
@@ -42,7 +43,6 @@
             this.CellValueBox = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.TheSpreadsheetPanel = new SSGui.SpreadsheetPanel();
-            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveDialog = new System.Windows.Forms.SaveFileDialog();
             this.menuStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -78,30 +78,37 @@
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
             this.newToolStripMenuItem.Text = "New";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
             this.openToolStripMenuItem.Text = "Open ..";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
+            // 
+            // helpToolStripMenuItem
+            // 
+            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.helpToolStripMenuItem.Text = "Help";
+            this.helpToolStripMenuItem.Click += new System.EventHandler(this.helpToolStripMenuItem_Click);
             // 
             // EditBox
             // 
             this.EditBox.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.EditBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.EditBox.Location = new System.Drawing.Point(2, 2);
-            this.EditBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.EditBox.Margin = new System.Windows.Forms.Padding(2);
             this.EditBox.Name = "EditBox";
             this.EditBox.Size = new System.Drawing.Size(774, 20);
             this.EditBox.TabIndex = 1;
@@ -118,7 +125,7 @@
             this.CellNameBox.Dock = System.Windows.Forms.DockStyle.Left;
             this.CellNameBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CellNameBox.Location = new System.Drawing.Point(2, 2);
-            this.CellNameBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.CellNameBox.Margin = new System.Windows.Forms.Padding(2);
             this.CellNameBox.MaximumSize = new System.Drawing.Size(50, 4);
             this.CellNameBox.MinimumSize = new System.Drawing.Size(50, 4);
             this.CellNameBox.Name = "CellNameBox";
@@ -136,7 +143,7 @@
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel4, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel3, 0, 2);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 28);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 24);
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 3;
@@ -152,13 +159,13 @@
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel2.Controls.Add(this.EditBox, 0, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(4, 41);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(4, 34);
             this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(4);
             this.tableLayoutPanel2.MinimumSize = new System.Drawing.Size(0, 37);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(778, 30);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(778, 37);
             this.tableLayoutPanel2.TabIndex = 7;
             // 
             // tableLayoutPanel4
@@ -175,14 +182,14 @@
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 1;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(778, 30);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(778, 37);
             this.tableLayoutPanel4.TabIndex = 8;
             // 
             // CellValueBox
             // 
             this.CellValueBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.CellValueBox.Location = new System.Drawing.Point(62, 2);
-            this.CellValueBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.CellValueBox.Margin = new System.Windows.Forms.Padding(2);
             this.CellValueBox.Name = "CellValueBox";
             this.CellValueBox.ReadOnly = true;
             this.CellValueBox.Size = new System.Drawing.Size(714, 20);
@@ -194,7 +201,7 @@
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel3.Controls.Add(this.TheSpreadsheetPanel, 0, 0);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(4, 78);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(4, 64);
             this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(4);
             this.tableLayoutPanel3.MinimumSize = new System.Drawing.Size(133, 123);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
@@ -210,17 +217,11 @@
             this.TheSpreadsheetPanel.Location = new System.Drawing.Point(2, 2);
             this.TheSpreadsheetPanel.Margin = new System.Windows.Forms.Padding(2);
             this.TheSpreadsheetPanel.Name = "TheSpreadsheetPanel";
-            this.TheSpreadsheetPanel.Size = new System.Drawing.Size(1033, 576);
+            this.TheSpreadsheetPanel.Size = new System.Drawing.Size(774, 467);
             this.TheSpreadsheetPanel.TabIndex = 0;
             this.TheSpreadsheetPanel.SelectionChanged += new SSGui.SelectionChangedHandler(this.TheSpreadsheetPanel_SelectionChanged);
             this.TheSpreadsheetPanel.Load += new System.EventHandler(this.TheSpreadsheetPanel_Load);
             this.TheSpreadsheetPanel.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TheSpreadsheetPanel_KeyDown);
-            // 
-            // helpToolStripMenuItem
-            // 
-            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(53, 24);
-            this.helpToolStripMenuItem.Text = "Help";
             // 
             // saveDialog
             // 
@@ -235,7 +236,7 @@
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "SSWindow";
             this.Text = "Spreadsheet";
             this.Load += new System.EventHandler(this.SSWindow_Load);

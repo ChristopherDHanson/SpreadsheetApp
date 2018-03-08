@@ -47,6 +47,11 @@ namespace SpreadsheetGUI
             SSWindowApplicationContext.GetContext().RunNew();
         }
 
+        public void OpenSS()
+        {
+            SSWindowApplicationContext.GetContext().RunNew();
+        }
+
         public string CellNameBoxVal
         {
             set { CellNameBox.Text = value; }
@@ -230,6 +235,35 @@ namespace SpreadsheetGUI
         private void SSWindow_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void helpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            
+            MessageBox.Show("Help Instructions: \n" +
+                            "\n" +
+                            "Select any cell with the mouse or arrow keys. \n" +
+                            "\n" +
+                            "Cells may contain any string or number, or a  \n" +
+                            "combination of both. \n" +
+                            "\n" +
+                            "A valid formula may be entered in any cell    \n" +
+                            "using the '=' sign to designate it a formula. \n" +
+                            "\n" +
+                            "A valid formula is any valid mathimatical  ex.\n" +
+                            "limited to these characters: (,),+,-,*,/.     \n" +
+                            "normal math rules apply (no dividing by zero) \n" +
+                            "\n" +
+                            "Any other cell's value may be used by using   \n" +
+                            "that cells column and row name in this format:\n" +
+                            "\n" +
+                            "                   A1, X22, B34, etc...       \n" +
+                            "\n" +
+                            "This spreadsheet may be saved using the File  \n" +
+                            "Menu on the top left; you may also use the    \n" +
+                            "menu to open a saved worksheet or open a fresh\n" +
+                            "page.\n" +
+                            "                   Thank You!");
         }
     }
 }

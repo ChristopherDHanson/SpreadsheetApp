@@ -170,8 +170,9 @@ namespace SpreadsheetGUI
         private void OpenSpreadsheet(string filename)
         {
             SSWindow newSpreadsheet = new SSWindow();
-            newSpreadsheet.OpenNew();
+            newSpreadsheet.OpenSS();
         }
+
 
         private void SaveSpreadsheet(string filename)
         {
