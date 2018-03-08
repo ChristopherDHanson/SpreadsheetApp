@@ -62,6 +62,7 @@ namespace SpreadsheetGUI
             Regex r = new Regex(".*");
             this.model = new Spreadsheet(sr, r);
             currentName = "A1";
+            theFilename = filename;
             window.ChangeCurrentEvent += ChangeCurrent;
             window.ChangeCellContentEvent += ChangeCellContent;
             window.RetrieveEditBoxValueEvent += RetrieveEditBoxValue;
@@ -75,7 +76,6 @@ namespace SpreadsheetGUI
             window.SaveSpreadsheetEvent += SaveSpreadsheet;
             window.UpdateTitleTextEvent += UpdateTitleText;
             window.UpdateAllNonEmptyEvent += UpdateAllNonEmpty;
-            theFilename = filename;
         }
 
         /// <summary>

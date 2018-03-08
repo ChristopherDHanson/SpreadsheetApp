@@ -305,14 +305,6 @@ namespace SpreadsheetGUI
 
         }
 
-        private void SSWindow_Load(object sender, EventArgs e)
-        {
-            if (UpdateAllNonEmptyEvent != null)
-            {
-                UpdateAllNonEmptyEvent();
-            }
-        }
-
         private void helpToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Help Instructions: \n" +
@@ -341,9 +333,12 @@ namespace SpreadsheetGUI
                             "                   Thank You!");
         }
 
-        private void tableLayoutPanel2_Paint(object sender, PaintEventArgs e)
+        private void SSWindow_Shown(object sender, EventArgs e)
         {
-
+            if (UpdateAllNonEmptyEvent != null)
+            {
+                UpdateAllNonEmptyEvent();
+            }
         }
     }
 }
