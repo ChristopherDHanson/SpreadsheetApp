@@ -304,14 +304,6 @@ namespace SpreadsheetGUI
 
         }
 
-        private void SSWindow_Load(object sender, EventArgs e)
-        {
-            if (UpdateAllNonEmptyEvent != null)
-            {
-                UpdateAllNonEmptyEvent();
-            }
-        }
-
         private void helpToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Help Instructions: \n" +
@@ -338,6 +330,14 @@ namespace SpreadsheetGUI
                             "menu to open a saved worksheet or open a fresh\n" +
                             "page.\n" +
                             "                   Thank You!");
+        }
+
+        private void SSWindow_Shown(object sender, EventArgs e)
+        {
+            if (UpdateAllNonEmptyEvent != null)
+            {
+                UpdateAllNonEmptyEvent();
+            }
         }
     }
 }

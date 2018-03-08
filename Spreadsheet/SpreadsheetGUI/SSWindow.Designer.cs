@@ -247,7 +247,7 @@
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "SSWindow";
             this.Text = "New Spreadsheet";
-            this.Load += new System.EventHandler(this.SSWindow_Load);
+            this.Shown += new System.EventHandler(this.SSWindow_Shown);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
