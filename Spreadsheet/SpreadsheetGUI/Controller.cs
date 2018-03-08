@@ -10,6 +10,8 @@ using SS;
 using System.Windows.Forms;
 using Formulas;
 using System.IO;
+using System.Text.RegularExpressions;
+using System.Xml;
 
 namespace SpreadsheetGUI
 {
@@ -78,12 +80,12 @@ namespace SpreadsheetGUI
         /// <param name="content"></param>
         private void ChangeCellContent(string content)
         {
+            String value;
             try
             {
                 cellsToChange = model.SetContentsOfCell(currentName, content); // Set contents in spreadsheet
                                                                                // Obtain value from cells (calced by above), conv to string, set it to display
                 object valueTemp = model.GetCellValue(currentName);
-                String value;
                 if (valueTemp is string)
                 {
                     value = (string)valueTemp;
@@ -101,7 +103,9 @@ namespace SpreadsheetGUI
             }
             catch (Exception e)
             {
-
+                MessageBox.Show(e.Message);
+                value = "";
+                cellsToChange = new HashSet<string>();
             }
         }
 
