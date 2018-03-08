@@ -33,6 +33,7 @@
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveRegularToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.EditBox = new System.Windows.Forms.TextBox();
             this.fileDialog = new System.Windows.Forms.OpenFileDialog();
@@ -44,7 +45,6 @@
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.TheSpreadsheetPanel = new SSGui.SpreadsheetPanel();
             this.saveDialog = new System.Windows.Forms.SaveFileDialog();
-            this.saveRegularToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -80,23 +80,30 @@
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(135, 26);
             this.newToolStripMenuItem.Text = "New";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(135, 26);
             this.openToolStripMenuItem.Text = "Open ..";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(135, 26);
             this.saveToolStripMenuItem.Text = "Save To";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
+            // 
+            // saveRegularToolStripMenuItem
+            // 
+            this.saveRegularToolStripMenuItem.Name = "saveRegularToolStripMenuItem";
+            this.saveRegularToolStripMenuItem.Size = new System.Drawing.Size(135, 26);
+            this.saveRegularToolStripMenuItem.Text = "Save";
+            this.saveRegularToolStripMenuItem.Click += new System.EventHandler(this.saveRegularToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -145,7 +152,7 @@
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel3, 0, 2);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 28);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(5);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 3;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
@@ -161,7 +168,7 @@
             this.tableLayoutPanel2.Controls.Add(this.EditBox, 0, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(5, 42);
-            this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(5);
             this.tableLayoutPanel2.MinimumSize = new System.Drawing.Size(0, 46);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
@@ -178,7 +185,7 @@
             this.tableLayoutPanel4.Controls.Add(this.CellValueBox, 1, 0);
             this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel4.Location = new System.Drawing.Point(5, 5);
-            this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(5);
             this.tableLayoutPanel4.MinimumSize = new System.Drawing.Size(0, 46);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 1;
@@ -203,7 +210,7 @@
             this.tableLayoutPanel3.Controls.Add(this.TheSpreadsheetPanel, 0, 0);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel3.Location = new System.Drawing.Point(5, 79);
-            this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(5);
             this.tableLayoutPanel3.MinimumSize = new System.Drawing.Size(177, 151);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 1;
@@ -226,14 +233,7 @@
             // 
             // saveDialog
             // 
-            this.saveDialog.DefaultExt = "xml";
-            // 
-            // saveRegularToolStripMenuItem
-            // 
-            this.saveRegularToolStripMenuItem.Name = "saveRegularToolStripMenuItem";
-            this.saveRegularToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
-            this.saveRegularToolStripMenuItem.Text = "Save";
-            this.saveRegularToolStripMenuItem.Click += new System.EventHandler(this.saveRegularToolStripMenuItem_Click);
+            this.saveDialog.DefaultExt = "ss";
             // 
             // SSWindow
             // 

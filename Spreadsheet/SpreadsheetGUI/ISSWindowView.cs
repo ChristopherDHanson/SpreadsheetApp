@@ -23,6 +23,7 @@ namespace SpreadsheetGUI
         event Action LoadEvent;
         event Action NewSpreadsheetEvent;
         event Action<string> OpenSpreadsheetEvent;
+        event Action UpdateAllNonEmptyEvent;
 
         string CellNameBoxVal { set; }
         string CellValueBoxVal { set; }
