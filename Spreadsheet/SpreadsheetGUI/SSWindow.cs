@@ -29,9 +29,15 @@ namespace SpreadsheetGUI
         public event Action LoadEvent;
         public event Action NewSpreadsheetEvent;
         public event Action<string> OpenSpreadsheetEvent;
-        public event Action CloseEvent;
+        public event Action<string, SSWindow> UpdateTitleTextEvent;
 
         public SSWindow()
+        {
+            InitializeComponent();
+        }
+
+        //TEST
+        public SSWindow(SSWindow oldWindow)
         {
             InitializeComponent();
         }
@@ -44,6 +50,16 @@ namespace SpreadsheetGUI
         public void OpenNew()
         {
             SSWindowApplicationContext.GetContext().RunNew();
+        }
+
+        public void OpenSS()
+        {
+            SSWindowApplicationContext.GetContext().RunNew();
+        }
+
+        public string TitleTextVal
+        {
+            set { this.Text = value; }
         }
 
         public string CellNameBoxVal
@@ -90,6 +106,10 @@ namespace SpreadsheetGUI
             if (ChangeCellContentEvent != null && !EditBox.Text.StartsWith("="))
             {
                 ChangeCellContentEvent(EditBox.Text);
+                if (UpdateTitleTextEvent != null && !EditBox.Text.StartsWith("="))
+                {
+                    UpdateTitleTextEvent("", this);
+                }
             }
         }
 
@@ -116,6 +136,14 @@ namespace SpreadsheetGUI
                 {
                     ChangeCellContentEvent(EditBox.Text);
                 }
+                if (UpdateTitleTextEvent != null)
+                {
+                    UpdateTitleTextEvent("", this);
+                }
+                if (UpdateTitleTextEvent != null)
+                {
+                    UpdateTitleTextEvent("", this);
+                }
                 if (UpdateRelevantEvent != null)
                 {
                     UpdateRelevantEvent();
@@ -124,6 +152,11 @@ namespace SpreadsheetGUI
             }
         }
 
+        /// <summary>
+        /// The 'new' button is clicked from file menu
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (NewSpreadsheetEvent != null)
@@ -131,7 +164,11 @@ namespace SpreadsheetGUI
                 NewSpreadsheetEvent();
             }
         }
-
+        /// <summary>
+        /// The 'open' button is clicked from file menu
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DialogResult result = fileDialog.ShowDialog();
@@ -144,6 +181,12 @@ namespace SpreadsheetGUI
             }
         }
 
+        /// <summary>
+        /// The 'save' button is clicked from file menu. Spreadsheet will be saved as
+        /// and XML file with location and name as specified in the save dialog.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DialogResult result = saveDialog.ShowDialog();
@@ -153,12 +196,11 @@ namespace SpreadsheetGUI
                 {
                     SaveSpreadsheetEvent(saveDialog.FileName);
                 }
+                if (UpdateTitleTextEvent != null)
+                {
+                    UpdateTitleTextEvent(saveDialog.FileName, this);
+                }
             }
-        }
-
-        private void CellNameBox_TextChanged_1(object sender, EventArgs e)
-        {
-
         }
 
         private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)

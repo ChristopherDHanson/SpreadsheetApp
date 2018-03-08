@@ -52,5 +52,21 @@ namespace SpreadsheetGUI
             // Run the form
             window.Show();
         }
+
+        public void RunNew(SSWindow oldWindow)
+        {
+            // Create the window and the controller
+            SSWindow window = new SSWindow();
+            new Controller(window);
+
+            // One more form is running
+            windowCount++;
+
+            // When this form closes, we want to find out
+            window.FormClosed += (o, e) => { if (--windowCount <= 0) ExitThread(); };
+
+            // Run the form
+            window.Show();
+        }
     }
 }

@@ -19,10 +19,10 @@ namespace SpreadsheetGUI
         event Action<SpreadsheetPanel> MoveRightEvent;
         event Action<SpreadsheetPanel> MoveUpEvent;
         event Action<SpreadsheetPanel> MoveDownEvent;
+        event Action<string, SSWindow> UpdateTitleTextEvent;
         event Action LoadEvent;
         event Action NewSpreadsheetEvent;
         event Action<string> OpenSpreadsheetEvent;
-        event Action CloseEvent;
 
         string CellNameBoxVal { set; }
         string CellValueBoxVal { set; }

@@ -45,6 +45,7 @@ namespace SpreadsheetGUI
             window.NewSpreadsheetEvent += NewSpreadsheet;
             window.OpenSpreadsheetEvent += OpenSpreadsheet;
             window.SaveSpreadsheetEvent += SaveSpreadsheet;
+            window.UpdateTitleTextEvent += UpdateTitleText;
         }
 
         /// <summary>
@@ -169,7 +170,7 @@ namespace SpreadsheetGUI
         private void OpenSpreadsheet(string filename)
         {
             SSWindow newSpreadsheet = new SSWindow();
-            newSpreadsheet.OpenNew();
+            newSpreadsheet.OpenSS();
         }
 
         private void SaveSpreadsheet(string filename)
@@ -179,6 +180,20 @@ namespace SpreadsheetGUI
             model.Save(sw);
             f.Write(sw);
             f.Close();
+        }
+
+        private void UpdateTitleText(string filename, SSWindow window)
+        {
+            if (model.Changed)
+            {
+                if (!window.Text.EndsWith("*")) {
+                    window.Text = window.Text + "*";
+                }
+            }
+            else
+            {
+                window.Text = filename;
+            }
         }
     }
 }
