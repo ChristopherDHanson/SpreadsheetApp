@@ -74,6 +74,8 @@ namespace SpreadsheetGUI
             window.OpenSpreadsheetEvent += OpenSpreadsheet;
             window.SaveSpreadsheetEvent += SaveSpreadsheet;
             window.UpdateTitleTextEvent += UpdateTitleText;
+            window.UpdateAllNonEmptyEvent += UpdateAllNonEmpty;
+            theFilename = filename;
         }
 
         /// <summary>

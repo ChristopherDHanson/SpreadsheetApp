@@ -58,7 +58,7 @@ namespace SpreadsheetGUI
         public void OpenSS(string filename)
         {
             SSWindowApplicationContext.GetContext().RunNew(filename);
-        }
+           }
 
         public string TitleTextVal
         {
@@ -339,6 +339,11 @@ namespace SpreadsheetGUI
                             "menu to open a saved worksheet or open a fresh\n" +
                             "page.\n" +
                             "                   Thank You!");
+        }
+
+        private void tableLayoutPanel2_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }
