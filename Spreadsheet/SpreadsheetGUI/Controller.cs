@@ -14,7 +14,7 @@ using System.Text.RegularExpressions;
 
 namespace SpreadsheetGUI
 {
-    class Controller
+    public class Controller
     {
         private Spreadsheet model;
         private ISSWindowView window;
@@ -106,33 +106,25 @@ namespace SpreadsheetGUI
         /// <param name="content"></param>
         private void ChangeCellContent(string content)
         {
+            cellsToChange = model.SetContentsOfCell(currentName, content); // Set contents in spreadsheet
             String value;
-            try
+            // Obtain value from cells (calced by above), conv to string, set it to display
+            object valueTemp = model.GetCellValue(currentName);
+            if (valueTemp is string)
             {
-                cellsToChange = model.SetContentsOfCell(currentName, content); // Set contents in spreadsheet
-                // Obtain value from cells (calced by above), conv to string, set it to display
-                object valueTemp = model.GetCellValue(currentName);
-                if (valueTemp is string)
-                {
-                    value = (string)valueTemp;
-                }
-                else if (valueTemp is double)
-                {
-                    value = valueTemp.ToString();
-                }
-                else if (valueTemp is FormulaError)
-                    value = "Formula Error";
-                else
-                    value = "";
-
-                currentPanel.SetValue(col, row, value);
+                value = (string) valueTemp;
             }
-            catch (Exception e)
+            else if (valueTemp is double)
             {
-                MessageBox.Show(e.Message);
+                value = valueTemp.ToString();
+            }
+            else if (valueTemp is FormulaError)
+                value = "Formula Error";
+            else
                 value = "";
-                cellsToChange = new HashSet<string>();
-            }
+
+            currentPanel.SetValue(col, row, value);
+        
         }
 
         private void RetrieveEditBoxValue(TextBox t)
