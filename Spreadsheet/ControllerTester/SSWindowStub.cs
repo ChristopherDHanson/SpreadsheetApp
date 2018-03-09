@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.SqlServer.Server;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SpreadsheetGUI;
 using SSGui;
 
@@ -27,6 +28,33 @@ namespace ControllerTester
         public event Action NewSpreadsheetEvent;
         public event Action<string> OpenSpreadsheetEvent;
         public event Action UpdateAllNonEmptyEvent;
+
+        public bool CalledChangeCurrent{get; private set;}
+        public void DoChangeCurrent(){CalledChangeCurrent = true;}
+        public bool CalledRetrieveEditBoxValueEvent { get; private set; }
+        public void DoRetrieveEditBoxValueEvent() { CalledRetrieveEditBoxValueEvent = true; }
+        public bool CalledMoveLeftEvent { get; private set; }
+        public void DoMoveLeftEvent() { CalledMoveLeftEvent = true; }
+        public bool CalledMoveRightEvent { get; private set; }
+        public void DoMoveRightEvent() { CalledMoveRightEvent = true; }
+        public bool CalledMoveUpEvent { get; private set; }
+        public void DoMoveUpEvent() { CalledMoveUpEvent = true; }
+        public bool CalledMoveDownEvent { get; private set; }
+        public void DoMoveDownEvent() { CalledMoveDownEvent = true; }
+        public bool CalledChangeCellContentEvent { get; private set; }
+        public void DoChangeCellContentEvent() { CalledChangeCellContentEvent = true; }
+        public bool CalledUpdateRelevantEvent { get; private set; }
+        public void DoUpdateRelevantEvent() { CalledUpdateRelevantEvent = true; }
+        public bool CalledSaveSpreadsheetEvent { get; private set; }
+        public void DoSaveSpreadsheetEvent() { CalledSaveSpreadsheetEvent = true; }
+        public bool CalledUpdateTitleTextEvent { get; private set; }
+        public void DoUpdateTitleTextEvent() { CalledUpdateTitleTextEvent = true; }
+        public bool CalledNewSpreadsheetEvent { get; private set; }
+        public void DoNewSpreadsheetEvent() { CalledNewSpreadsheetEvent = true; }
+        public bool CalledOpenSpreadsheetEvent { get; private set; }
+        public void DoOpenSpreadsheetEvent() { CalledOpenSpreadsheetEvent = true; }
+        public bool CalledUpdateAllNonEmptyEvent { get; private set; }
+        public void DoUpdateAllNonEmptyEvent() { CalledUpdateAllNonEmptyEvent = true; }
 
         public string TitleTextVal { set; get; }
 

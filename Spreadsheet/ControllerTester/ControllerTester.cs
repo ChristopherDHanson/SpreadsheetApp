@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SpreadsheetGUI;
 
@@ -14,6 +15,9 @@ namespace ControllerTester
         {
             SSWindowStub stub = new SSWindowStub();
             Controller controller = new Controller(stub);
+
+            stub.FireRetrieveEditBoxValueEvent(new TextBox());
+         
 
         }
 
@@ -126,23 +130,8 @@ namespace ControllerTester
         {
             SSWindowStub stub = new SSWindowStub();
             Controller controller = new Controller(stub);
-
-        }
-
-        [TestMethod]
-        public void TestLoadEvent()
-        {
-            SSWindowStub stub = new SSWindowStub();
-            Controller controller = new Controller(stub);
-
-        }
-
-        [TestMethod]
-        public void TestLoadEvent2()
-        {
-            SSWindowStub stub = new SSWindowStub();
-            Controller controller = new Controller(stub);
-
+            stub.FireUpdateTitleTextEvent("Title", new SSWindow()); ;
+            Assert.IsTrue(stub.CalledUpdateTitleTextEvent);
         }
 
         [TestMethod]
@@ -150,10 +139,11 @@ namespace ControllerTester
         {
             SSWindowStub stub = new SSWindowStub();
             Controller controller = new Controller(stub);
-
+            stub.FireNewSpreadsheetEvent();
+            Assert.IsTrue(stub.CalledNewSpreadsheetEvent);
         }
 
-        [TestMethod]
+        //[TestMethod]
         public void TestNewSpreadsheetEvent2()
         {
             SSWindowStub stub = new SSWindowStub();
@@ -166,10 +156,11 @@ namespace ControllerTester
         {
             SSWindowStub stub = new SSWindowStub();
             Controller controller = new Controller(stub);
-
+            stub.FireOpenSpreadsheetEvent("");
+            Assert.IsTrue(stub.CalledOpenSpreadsheetEvent);
         }
 
-        [TestMethod]
+        //[TestMethod]
         public void TestOpenSpreadsheetEvent2()
         {
             SSWindowStub stub = new SSWindowStub();
@@ -182,15 +173,15 @@ namespace ControllerTester
         {
             SSWindowStub stub = new SSWindowStub();
             Controller controller = new Controller(stub);
-
+            stub.FireUpdateAllNonEmptyEvent();
+            Assert.IsTrue(stub.CalledUpdateAllNonEmptyEvent);
         }
 
-        [TestMethod]
+        //[TestMethod]
         public void TestUpdateAllNonEmptyEvent2()
         {
             SSWindowStub stub = new SSWindowStub();
             Controller controller = new Controller(stub);
-
         }
 
 
