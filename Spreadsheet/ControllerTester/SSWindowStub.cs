@@ -24,10 +24,11 @@ namespace ControllerTester
         public event Action UpdateRelevantEvent;
         public event Action<string> SaveSpreadsheetEvent;
         public event Action<string, SSWindow> UpdateTitleTextEvent;
-        public event Action LoadEvent;
         public event Action NewSpreadsheetEvent;
         public event Action<string> OpenSpreadsheetEvent;
         public event Action UpdateAllNonEmptyEvent;
+
+        public string TitleTextVal { set; get; }
 
         //Next fourteen methods fire above events
         public void FireChangeCurrentEvent(SpreadsheetPanel testPanel)
@@ -107,14 +108,6 @@ namespace ControllerTester
             if (UpdateTitleTextEvent != null)
             {
                 UpdateTitleTextEvent(titleName, testWindow);
-            }
-        }
-
-        public void FireLoadEvent()
-        {
-            if (LoadEvent != null)
-            {
-                LoadEvent();
             }
         }
 

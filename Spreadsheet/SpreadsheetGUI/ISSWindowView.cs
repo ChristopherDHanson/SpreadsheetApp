@@ -24,6 +24,8 @@ namespace SpreadsheetGUI
         event Action<string> OpenSpreadsheetEvent;
         event Action UpdateAllNonEmptyEvent;
 
+        string TitleTextVal { set; }
+
         string CellNameBoxVal { set; }
         string CellValueBoxVal { set; }
 

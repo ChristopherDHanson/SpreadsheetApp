@@ -7,9 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using SSGui;
 using SS;
-using System.Windows.Forms;
 using Formulas;
-using System.IO;
 using System.Text.RegularExpressions;
 
 namespace SpreadsheetGUI

@@ -192,5 +192,15 @@ namespace ControllerTester
             Controller controller = new Controller(stub);
 
         }
+
+
+        [TestMethod]
+        public void DoCloseTest()
+        {
+            SSWindowStub stub = new SSWindowStub();
+            Controller controller = new Controller(stub);
+            stub.DoClose();
+            Assert.IsTrue(stub.CalledDoClose);
+        }
     }
 }
