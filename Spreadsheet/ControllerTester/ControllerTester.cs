@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SpreadsheetGUI;
+using SSGui;
 
 namespace ControllerTester
 {
@@ -34,6 +35,9 @@ namespace ControllerTester
             SSWindowStub stub = new SSWindowStub();
             Controller controller = new Controller(stub);
 
+            stub.FireChangeCurrentEvent(new SpreadsheetPanel());
+            Assert.IsTrue(stub.CalledChangeCurrent);
+
         }
 
         [TestMethod]
@@ -50,6 +54,9 @@ namespace ControllerTester
             SSWindowStub stub = new SSWindowStub();
             Controller controller = new Controller(stub);
 
+            stub.FireMoveLeftEvent(new SpreadsheetPanel());
+            Assert.IsTrue(stub.CalledRetrieveEditBoxValueEvent);
+
         }
 
         [TestMethod]
@@ -57,6 +64,9 @@ namespace ControllerTester
         {
             SSWindowStub stub = new SSWindowStub();
             Controller controller = new Controller(stub);
+
+            stub.FireMoveRightEvent(new SpreadsheetPanel());
+            Assert.IsTrue(stub.CalledRetrieveEditBoxValueEvent);
 
         }
 
@@ -66,6 +76,9 @@ namespace ControllerTester
             SSWindowStub stub = new SSWindowStub();
             Controller controller = new Controller(stub);
 
+            stub.FireMoveUpEvent(new SpreadsheetPanel());
+            Assert.IsTrue(stub.CalledRetrieveEditBoxValueEvent);
+
         }
 
         [TestMethod]
@@ -74,6 +87,11 @@ namespace ControllerTester
             SSWindowStub stub = new SSWindowStub();
             Controller controller = new Controller(stub);
 
+            stub.FireMoveDownEvent(new SpreadsheetPanel());
+            Assert.IsTrue(stub.CalledRetrieveEditBoxValueEvent);
+
+            
+
         }
 
         [TestMethod]
@@ -81,6 +99,9 @@ namespace ControllerTester
         {
             SSWindowStub stub = new SSWindowStub();
             Controller controller = new Controller(stub);
+
+            stub.FireChangeCellContentEvent("");
+            Assert.IsTrue(stub.CalledRetrieveEditBoxValueEvent);
 
         }
 
@@ -98,6 +119,9 @@ namespace ControllerTester
             SSWindowStub stub = new SSWindowStub();
             Controller controller = new Controller(stub);
 
+            stub.FireUpdateRelevantEvent();
+            Assert.IsTrue(stub.CalledRetrieveEditBoxValueEvent);
+
         }
 
         [TestMethod]
@@ -113,6 +137,9 @@ namespace ControllerTester
         {
             SSWindowStub stub = new SSWindowStub();
             Controller controller = new Controller(stub);
+
+            stub.FireSaveSpreadsheetEvent("");
+            Assert.IsTrue(stub.CalledRetrieveEditBoxValueEvent);
 
         }
 
@@ -130,21 +157,6 @@ namespace ControllerTester
             SSWindowStub stub = new SSWindowStub();
             Controller controller = new Controller(stub);
 
-        }
-
-        [TestMethod]
-        public void TestLoadEvent()
-        {
-            SSWindowStub stub = new SSWindowStub();
-            Controller controller = new Controller(stub);
-
-        }
-
-        [TestMethod]
-        public void TestLoadEvent2()
-        {
-            SSWindowStub stub = new SSWindowStub();
-            Controller controller = new Controller(stub);
 
         }
 
