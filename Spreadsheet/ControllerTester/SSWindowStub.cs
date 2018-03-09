@@ -73,6 +73,7 @@ namespace ControllerTester
         {
             if (RetrieveEditBoxValueEvent != null)
             {
+                DoChangeCurrent();
                 RetrieveEditBoxValueEvent(textBox);
             }
         }
@@ -81,6 +82,7 @@ namespace ControllerTester
         {
             if (MoveLeftEvent != null)
             {
+                DoMoveLeftEvent();
                 MoveLeftEvent(testPanel);
             }
         }
@@ -89,6 +91,7 @@ namespace ControllerTester
         {
             if (MoveRightEvent != null)
             {
+                DoMoveRightEvent();
                 MoveRightEvent(testPanel);
             }
         }
@@ -97,6 +100,7 @@ namespace ControllerTester
         {
             if (MoveDownEvent != null)
             {
+                DoMoveDownEvent();
                 MoveDownEvent(testPanel);
             }
         }
@@ -105,6 +109,7 @@ namespace ControllerTester
         {
             if (MoveUpEvent != null)
             {
+                DoMoveUpEvent();
                 MoveUpEvent(testPanel);
             }
         }
@@ -113,6 +118,7 @@ namespace ControllerTester
         {
             if (ChangeCellContentEvent != null)
             {
+                DoChangeCellContentEvent();
                 ChangeCellContentEvent(testString);
             }
         }
@@ -121,6 +127,7 @@ namespace ControllerTester
         {
             if (UpdateRelevantEvent != null)
             {
+                DoUpdateRelevantEvent();
                 UpdateRelevantEvent();
             }
         }
@@ -129,6 +136,7 @@ namespace ControllerTester
         {
             if (SaveSpreadsheetEvent != null)
             {
+                DoSaveSpreadsheetEvent();
                 SaveSpreadsheetEvent(saveSheet);
             }
         }
@@ -137,6 +145,7 @@ namespace ControllerTester
         {
             if (UpdateTitleTextEvent != null)
             {
+                DoUpdateTitleTextEvent();
                 UpdateTitleTextEvent(titleName, testWindow);
             }
         }
@@ -145,6 +154,7 @@ namespace ControllerTester
         {
             if (LoadEvent != null)
             {
+                DoLoadEvent();
                 LoadEvent();
             }
         }
@@ -153,6 +163,7 @@ namespace ControllerTester
         {
             if (NewSpreadsheetEvent != null)
             {
+                DoNewSpreadsheetEvent();
                 NewSpreadsheetEvent();
             }
         }
@@ -161,6 +172,7 @@ namespace ControllerTester
         {
             if (OpenSpreadsheetEvent != null)
             {
+                DoOpenSpreadsheetEvent();
                 OpenSpreadsheetEvent(newFile);
             }
         }
@@ -168,6 +180,7 @@ namespace ControllerTester
         {
             if (UpdateAllNonEmptyEvent != null)
             {
+                DoUpdateAllNonEmptyEvent();
                 UpdateAllNonEmptyEvent();
             }
         }
