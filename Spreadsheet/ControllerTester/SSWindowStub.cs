@@ -29,6 +29,7 @@ namespace ControllerTester
         public event Action<string> OpenSpreadsheetEvent;
         public event Action UpdateAllNonEmptyEvent;
 
+        // Bools indicate whether event was fired, void methods set bools
         public bool CalledChangeCurrent { get;  set; }
         private void DoChangeCurrent(){CalledChangeCurrent = true;}
         public bool CalledRetrieveEditBoxValueEvent { get;  set; }

@@ -12,13 +12,16 @@ using System.Text.RegularExpressions;
 
 namespace SpreadsheetGUI
 {
+    /// <summary>
+    /// Controls operation of an ISSWindowView.
+    /// </summary>
     public class Controller
     {
         private Spreadsheet model;
         private ISSWindowView window;
         private string currentName;
-        private int col;
-        private int row;
+        private int col; // Current column
+        private int row; // Current row
         private SpreadsheetPanel currentPanel;
         private char[] alphabet = {'A','B','C','D','E','F','G','H','I','J','K','L',
             'M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
@@ -134,6 +137,11 @@ namespace SpreadsheetGUI
             }
         }
 
+        /// <summary>
+        /// Retrieves the target value of the EditBox by getting content
+        /// of current cell. Used when selection changes.
+        /// </summary>
+        /// <param name="t"></param>
         private void RetrieveEditBoxValue(TextBox t)
         {
             t.Text = currentContent;
@@ -267,6 +275,9 @@ namespace SpreadsheetGUI
             }
         }
 
+        /// <summary>
+        /// All nonempty cells are updated.
+        /// </summary>
         private void UpdateAllNonEmpty()
         {
             ISet<string> set = new HashSet<string>();

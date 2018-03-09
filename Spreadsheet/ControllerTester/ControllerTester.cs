@@ -204,5 +204,31 @@ namespace ControllerTester
                 .Remove(path.Length-10)
                 +"/Test_Files/OpenTest.ss");
         }
+
+        [TestMethod]
+        public void SaveSSWithPathTest()
+        {
+            SSWindowStub stub = new SSWindowStub();
+            string path = System.IO.Directory.GetCurrentDirectory();
+            Controller controller = new Controller(stub, path
+                .Remove(path.Length - 10)
+                + "/Test_Files/OpenTest.ss");
+            stub.FireSaveSpreadsheetEvent(path
+                .Remove(path.Length - 10)
+                + "/Test_Files/SaveTest.ss");
+        }
+
+        [TestMethod]
+        public void UpdateRelevantCellsWithPathTest()
+        {
+            SSWindowStub stub = new SSWindowStub();
+            string path = System.IO.Directory.GetCurrentDirectory();
+            Controller controller = new Controller(stub, path
+                .Remove(path.Length - 10)
+                + "/Test_Files/OpenTest.ss");
+            SpreadsheetPanel sp = new SpreadsheetPanel();
+            stub.FireChangeCurrentEvent(sp);
+            stub.FireChangeCellContentEvent("GRR");
+        }
     }
 }
