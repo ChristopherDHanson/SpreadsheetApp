@@ -395,9 +395,8 @@ namespace SS
                     depGraph.RemoveDependency(s, name);
                 }
                 if (oldContents != null) { // If the cell did not exist before exception
-                    sheet.Add(name, test);
+                    sheet.Add(name, test); // Otherwise, add in the cell in its previous state, so as not to allow ss to have circexcep.
                 }
-                //else // Otherwise, add in the cell in its previous state, so as not to allow ss to have circexcep.
                     
                 throw e;
             }
