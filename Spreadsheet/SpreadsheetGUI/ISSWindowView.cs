@@ -32,5 +32,7 @@ namespace SpreadsheetGUI
         void DoClose();
 
         void OpenNew();
+
+        void ShowException(string s);
     }
 }

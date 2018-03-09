@@ -364,5 +364,10 @@ namespace SpreadsheetGUI
                 UpdateAllNonEmptyEvent();
             }
         }
+
+        public void ShowException(string message)
+        {
+            MessageBox.Show(message);
+        }
     }
 }

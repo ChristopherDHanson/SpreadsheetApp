@@ -199,6 +199,12 @@ namespace ControllerTester
         {
             get; private set;
         }
+
+        public bool CalledShowException { get; set; }
+        public void ShowException(string s)
+        {
+            CalledShowException = true;
+        }
     }
 }
 
