@@ -20,8 +20,13 @@ namespace SpreadsheetGUI
         private int col;
         private int row;
         private SpreadsheetPanel currentPanel;
-        private char[] alphabet = {'A','B','C','D','E','F','G','H','I','J','K','L',
-            'M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
+
+        private char[] alphabet =
+        {
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U',
+            'V', 'W', 'X', 'Y', 'Z'
+        };
+
         private string currentValue;
         private string currentContent;
         private ISet<string> cellsToChange;
@@ -32,6 +37,7 @@ namespace SpreadsheetGUI
         /// </summary>
         public Controller(ISSWindowView window)
         {
+            currentPanel = new SpreadsheetPanel();
             this.window = window;
             this.model = new Spreadsheet();
             currentName = "A1";
@@ -48,6 +54,11 @@ namespace SpreadsheetGUI
             window.SaveSpreadsheetEvent += SaveSpreadsheet;
             window.UpdateTitleTextEvent += UpdateTitleText;
             window.UpdateAllNonEmptyEvent += UpdateAllNonEmpty;
+        }
+
+        public void setCellsToChange(ISet<string> input)
+        {
+            cellsToChange = input;
         }
 
         /// <summary>
@@ -84,7 +95,7 @@ namespace SpreadsheetGUI
         {
             currentPanel = sender;
             sender.GetSelection(out col, out row);
-            currentName = (alphabet[col] + (row+1).ToString());
+            currentName = (alphabet[col] + (row + 1).ToString());
             sender.GetValue(col, row, out currentValue);
             object desiredContent = model.GetCellContents(currentName);
             if (desiredContent is Formula)
@@ -113,7 +124,7 @@ namespace SpreadsheetGUI
                 object valueTemp = model.GetCellValue(currentName);
                 if (valueTemp is string)
                 {
-                    value = (string)valueTemp;
+                    value = (string) valueTemp;
                 }
                 else if (valueTemp is double)
                 {
@@ -150,14 +161,13 @@ namespace SpreadsheetGUI
                 int thisRow;
                 int.TryParse(s.Substring(1), out thisRow);
                 thisRow--;
-                
 
                 // Get the value in the cell and convert it to appropriate string
                 object valueTemp = model.GetCellValue(s);
                 String value;
                 if (valueTemp is string)
                 {
-                    value = (string)valueTemp;
+                    value = (string) valueTemp;
                 }
                 else if (valueTemp is double)
                 {
@@ -177,11 +187,12 @@ namespace SpreadsheetGUI
         /// </summary>
         private void MoveLeft(SpreadsheetPanel sender)
         {
-            if(sender.SetSelection(col - 1, row))
+            if (sender.SetSelection(col - 1, row))
             {
                 col -= 1;
             }
         }
+
         /// <summary>
         /// Move selection to the right
         /// </summary>
@@ -192,6 +203,7 @@ namespace SpreadsheetGUI
                 col += 1;
             }
         }
+
         /// <summary>
         /// Move selection up
         /// </summary>
@@ -202,12 +214,13 @@ namespace SpreadsheetGUI
                 row -= 1;
             }
         }
+
         /// <summary>
         /// Move selection down
         /// </summary>
         private void MoveDown(SpreadsheetPanel sender)
         {
-            if(sender.SetSelection(col, row + 1))
+            if (sender.SetSelection(col, row + 1))
             {
                 row += 1;
             }
@@ -229,8 +242,15 @@ namespace SpreadsheetGUI
         /// <param name="filename"></param>
         private void OpenSpreadsheet(string filename)
         {
-            SSWindow newSpreadsheet = new SSWindow();
-            newSpreadsheet.OpenSS(filename);
+            try
+            {
+                SSWindow newSpreadsheet = new SSWindow();
+                newSpreadsheet.OpenSS(filename);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Path not found.");
+            }
         }
 
         /// <summary>
@@ -239,12 +259,19 @@ namespace SpreadsheetGUI
         /// <param name="filename"></param>
         private void SaveSpreadsheet(string filename)
         {
-            StreamWriter f = new StreamWriter(filename);
-            StringWriter sw = new StringWriter();
-            model.Save(sw);
-            f.Write(sw);
-            f.Close();
-            theFilename = filename;
+            try
+            {
+                StreamWriter f = new StreamWriter(filename);
+                StringWriter sw = new StringWriter();
+                model.Save(sw);
+                f.Write(sw);
+                f.Close();
+                theFilename = filename;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Path not found.");
+            }
         }
 
         /// <summary>
@@ -257,7 +284,8 @@ namespace SpreadsheetGUI
         {
             if (model.Changed)
             {
-                if (!window.Text.EndsWith("*")) {
+                if (!window.Text.EndsWith("*"))
+                {
                     window.Text = window.Text + "*";
                 }
             }
@@ -270,10 +298,11 @@ namespace SpreadsheetGUI
         private void UpdateAllNonEmpty()
         {
             ISet<string> set = new HashSet<string>();
-            foreach(string s in model.GetNamesOfAllNonemptyCells())
+            foreach (string s in model.GetNamesOfAllNonemptyCells())
             {
                 set.Add(s);
             }
+
             cellsToChange = set;
             UpdateRelevantCells();
         }

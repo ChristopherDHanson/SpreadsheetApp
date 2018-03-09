@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Windows.Forms;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SpreadsheetGUI;
@@ -22,14 +24,6 @@ namespace ControllerTester
         }
 
         [TestMethod]
-        public void TestRetrieveEditBoxValueEvent2()
-        {
-            SSWindowStub stub = new SSWindowStub();
-            Controller controller = new Controller(stub);
-
-        }
-
-        [TestMethod]
         public void TestChangeCurrentEvent()
         {
             SSWindowStub stub = new SSWindowStub();
@@ -37,14 +31,6 @@ namespace ControllerTester
 
             stub.FireChangeCurrentEvent(new SpreadsheetPanel());
             Assert.IsTrue(stub.CalledChangeCurrent);
-
-        }
-
-        [TestMethod]
-        public void TestChangeCurrentEvent2()
-        {
-            SSWindowStub stub = new SSWindowStub();
-            Controller controller = new Controller(stub);
 
         }
 
@@ -89,9 +75,6 @@ namespace ControllerTester
 
             stub.FireMoveDownEvent(new SpreadsheetPanel());
             Assert.IsTrue(stub.CalledMoveDownEvent);
-
-            
-
         }
 
         [TestMethod]
@@ -102,15 +85,6 @@ namespace ControllerTester
 
             stub.FireChangeCellContentEvent("");
             Assert.IsTrue(stub.CalledChangeCellContentEvent);
-
-        }
-
-        [TestMethod]
-        public void TestChangeCellContentEvent2()
-        {
-            SSWindowStub stub = new SSWindowStub();
-            Controller controller = new Controller(stub);
-
         }
 
         [TestMethod]
@@ -119,16 +93,17 @@ namespace ControllerTester
             SSWindowStub stub = new SSWindowStub();
             Controller controller = new Controller(stub);
 
+            HashSet<string> tester = new HashSet<string>();
+            tester.Add("A1");
+            tester.Add("B1");
+            tester.Add("C1");
+            tester.Add("D1");
+
+            controller.setCellsToChange(tester);
+            
+
             stub.FireUpdateRelevantEvent();
             Assert.IsTrue(stub.CalledUpdateRelevantEvent);
-
-        }
-
-        [TestMethod]
-        public void TestUpdateRelevantEvent2()
-        {
-            SSWindowStub stub = new SSWindowStub();
-            Controller controller = new Controller(stub);
 
         }
 
@@ -138,16 +113,9 @@ namespace ControllerTester
             SSWindowStub stub = new SSWindowStub();
             Controller controller = new Controller(stub);
 
+            
             stub.FireSaveSpreadsheetEvent("");
             Assert.IsTrue(stub.CalledSaveSpreadsheetEvent);
-
-        }
-
-        [TestMethod]
-        public void TestSaveSpreadsheetEvent2()
-        {
-            SSWindowStub stub = new SSWindowStub();
-            Controller controller = new Controller(stub);
 
         }
 
@@ -169,14 +137,6 @@ namespace ControllerTester
             Assert.IsTrue(stub.CalledNewSpreadsheetEvent);
         }
 
-        //[TestMethod]
-        public void TestNewSpreadsheetEvent2()
-        {
-            SSWindowStub stub = new SSWindowStub();
-            Controller controller = new Controller(stub);
-
-        }
-
         [TestMethod]
         public void TestOpenSpreadsheetEvent()
         {
@@ -186,14 +146,6 @@ namespace ControllerTester
             Assert.IsTrue(stub.CalledOpenSpreadsheetEvent);
         }
 
-        //[TestMethod]
-        public void TestOpenSpreadsheetEvent2()
-        {
-            SSWindowStub stub = new SSWindowStub();
-            Controller controller = new Controller(stub);
-
-        }
-
         [TestMethod]
         public void TestUpdateAllNonEmptyEvent()
         {
@@ -201,13 +153,6 @@ namespace ControllerTester
             Controller controller = new Controller(stub);
             stub.FireUpdateAllNonEmptyEvent();
             Assert.IsTrue(stub.CalledUpdateAllNonEmptyEvent);
-        }
-
-        //[TestMethod]
-        public void TestUpdateAllNonEmptyEvent2()
-        {
-            SSWindowStub stub = new SSWindowStub();
-            Controller controller = new Controller(stub);
         }
 
 
