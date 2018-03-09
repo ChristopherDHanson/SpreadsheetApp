@@ -153,7 +153,7 @@ namespace SpreadsheetGUI
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message);
+                window.ShowException(e.Message);
                 value = "";
                 cellsToChange = new HashSet<string>();
             }

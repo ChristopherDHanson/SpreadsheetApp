@@ -330,7 +330,7 @@ namespace ControllerTester
             controller.setCellsToChange(tester);
             stub.FireChangeCellContentEvent("= +++++AA1/0");
             stub.FireUpdateRelevantEvent();
-            Assert.IsTrue(stub.CalledUpdateRelevantEvent);
+            Assert.IsTrue(stub.CalledShowException);
         }
     }
 }
