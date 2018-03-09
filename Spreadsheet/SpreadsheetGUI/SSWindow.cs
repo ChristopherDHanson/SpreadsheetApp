@@ -369,5 +369,10 @@ namespace SpreadsheetGUI
         {
             MessageBox.Show(message);
         }
+
+        private void SSWindow_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

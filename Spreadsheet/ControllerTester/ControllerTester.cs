@@ -161,7 +161,7 @@ namespace ControllerTester
 
             
             stub.FireSaveSpreadsheetEvent("");
-
+            Assert.IsTrue(stub.CalledSaveSpreadsheetEvent);
         }
 
         [TestMethod]
@@ -180,8 +180,8 @@ namespace ControllerTester
             Controller controller = new Controller(stub);
             stub.FireNewSpreadsheetEvent();
             Assert.IsTrue(stub.CalledNewSpreadsheetEvent);
-        
-        
+        }
+
         [TestMethod]
         [ExpectedException(typeof(System.IO.FileNotFoundException))]
         public void TestOpenSpreadsheetEvent()
