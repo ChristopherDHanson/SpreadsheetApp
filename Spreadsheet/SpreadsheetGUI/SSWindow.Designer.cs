@@ -114,7 +114,6 @@
             // 
             // EditBox
             // 
-            this.EditBox.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.EditBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.EditBox.Location = new System.Drawing.Point(2, 2);
             this.EditBox.Margin = new System.Windows.Forms.Padding(2);
