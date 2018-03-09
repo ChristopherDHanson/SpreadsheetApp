@@ -196,7 +196,7 @@ namespace ControllerTester
         }
 
         [TestMethod]
-        public void Test()
+        public void OpenSSWithPathTest()
         {
             SSWindowStub stub = new SSWindowStub();
             string path = System.IO.Directory.GetCurrentDirectory();
