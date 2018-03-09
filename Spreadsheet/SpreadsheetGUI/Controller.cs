@@ -64,15 +64,16 @@ namespace SpreadsheetGUI
         {
             cellsToChange = input;
         }
+
         public void setModel(Spreadsheet newPanel)
         {
             model = newPanel;
         }
+
         public void setLocation(int incol, int inrow)
         {
             col = incol;
             row = inrow;
-
         }
 
         /// <summary>
@@ -261,8 +262,8 @@ namespace SpreadsheetGUI
         /// <param name="filename"></param>
         private void OpenSpreadsheet(string filename)
         {
-                SSWindow newSpreadsheet = new SSWindow();
-                newSpreadsheet.OpenSS(filename);
+            SSWindow newSpreadsheet = new SSWindow();
+            newSpreadsheet.OpenSS(filename);
         }
 
         /// <summary>
@@ -303,8 +304,7 @@ namespace SpreadsheetGUI
             }
             else if (filename.Equals("test"))
             {
-                if (theFilename != null)
-                    window.Text = theFilename;
+                if (theFilename != null) window.Text = theFilename;
             }
             else
             {

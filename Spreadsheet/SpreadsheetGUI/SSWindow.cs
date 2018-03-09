@@ -101,14 +101,17 @@ namespace SpreadsheetGUI
             {
                 ChangeCellContentEvent(EditBox.Text);
             }
+
             if (UpdateRelevantEvent != null)
             {
                 UpdateRelevantEvent();
             }
+
             if (ChangeCurrentEvent != null)
             {
                 ChangeCurrentEvent(sender);
             }
+
             if (RetrieveEditBoxValueEvent != null)
             {
                 RetrieveEditBoxValueEvent(EditBox);
@@ -127,7 +130,6 @@ namespace SpreadsheetGUI
                 ChangeCurrentEvent((SpreadsheetPanel) sender);
             }
         }
-        
 
         /// <summary>
         /// Allows use of the "Enter" key to submit a value to be updated
@@ -136,25 +138,28 @@ namespace SpreadsheetGUI
         /// <param name="e"></param>
         private void EditBox_KeyPress(object sender, KeyPressEventArgs e)
         {
-
-            if (e.KeyChar == (char)Keys.Return)
+            if (e.KeyChar == (char) Keys.Return)
             {
                 if (ChangeCellContentEvent != null)
                 {
                     ChangeCellContentEvent(EditBox.Text);
                 }
+
                 if (UpdateTitleTextEvent != null)
                 {
                     UpdateTitleTextEvent("", this);
                 }
+
                 if (UpdateTitleTextEvent != null)
                 {
                     UpdateTitleTextEvent("", this);
                 }
+
                 if (UpdateRelevantEvent != null)
                 {
                     UpdateRelevantEvent();
                 }
+
                 ChangeCurrentEvent(TheSpreadsheetPanel);
             }
         }
@@ -171,6 +176,7 @@ namespace SpreadsheetGUI
                 NewSpreadsheetEvent();
             }
         }
+
         /// <summary>
         /// The 'open' button is clicked from file menu
         /// </summary>
@@ -205,13 +211,14 @@ namespace SpreadsheetGUI
                 {
                     SaveSpreadsheetEvent(saveDialog.FileName);
                 }
+
                 if (UpdateTitleTextEvent != null)
                 {
                     UpdateTitleTextEvent(saveDialog.FileName, this);
                 }
-            }
 
-            saved = true;
+                saved = true;
+            }
         }
 
         /// <summary>
@@ -223,36 +230,39 @@ namespace SpreadsheetGUI
         /// <param name="e"></param>
         private void saveRegularToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (this.Text.Contains(".")) { // If title text is a filepath, meaning sheet has been saved
+            if (this.Text.Contains("."))
+            {
+                // If title text is a filepath, meaning sheet has been saved
                 string filepath;
                 if (this.Text.EndsWith("*")) // If the path defined in title ends with '*',
                 {
-                    filepath = this.Text.Remove(this.Text.Length-1); // Remove it from filepath
+                    filepath = this.Text.Remove(this.Text.Length - 1); // Remove it from filepath
                 }
                 else
                 {
                     filepath = this.Text; // Otherwise, set the title to filepath
                 }
+
                 if (SaveSpreadsheetEvent != null)
                 {
                     SaveSpreadsheetEvent(filepath);
                 }
+
                 if (UpdateTitleTextEvent != null)
                 {
                     UpdateTitleTextEvent(filepath, this);
                 }
+
+                saved = true;
             }
             else // If sheet has not been saved, act as if 'Save To' was pressed (bring up save dialog)
             {
                 saveToolStripMenuItem_Click(sender, e);
             }
-
-            saved = true;
         }
 
         private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-
         }
 
         /// <summary>
@@ -262,41 +272,38 @@ namespace SpreadsheetGUI
         /// <param name="e"></param>
         private void TheSpreadsheetPanel_KeyDown(object sender, KeyEventArgs e)
         {
-            
-                if (e.KeyCode == Keys.Left) // Left arrow pressed
+            if (e.KeyCode == Keys.Left) // Left arrow pressed
+            {
+                if (MoveLeftEvent != null)
                 {
-                    if (MoveLeftEvent != null)
-                    {
-                        MoveLeftEvent((SpreadsheetPanel) sender);
-                        TheSpreadsheetPanel_SelectionChanged(TheSpreadsheetPanel);
-                    }
+                    MoveLeftEvent((SpreadsheetPanel) sender);
+                    TheSpreadsheetPanel_SelectionChanged(TheSpreadsheetPanel);
                 }
-                else if (e.KeyCode == Keys.Right) // Right arrow pressed
+            }
+            else if (e.KeyCode == Keys.Right) // Right arrow pressed
+            {
+                if (MoveRightEvent != null)
                 {
-                    if (MoveRightEvent != null)
-                    {
-                        MoveRightEvent((SpreadsheetPanel) sender);
-                        TheSpreadsheetPanel_SelectionChanged(TheSpreadsheetPanel);
-                    }
+                    MoveRightEvent((SpreadsheetPanel) sender);
+                    TheSpreadsheetPanel_SelectionChanged(TheSpreadsheetPanel);
                 }
-                else if (e.KeyCode == Keys.Up) // Up arrow pressed
+            }
+            else if (e.KeyCode == Keys.Up) // Up arrow pressed
+            {
+                if (MoveUpEvent != null)
                 {
-                    if (MoveUpEvent != null)
-                    {
-                        MoveUpEvent((SpreadsheetPanel) sender);
-                        TheSpreadsheetPanel_SelectionChanged(TheSpreadsheetPanel);
-                    }
+                    MoveUpEvent((SpreadsheetPanel) sender);
+                    TheSpreadsheetPanel_SelectionChanged(TheSpreadsheetPanel);
                 }
-                else if (e.KeyCode == Keys.Down) // Down arrow pressed
+            }
+            else if (e.KeyCode == Keys.Down) // Down arrow pressed
+            {
+                if (MoveDownEvent != null)
                 {
-                    if (MoveDownEvent != null)
-                    {
-                        MoveDownEvent((SpreadsheetPanel) sender);
-                        TheSpreadsheetPanel_SelectionChanged(TheSpreadsheetPanel);
-                    }
+                    MoveDownEvent((SpreadsheetPanel) sender);
+                    TheSpreadsheetPanel_SelectionChanged(TheSpreadsheetPanel);
                 }
-
-            
+            }
         }
 
         /// <summary>
@@ -305,11 +312,11 @@ namespace SpreadsheetGUI
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void EditBox_KeyDown(object sender, KeyEventArgs e)
-        {   // If the key down was an arrow key
+        {
+            // If the key down was an arrow key
             if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down || e.KeyCode == Keys.Left || e.KeyCode == Keys.Right)
             {
                 TheSpreadsheetPanel_KeyDown(TheSpreadsheetPanel, e);
-
                 if (ChangeCellContentEvent != null)
                 {
                     ChangeCellContentEvent(EditBox.Text);
@@ -322,7 +329,6 @@ namespace SpreadsheetGUI
 
                 ChangeCurrentEvent(TheSpreadsheetPanel);
             }
-
         }
 
         /// <summary>
@@ -332,32 +338,22 @@ namespace SpreadsheetGUI
         /// <param name="e"></param>
         private void helpToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Help Instructions: \n" +
-                            "\n" +
-                            "Select any cell with the mouse or arrow keys. \n" +
-                            "\n" +
-                            "Cells may contain any string or number, or a  \n" +
-                            "combination of both. \n" +
-                            "\n" +
+            MessageBox.Show("Help Instructions: \n" + "\n" + "Select any cell with the mouse or arrow keys. \n" + "\n" +
+                            "Cells may contain any string or number, or a  \n" + "combination of both. \n" + "\n" +
                             "A valid formula may be entered in any cell    \n" +
-                            "using the '=' sign to designate it a formula. \n" +
-                            "\n" +
+                            "using the '=' sign to designate it a formula. \n" + "\n" +
                             "A valid formula is any valid mathimatical  ex.\n" +
                             "limited to these characters: (,),+,-,*,/.     \n" +
-                            "normal math rules apply (no dividing by zero) \n" +
-                            "\n" +
+                            "normal math rules apply (no dividing by zero) \n" + "\n" +
                             "Any other cell's value may be used by using   \n" +
-                            "that cells column and row name in this format:\n" +
-                            "\n" +
-                            "                   A1, X22, B34, etc...       \n" +
-                            "\n" +
+                            "that cells column and row name in this format:\n" + "\n" +
+                            "                   A1, X22, B34, etc...       \n" + "\n" +
                             "This spreadsheet may be saved using the File  \n" +
                             "Menu on the top left; you may also use the    \n" +
-                            "menu to open a saved worksheet or open a fresh\n" +
-                            "page.\n" +
+                            "menu to open a saved worksheet or open a fresh\n" + "page.\n" +
                             "                   Thank You!");
         }
-        
+
         /// <summary>
         /// Upon window being shown, updates all nonempty. This is most useful when
         /// a spreadsheet is opened from a file.
@@ -370,10 +366,12 @@ namespace SpreadsheetGUI
             {
                 UpdateAllNonEmptyEvent();
             }
+
             if (RetrieveEditBoxValueEvent != null)
             {
                 RetrieveEditBoxValueEvent(EditBox);
             }
+
             if (UpdateTitleTextEvent != null)
             {
                 UpdateTitleTextEvent("test", this);
