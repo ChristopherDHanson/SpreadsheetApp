@@ -29,32 +29,32 @@ namespace ControllerTester
         public event Action<string> OpenSpreadsheetEvent;
         public event Action UpdateAllNonEmptyEvent;
 
-        public bool CalledChangeCurrent{get; private set;}
-        public void DoChangeCurrent(){CalledChangeCurrent = true;}
-        public bool CalledRetrieveEditBoxValueEvent { get; private set; }
-        public void DoRetrieveEditBoxValueEvent() { CalledRetrieveEditBoxValueEvent = true; }
-        public bool CalledMoveLeftEvent { get; private set; }
-        public void DoMoveLeftEvent() { CalledMoveLeftEvent = true; }
-        public bool CalledMoveRightEvent { get; private set; }
-        public void DoMoveRightEvent() { CalledMoveRightEvent = true; }
-        public bool CalledMoveUpEvent { get; private set; }
-        public void DoMoveUpEvent() { CalledMoveUpEvent = true; }
-        public bool CalledMoveDownEvent { get; private set; }
-        public void DoMoveDownEvent() { CalledMoveDownEvent = true; }
-        public bool CalledChangeCellContentEvent { get; private set; }
-        public void DoChangeCellContentEvent() { CalledChangeCellContentEvent = true; }
-        public bool CalledUpdateRelevantEvent { get; private set; }
-        public void DoUpdateRelevantEvent() { CalledUpdateRelevantEvent = true; }
-        public bool CalledSaveSpreadsheetEvent { get; private set; }
-        public void DoSaveSpreadsheetEvent() { CalledSaveSpreadsheetEvent = true; }
-        public bool CalledUpdateTitleTextEvent { get; private set; }
-        public void DoUpdateTitleTextEvent() { CalledUpdateTitleTextEvent = true; }
-        public bool CalledNewSpreadsheetEvent { get; private set; }
-        public void DoNewSpreadsheetEvent() { CalledNewSpreadsheetEvent = true; }
-        public bool CalledOpenSpreadsheetEvent { get; private set; }
-        public void DoOpenSpreadsheetEvent() { CalledOpenSpreadsheetEvent = true; }
-        public bool CalledUpdateAllNonEmptyEvent { get; private set; }
-        public void DoUpdateAllNonEmptyEvent() { CalledUpdateAllNonEmptyEvent = true; }
+        public bool CalledChangeCurrent { get;  set; }
+        private void DoChangeCurrent(){CalledChangeCurrent = true;}
+        public bool CalledRetrieveEditBoxValueEvent { get;  set; }
+        private void DoRetrieveEditBoxValueEvent() { CalledRetrieveEditBoxValueEvent = true; }
+        public bool CalledMoveLeftEvent { get;  set; }
+        private void DoMoveLeftEvent() { CalledMoveLeftEvent = true; }
+        public bool CalledMoveRightEvent { get;  set; }
+        private void DoMoveRightEvent() { CalledMoveRightEvent = true; }
+        public bool CalledMoveUpEvent { get;  set; }
+        private void DoMoveUpEvent() { CalledMoveUpEvent = true; }
+        public bool CalledMoveDownEvent { get;  set; }
+        private void DoMoveDownEvent() { CalledMoveDownEvent = true; }
+        public bool CalledChangeCellContentEvent { get;  set; }
+        private void DoChangeCellContentEvent() { CalledChangeCellContentEvent = true; }
+        public bool CalledUpdateRelevantEvent { get;  set; }
+        private void DoUpdateRelevantEvent() { CalledUpdateRelevantEvent = true; }
+        public bool CalledSaveSpreadsheetEvent { get;  set; }
+        private void DoSaveSpreadsheetEvent() { CalledSaveSpreadsheetEvent = true; }
+        public bool CalledUpdateTitleTextEvent { get;  set; }
+        private void DoUpdateTitleTextEvent() { CalledUpdateTitleTextEvent = true; }
+        public bool CalledNewSpreadsheetEvent { get;  set; }
+        private void DoNewSpreadsheetEvent() { CalledNewSpreadsheetEvent = true; }
+        public bool CalledOpenSpreadsheetEvent { get;  set; }
+        private void DoOpenSpreadsheetEvent() { CalledOpenSpreadsheetEvent = true; }
+        public bool CalledUpdateAllNonEmptyEvent { get;  set; }
+        private void DoUpdateAllNonEmptyEvent() { CalledUpdateAllNonEmptyEvent = true; }
 
         public string TitleTextVal { set; get; }
 
@@ -63,6 +63,7 @@ namespace ControllerTester
         {
             if (ChangeCurrentEvent != null)
             {
+                DoChangeCurrent();
                 ChangeCurrentEvent(testPanel);
             }
         }
