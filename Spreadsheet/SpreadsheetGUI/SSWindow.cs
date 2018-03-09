@@ -363,6 +363,14 @@ namespace SpreadsheetGUI
             {
                 UpdateAllNonEmptyEvent();
             }
+            if (RetrieveEditBoxValueEvent != null)
+            {
+                RetrieveEditBoxValueEvent(EditBox);
+            }
+            if (UpdateTitleTextEvent != null)
+            {
+                UpdateTitleTextEvent("test", this);
+            }
         }
 
         public void ShowException(string message)
@@ -370,7 +378,7 @@ namespace SpreadsheetGUI
             MessageBox.Show(message);
         }
 
-        private void SSWindow_Load(object sender, EventArgs e)
+        private void closeToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
         }

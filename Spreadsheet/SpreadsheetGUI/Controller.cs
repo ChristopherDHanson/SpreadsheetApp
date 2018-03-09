@@ -301,6 +301,11 @@ namespace SpreadsheetGUI
                     window.Text = window.Text + "*";
                 }
             }
+            else if (filename.Equals("test"))
+            {
+                if (theFilename != null)
+                    window.Text = theFilename;
+            }
             else
             {
                 window.Text = filename;
