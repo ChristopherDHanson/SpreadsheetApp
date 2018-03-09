@@ -180,7 +180,7 @@ namespace ControllerTester
             Controller controller = new Controller(stub);
             stub.FireNewSpreadsheetEvent();
             Assert.IsTrue(stub.CalledNewSpreadsheetEvent);
-        }
+        
         
         [TestMethod]
         [ExpectedException(typeof(System.IO.FileNotFoundException))]
