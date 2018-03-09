@@ -59,14 +59,20 @@ namespace SpreadsheetGUI
             window.UpdateAllNonEmptyEvent += UpdateAllNonEmpty;
         }
 
+        // METHODS FOR TESTING
         public void setCellsToChange(ISet<string> input)
         {
             cellsToChange = input;
         }
-
         public void setModel(Spreadsheet newPanel)
         {
             model = newPanel;
+        }
+        public void setLocation(int incol, int inrow)
+        {
+            col = incol;
+            row = inrow;
+
         }
 
         /// <summary>

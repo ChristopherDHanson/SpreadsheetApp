@@ -219,5 +219,80 @@ namespace ControllerTester
             stub.FireChangeCurrentEvent(sp);
             stub.FireChangeCellContentEvent("GRR");
         }
+
+        [TestMethod]
+        public void TestReplaceDoubleEvent()
+        {
+            SSWindowStub stub = new SSWindowStub();
+            Controller controller = new Controller(stub);
+
+            HashSet<string> tester = new HashSet<string>();
+            tester.Add("A1");
+            tester.Add("B1");
+            tester.Add("C1");
+            tester.Add("D1");
+
+            Spreadsheet testee = new Spreadsheet();
+            testee.SetContentsOfCell("A1", "5");
+            testee.SetContentsOfCell("B1", "=2");
+            testee.SetContentsOfCell("C1", "2=2");
+            controller.setModel(testee);
+            controller.setLocation(3, 3);
+            stub.FireChangeCellContentEvent("5");
+            controller.setCellsToChange(tester);
+            stub.FireUpdateRelevantEvent();
+            stub.FireChangeCellContentEvent("ok");
+            Assert.IsTrue(stub.CalledUpdateRelevantEvent);
+        }
+
+        [TestMethod]
+        public void TestReplaceFormulaErrorEvent()
+        {
+            SSWindowStub stub = new SSWindowStub();
+            Controller controller = new Controller(stub);
+
+            HashSet<string> tester = new HashSet<string>();
+            tester.Add("A1");
+            tester.Add("B1");
+            tester.Add("C1");
+            tester.Add("D1");
+
+            Spreadsheet testee = new Spreadsheet();
+            testee.SetContentsOfCell("C3", "=A1/0");
+            testee.SetContentsOfCell("B1", "=2");
+            testee.SetContentsOfCell("C1", "2=2");
+            controller.setModel(testee);
+            controller.setLocation(3, 3);
+            stub.FireChangeCellContentEvent("= A6/0");
+            controller.setCellsToChange(tester);
+            stub.FireChangeCellContentEvent("= AA1/0");
+            stub.FireUpdateRelevantEvent();
+            Assert.IsTrue(stub.CalledUpdateRelevantEvent);
+        }
+
+        [TestMethod]
+        public void TestReplaceGetExceptionEvent()
+        {
+            SSWindowStub stub = new SSWindowStub();
+            Controller controller = new Controller(stub);
+
+            HashSet<string> tester = new HashSet<string>();
+            tester.Add("A1");
+            tester.Add("B1");
+            tester.Add("C1");
+            tester.Add("D1");
+
+            Spreadsheet testee = new Spreadsheet();
+            testee.SetContentsOfCell("C3", "=A1/0");
+            testee.SetContentsOfCell("B1", "=2");
+            testee.SetContentsOfCell("C1", "2=2");
+            controller.setModel(testee);
+            controller.setLocation(3, 3);
+            stub.FireChangeCellContentEvent("= A6/0");
+            controller.setCellsToChange(tester);
+            stub.FireChangeCellContentEvent("= +++++AA1/0");
+            stub.FireUpdateRelevantEvent();
+            Assert.IsTrue(stub.CalledUpdateRelevantEvent);
+        }
     }
 }
