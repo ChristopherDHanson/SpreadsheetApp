@@ -390,14 +390,15 @@ namespace SS
             {
                 sheet.Remove(name);
                 test.SetContents(oldContents);
-                if (oldContents == null) { // If the cell did not exist before exception
-                    foreach (string s in vars) // Remove dependencies that were added
-                    {
-                        depGraph.RemoveDependency(s, name);
-                    }
+                foreach (string s in vars) // Remove dependencies that were added
+                {
+                    depGraph.RemoveDependency(s, name);
                 }
-                else // Otherwise, add in the cell in its previous state, so as not to allow ss to have circexcep.
+                if (oldContents != null) { // If the cell did not exist before exception
                     sheet.Add(name, test);
+                }
+                //else // Otherwise, add in the cell in its previous state, so as not to allow ss to have circexcep.
+                    
                 throw e;
             }
         }

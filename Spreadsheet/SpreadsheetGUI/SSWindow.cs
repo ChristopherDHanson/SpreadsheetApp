@@ -105,14 +105,14 @@ namespace SpreadsheetGUI
         /// <param name="e"></param>
         private void EditBox_TextChanged(object sender, EventArgs e)
         {
-            if (ChangeCellContentEvent != null && !EditBox.Text.StartsWith("="))
-            {
-                ChangeCellContentEvent(EditBox.Text);
-                if (UpdateTitleTextEvent != null && !EditBox.Text.StartsWith("="))
-                {
-                    UpdateTitleTextEvent("", this);
-                }
-            }
+            //if (ChangeCellContentEvent != null && !EditBox.Text.StartsWith("="))
+            //{
+            //    ChangeCellContentEvent(EditBox.Text);
+            //    if (UpdateTitleTextEvent != null && !EditBox.Text.StartsWith("="))
+            //    {
+            //        UpdateTitleTextEvent("", this);
+            //    }
+            //}
         }
 
         private void TheSpreadsheetPanel_Load(object sender, EventArgs e)

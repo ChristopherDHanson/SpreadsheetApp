@@ -110,6 +110,7 @@ namespace SpreadsheetGUI
             try
             {
                 cellsToChange = model.SetContentsOfCell(currentName, content); // Set contents in spreadsheet
+                //cellsToChange.Remove(currentName);
                 // Obtain value from cells (calced by above), conv to string, set it to display
                 object valueTemp = model.GetCellValue(currentName);
                 if (valueTemp is string)
