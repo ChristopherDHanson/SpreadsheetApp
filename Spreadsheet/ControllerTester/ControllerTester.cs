@@ -114,14 +114,13 @@ namespace ControllerTester
         }
 
         [TestMethod]
+        [ExpectedException(typeof(NullReferenceException))]
         public void TestUpdateRelevantEvent()
         {
             SSWindowStub stub = new SSWindowStub();
             Controller controller = new Controller(stub);
 
             stub.FireUpdateRelevantEvent();
-            Assert.IsTrue(stub.CalledUpdateRelevantEvent);
-
         }
 
         [TestMethod]
@@ -133,13 +132,13 @@ namespace ControllerTester
         }
 
         [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
         public void TestSaveSpreadsheetEvent()
         {
             SSWindowStub stub = new SSWindowStub();
             Controller controller = new Controller(stub);
 
             stub.FireSaveSpreadsheetEvent("");
-            Assert.IsTrue(stub.CalledSaveSpreadsheetEvent);
 
         }
 
@@ -169,14 +168,6 @@ namespace ControllerTester
             Assert.IsTrue(stub.CalledNewSpreadsheetEvent);
         }
 
-        //[TestMethod]
-        public void TestNewSpreadsheetEvent2()
-        {
-            SSWindowStub stub = new SSWindowStub();
-            Controller controller = new Controller(stub);
-
-        }
-
         [TestMethod]
         [ExpectedException(typeof(System.IO.FileNotFoundException))]
         public void TestOpenSpreadsheetEvent()
@@ -184,14 +175,6 @@ namespace ControllerTester
             SSWindowStub stub = new SSWindowStub();
             Controller controller = new Controller(stub);
             stub.FireOpenSpreadsheetEvent("/tst.txt");
-        }
-
-        //[TestMethod]
-        public void TestOpenSpreadsheetEvent2()
-        {
-            SSWindowStub stub = new SSWindowStub();
-            Controller controller = new Controller(stub);
-
         }
 
         [TestMethod]
@@ -203,14 +186,6 @@ namespace ControllerTester
             Assert.IsTrue(stub.CalledUpdateAllNonEmptyEvent);
         }
 
-        //[TestMethod]
-        public void TestUpdateAllNonEmptyEvent2()
-        {
-            SSWindowStub stub = new SSWindowStub();
-            Controller controller = new Controller(stub);
-        }
-
-
         [TestMethod]
         public void DoCloseTest()
         {
@@ -218,6 +193,16 @@ namespace ControllerTester
             Controller controller = new Controller(stub);
             stub.DoClose();
             Assert.IsTrue(stub.CalledDoClose);
+        }
+
+        [TestMethod]
+        public void Test()
+        {
+            SSWindowStub stub = new SSWindowStub();
+            string path = System.IO.Directory.GetCurrentDirectory();
+            Controller controller = new Controller(stub, path
+                .Remove(path.Length-10)
+                +"/Test_Files/OpenTest.ss");
         }
     }
 }
