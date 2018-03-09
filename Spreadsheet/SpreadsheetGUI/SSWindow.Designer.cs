@@ -116,7 +116,7 @@
             // 
             this.EditBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.EditBox.Location = new System.Drawing.Point(2, 2);
-            this.EditBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.EditBox.Margin = new System.Windows.Forms.Padding(2);
             this.EditBox.Name = "EditBox";
             this.EditBox.Size = new System.Drawing.Size(774, 20);
             this.EditBox.TabIndex = 1;
@@ -132,7 +132,7 @@
             this.CellNameBox.Dock = System.Windows.Forms.DockStyle.Left;
             this.CellNameBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CellNameBox.Location = new System.Drawing.Point(2, 2);
-            this.CellNameBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.CellNameBox.Margin = new System.Windows.Forms.Padding(2);
             this.CellNameBox.MaximumSize = new System.Drawing.Size(50, 4);
             this.CellNameBox.MinimumSize = new System.Drawing.Size(50, 4);
             this.CellNameBox.Name = "CellNameBox";
@@ -150,7 +150,7 @@
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel3, 0, 2);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 24);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(5);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 3;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
@@ -166,7 +166,7 @@
             this.tableLayoutPanel2.Controls.Add(this.EditBox, 0, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(5, 35);
-            this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(5);
             this.tableLayoutPanel2.MinimumSize = new System.Drawing.Size(0, 30);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
@@ -183,7 +183,7 @@
             this.tableLayoutPanel4.Controls.Add(this.CellValueBox, 1, 0);
             this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel4.Location = new System.Drawing.Point(5, 5);
-            this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(5);
             this.tableLayoutPanel4.MinimumSize = new System.Drawing.Size(0, 46);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 1;
@@ -195,7 +195,7 @@
             // 
             this.CellValueBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.CellValueBox.Location = new System.Drawing.Point(62, 2);
-            this.CellValueBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.CellValueBox.Margin = new System.Windows.Forms.Padding(2);
             this.CellValueBox.Name = "CellValueBox";
             this.CellValueBox.ReadOnly = true;
             this.CellValueBox.Size = new System.Drawing.Size(714, 20);
@@ -208,7 +208,7 @@
             this.tableLayoutPanel3.Controls.Add(this.TheSpreadsheetPanel, 0, 0);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel3.Location = new System.Drawing.Point(5, 65);
-            this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(5);
             this.tableLayoutPanel3.MinimumSize = new System.Drawing.Size(177, 151);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 1;
@@ -221,7 +221,7 @@
             this.TheSpreadsheetPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.TheSpreadsheetPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TheSpreadsheetPanel.Location = new System.Drawing.Point(2, 2);
-            this.TheSpreadsheetPanel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.TheSpreadsheetPanel.Margin = new System.Windows.Forms.Padding(2);
             this.TheSpreadsheetPanel.Name = "TheSpreadsheetPanel";
             this.TheSpreadsheetPanel.Size = new System.Drawing.Size(774, 467);
             this.TheSpreadsheetPanel.TabIndex = 0;
@@ -242,7 +242,7 @@
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "SSWindow";
             this.Text = "New Spreadsheet";
             this.Shown += new System.EventHandler(this.SSWindow_Shown);

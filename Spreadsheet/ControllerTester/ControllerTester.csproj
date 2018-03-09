@@ -60,6 +60,10 @@
     <None Include="Test_Files\SaveTest.ss" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Formula\Formula.csproj">
+      <Project>{D43D998C-9797-4CF4-9BB0-6DE22753849A}</Project>
+      <Name>Formula</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SpreadsheetGUI\SpreadsheetGUI.csproj">
       <Project>{3edabc41-ce17-44ff-9891-75af69c3f408}</Project>
       <Name>SpreadsheetGUI</Name>

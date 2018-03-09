@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
+using Formulas;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SpreadsheetGUI;
 using SS;
@@ -113,6 +114,7 @@ namespace ControllerTester
             Assert.IsTrue(stub.CalledUpdateRelevantEvent);
         }
 
+        [ExpectedException(typeof(FormulaFormatException))]
         [TestMethod]
         public void TestUpdateRelevantEvent2()
         {
@@ -128,12 +130,27 @@ namespace ControllerTester
             Spreadsheet testee = new Spreadsheet();
             testee.SetContentsOfCell("A1", "z");
             testee.SetContentsOfCell("B1", "=2");
-            testee.SetContentsOfCell("C1", "2=2");
+            testee.SetContentsOfCell("C1", "=asd344*&2");
             controller.setModel(testee);
 
             controller.setCellsToChange(tester);
             stub.FireUpdateRelevantEvent();
             Assert.IsTrue(stub.CalledUpdateRelevantEvent);
+        }
+
+        [TestMethod]
+        public void TestUpdateTitle()
+        {
+            SSWindowStub stub = new SSWindowStub();
+            Controller controller = new Controller(stub);
+
+            Spreadsheet tester = new Spreadsheet();
+            controller.setModel(tester);
+            tester.SetContentsOfCell("a1", "a2");
+            stub.FireUpdateTitleTextEvent("name",new SSWindow());
+
+            Assert.IsTrue(tester.Changed);
+            
         }
 
         [TestMethod]
@@ -164,7 +181,7 @@ namespace ControllerTester
             stub.FireNewSpreadsheetEvent();
             Assert.IsTrue(stub.CalledNewSpreadsheetEvent);
         }
-
+        
         [TestMethod]
         [ExpectedException(typeof(System.IO.FileNotFoundException))]
         public void TestOpenSpreadsheetEvent()
@@ -218,6 +235,27 @@ namespace ControllerTester
             SpreadsheetPanel sp = new SpreadsheetPanel();
             stub.FireChangeCurrentEvent(sp);
             stub.FireChangeCellContentEvent("GRR");
+        }
+
+        [TestMethod]
+        public void TestMovement()
+        {
+            SSWindowStub stub = new SSWindowStub();
+            Controller controller = new Controller(stub);
+
+            SpreadsheetPanel tester = new SpreadsheetPanel();
+            tester.SetValue(5, 5, "5");
+            tester.SetSelection(5, 5);
+
+            stub.FireMoveDownEvent(tester);
+            stub.FireMoveLeftEvent(tester);
+            stub.FireMoveUpEvent(tester);
+            stub.FireMoveRightEvent(tester);
+
+            Assert.IsTrue(stub.CalledMoveRightEvent);
+            Assert.IsTrue(stub.CalledMoveDownEvent);
+            Assert.IsTrue(stub.CalledMoveLeftEvent);
+            Assert.IsTrue(stub.CalledMoveUpEvent);
         }
     }
 }
