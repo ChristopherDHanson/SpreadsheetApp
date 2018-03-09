@@ -71,7 +71,7 @@ namespace ControllerTester
         {
             if (RetrieveEditBoxValueEvent != null)
             {
-                DoChangeCurrent();
+                DoRetrieveEditBoxValueEvent();
                 RetrieveEditBoxValueEvent(textBox);
             }
         }

@@ -151,12 +151,12 @@ namespace ControllerTester
         }
 
         [TestMethod]
+        [ExpectedException(typeof(System.IO.FileNotFoundException))]
         public void TestOpenSpreadsheetEvent()
         {
             SSWindowStub stub = new SSWindowStub();
             Controller controller = new Controller(stub);
-            stub.FireOpenSpreadsheetEvent("");
-            Assert.IsTrue(stub.CalledOpenSpreadsheetEvent);
+            stub.FireOpenSpreadsheetEvent("/tst.txt");
         }
 
         //[TestMethod]
