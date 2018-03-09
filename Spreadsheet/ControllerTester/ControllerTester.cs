@@ -156,8 +156,8 @@ namespace ControllerTester
         {
             SSWindowStub stub = new SSWindowStub();
             Controller controller = new Controller(stub);
-
-
+            stub.FireUpdateTitleTextEvent("Title", new SSWindow()); ;
+            Assert.IsTrue(stub.CalledUpdateTitleTextEvent);
         }
 
         [TestMethod]
@@ -165,10 +165,11 @@ namespace ControllerTester
         {
             SSWindowStub stub = new SSWindowStub();
             Controller controller = new Controller(stub);
-
+            stub.FireNewSpreadsheetEvent();
+            Assert.IsTrue(stub.CalledNewSpreadsheetEvent);
         }
 
-        [TestMethod]
+        //[TestMethod]
         public void TestNewSpreadsheetEvent2()
         {
             SSWindowStub stub = new SSWindowStub();
@@ -181,10 +182,11 @@ namespace ControllerTester
         {
             SSWindowStub stub = new SSWindowStub();
             Controller controller = new Controller(stub);
-
+            stub.FireOpenSpreadsheetEvent("");
+            Assert.IsTrue(stub.CalledOpenSpreadsheetEvent);
         }
 
-        [TestMethod]
+        //[TestMethod]
         public void TestOpenSpreadsheetEvent2()
         {
             SSWindowStub stub = new SSWindowStub();
@@ -197,15 +199,25 @@ namespace ControllerTester
         {
             SSWindowStub stub = new SSWindowStub();
             Controller controller = new Controller(stub);
-
+            stub.FireUpdateAllNonEmptyEvent();
+            Assert.IsTrue(stub.CalledUpdateAllNonEmptyEvent);
         }
 
-        [TestMethod]
+        //[TestMethod]
         public void TestUpdateAllNonEmptyEvent2()
         {
             SSWindowStub stub = new SSWindowStub();
             Controller controller = new Controller(stub);
+        }
 
+
+        [TestMethod]
+        public void DoCloseTest()
+        {
+            SSWindowStub stub = new SSWindowStub();
+            Controller controller = new Controller(stub);
+            stub.DoClose();
+            Assert.IsTrue(stub.CalledDoClose);
         }
     }
 }
