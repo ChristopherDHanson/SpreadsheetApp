@@ -27,7 +27,6 @@ namespace SpreadsheetGUI
         public event Action<SpreadsheetPanel> MoveUpEvent;
         public event Action<SpreadsheetPanel> MoveDownEvent;
         public event Action<string> SaveSpreadsheetEvent;
-        public event Action LoadEvent;
         public event Action NewSpreadsheetEvent;
         public event Action<string> OpenSpreadsheetEvent;
         public event Action<string, SSWindow> UpdateTitleTextEvent;
