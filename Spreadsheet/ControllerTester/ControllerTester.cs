@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SpreadsheetGUI;
 
@@ -14,6 +15,9 @@ namespace ControllerTester
         {
             SSWindowStub stub = new SSWindowStub();
             Controller controller = new Controller(stub);
+
+            stub.FireRetrieveEditBoxValueEvent(new TextBox());
+         
 
         }
 
