@@ -17,8 +17,7 @@ namespace ControllerTester
             Controller controller = new Controller(stub);
 
             stub.FireRetrieveEditBoxValueEvent(new TextBox());
-         
-
+            Assert.IsTrue(stub.CalledRetrieveEditBoxValueEvent);
         }
 
         [TestMethod]
