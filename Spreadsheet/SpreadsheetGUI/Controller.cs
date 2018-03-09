@@ -107,24 +107,33 @@ namespace SpreadsheetGUI
         private void ChangeCellContent(string content)
         {
             String value;
-            cellsToChange = model.SetContentsOfCell(currentName, content); // Set contents in spreadsheet 
-            // Obtain value from cells (calced by above), conv to string, set it to display
-            object valueTemp = model.GetCellValue(currentName);
-            if (valueTemp is string)
+            try
             {
-                value = (string) valueTemp;
+                cellsToChange = model.SetContentsOfCell(currentName, content); // Set contents in spreadsheet
+                //cellsToChange.Remove(currentName);
+                // Obtain value from cells (calced by above), conv to string, set it to display
+                object valueTemp = model.GetCellValue(currentName);
+                if (valueTemp is string)
+                {
+                    value = (string)valueTemp;
+                }
+                else if (valueTemp is double)
+                {
+                    value = valueTemp.ToString();
+                }
+                else if (valueTemp is FormulaError)
+                    value = "Formula Error";
+                else
+                    value = "";
+
+                currentPanel.SetValue(col, row, value);
             }
-            else if (valueTemp is double)
+            catch (Exception e)
             {
-                value = valueTemp.ToString();
-            }
-            else if (valueTemp is FormulaError)
-                value = "Formula Error";
-            else
+                MessageBox.Show(e.Message);
                 value = "";
-
-            currentPanel.SetValue(col, row, value);
-
+                cellsToChange = new HashSet<string>();
+            }
         }
 
         private void RetrieveEditBoxValue(TextBox t)
