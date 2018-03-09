@@ -4,6 +4,7 @@ using System.IO;
 using System.Windows.Forms;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SpreadsheetGUI;
+using SS;
 using SSGui;
 
 namespace ControllerTester
@@ -99,10 +100,40 @@ namespace ControllerTester
             tester.Add("C1");
             tester.Add("D1");
 
+            Spreadsheet testee = new Spreadsheet();
+            testee.SetContentsOfCell("A1", "z");
+            testee.SetContentsOfCell("B1", "=2");
+            testee.SetContentsOfCell("C1", "2=2");
+            controller.setModel(testee);
+
             controller.setCellsToChange(tester);
             
 
             stub.FireUpdateRelevantEvent();
+            Assert.IsTrue(stub.CalledUpdateRelevantEvent);
+        }
+
+        [TestMethod]
+        public void TestUpdateRelevantEvent2()
+        {
+            SSWindowStub stub = new SSWindowStub();
+            Controller controller = new Controller(stub);
+
+            HashSet<string> tester = new HashSet<string>();
+            tester.Add("A1");
+            tester.Add("B1");
+            tester.Add("C1");
+            tester.Add("D1");
+
+            Spreadsheet testee = new Spreadsheet();
+            testee.SetContentsOfCell("A1", "z");
+            testee.SetContentsOfCell("B1", "=2");
+            testee.SetContentsOfCell("C1", "2=2");
+            controller.setModel(testee);
+
+            controller.setCellsToChange(tester);
+            stub.FireUpdateRelevantEvent();
+            Assert.IsTrue(stub.CalledUpdateRelevantEvent);
         }
 
         [TestMethod]

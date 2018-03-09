@@ -61,6 +61,11 @@ namespace SpreadsheetGUI
             cellsToChange = input;
         }
 
+        public void setModel(Spreadsheet newPanel)
+        {
+            model = newPanel;
+        }
+
         /// <summary>
         /// Begins controlling window. This constructor takes in a filename
         /// </summary>
@@ -242,15 +247,8 @@ namespace SpreadsheetGUI
         /// <param name="filename"></param>
         private void OpenSpreadsheet(string filename)
         {
-            try
-            {
                 SSWindow newSpreadsheet = new SSWindow();
                 newSpreadsheet.OpenSS(filename);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Path not found.");
-            }
         }
 
         /// <summary>
