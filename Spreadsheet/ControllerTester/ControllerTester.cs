@@ -55,7 +55,7 @@ namespace ControllerTester
             Controller controller = new Controller(stub);
 
             stub.FireMoveLeftEvent(new SpreadsheetPanel());
-            Assert.IsTrue(stub.CalledRetrieveEditBoxValueEvent);
+            Assert.IsTrue(stub.CalledMoveLeftEvent);
 
         }
 
@@ -66,7 +66,7 @@ namespace ControllerTester
             Controller controller = new Controller(stub);
 
             stub.FireMoveRightEvent(new SpreadsheetPanel());
-            Assert.IsTrue(stub.CalledRetrieveEditBoxValueEvent);
+            Assert.IsTrue(stub.CalledMoveRightEvent);
 
         }
 
@@ -77,7 +77,7 @@ namespace ControllerTester
             Controller controller = new Controller(stub);
 
             stub.FireMoveUpEvent(new SpreadsheetPanel());
-            Assert.IsTrue(stub.CalledRetrieveEditBoxValueEvent);
+            Assert.IsTrue(stub.CalledMoveUpEvent);
 
         }
 
@@ -88,7 +88,7 @@ namespace ControllerTester
             Controller controller = new Controller(stub);
 
             stub.FireMoveDownEvent(new SpreadsheetPanel());
-            Assert.IsTrue(stub.CalledRetrieveEditBoxValueEvent);
+            Assert.IsTrue(stub.CalledMoveDownEvent);
 
             
 
@@ -101,7 +101,7 @@ namespace ControllerTester
             Controller controller = new Controller(stub);
 
             stub.FireChangeCellContentEvent("");
-            Assert.IsTrue(stub.CalledRetrieveEditBoxValueEvent);
+            Assert.IsTrue(stub.CalledChangeCellContentEvent);
 
         }
 
@@ -120,7 +120,7 @@ namespace ControllerTester
             Controller controller = new Controller(stub);
 
             stub.FireUpdateRelevantEvent();
-            Assert.IsTrue(stub.CalledRetrieveEditBoxValueEvent);
+            Assert.IsTrue(stub.CalledUpdateRelevantEvent);
 
         }
 
@@ -139,7 +139,7 @@ namespace ControllerTester
             Controller controller = new Controller(stub);
 
             stub.FireSaveSpreadsheetEvent("");
-            Assert.IsTrue(stub.CalledRetrieveEditBoxValueEvent);
+            Assert.IsTrue(stub.CalledSaveSpreadsheetEvent);
 
         }
 

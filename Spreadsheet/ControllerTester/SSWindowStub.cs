@@ -49,8 +49,6 @@ namespace ControllerTester
         private void DoSaveSpreadsheetEvent() { CalledSaveSpreadsheetEvent = true; }
         public bool CalledUpdateTitleTextEvent { get;  set; }
         private void DoUpdateTitleTextEvent() { CalledUpdateTitleTextEvent = true; }
-        public bool CalledLoadEvent { get;  set; }
-        private void DoLoadEvent() { CalledLoadEvent = true; }
         public bool CalledNewSpreadsheetEvent { get;  set; }
         private void DoNewSpreadsheetEvent() { CalledNewSpreadsheetEvent = true; }
         public bool CalledOpenSpreadsheetEvent { get;  set; }
