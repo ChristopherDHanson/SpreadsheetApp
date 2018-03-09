@@ -33,42 +33,58 @@ namespace SpreadsheetGUI
         public event Action<string, SSWindow> UpdateTitleTextEvent;
         public event Action UpdateAllNonEmptyEvent;
 
+        /// <summary>
+        /// Creates new SSWindow
+        /// </summary>
         public SSWindow()
         {
             InitializeComponent();
         }
 
-        //TEST
-        public SSWindow(SSWindow oldWindow)
-        {
-            InitializeComponent();
-        }
-
+        /// <summary>
+        /// Close window
+        /// </summary>
         public void DoClose()
         {
             Close();
         }
 
+        /// <summary>
+        /// Open new empty spreadsheet
+        /// </summary>
         public void OpenNew()
         {
             SSWindowApplicationContext.GetContext().RunNew();
         }
 
+        /// <summary>
+        /// Open spreadsheet at filename in new window
+        /// </summary>
+        /// <param name="filename"></param>
         public void OpenSS(string filename)
         {
             SSWindowApplicationContext.GetContext().RunNew(filename);
-           }
+        }
 
+        /// <summary>
+        /// Title of window
+        /// </summary>
         public string TitleTextVal
         {
             set { this.Text = value; }
         }
 
+        /// <summary>
+        /// Text of box containing cell name
+        /// </summary>
         public string CellNameBoxVal
         {
             set { CellNameBox.Text = value; }
         }
 
+        /// <summary>
+        /// Text of box containing cell value
+        /// </summary>
         public string CellValueBoxVal
         {
             set { CellValueBox.Text = value; }
@@ -98,6 +114,11 @@ namespace SpreadsheetGUI
             }
         }
 
+        /// <summary>
+        /// Upon form loading
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TheSpreadsheetPanel_Load(object sender, EventArgs e)
         {
             if (ChangeCurrentEvent != null)
@@ -227,6 +248,11 @@ namespace SpreadsheetGUI
 
         }
 
+        /// <summary>
+        /// When a key is pressed down
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TheSpreadsheetPanel_KeyDown(object sender, KeyEventArgs e)
         {
             
@@ -266,6 +292,11 @@ namespace SpreadsheetGUI
             
         }
 
+        /// <summary>
+        /// Key pressed down in editbox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void EditBox_KeyDown(object sender, KeyEventArgs e)
         {   // If the key down was an arrow key
             if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down || e.KeyCode == Keys.Left || e.KeyCode == Keys.Right)
@@ -287,6 +318,11 @@ namespace SpreadsheetGUI
 
         }
 
+        /// <summary>
+        /// 'Help' button is pressed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void helpToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Help Instructions: \n" +
@@ -314,7 +350,13 @@ namespace SpreadsheetGUI
                             "page.\n" +
                             "                   Thank You!");
         }
-
+        
+        /// <summary>
+        /// Upon window being shown, updates all nonempty. This is most useful when
+        /// a spreadsheet is opened from a file.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SSWindow_Shown(object sender, EventArgs e)
         {
             if (UpdateAllNonEmptyEvent != null)
