@@ -103,8 +103,6 @@ namespace ControllerTester
             
 
             stub.FireUpdateRelevantEvent();
-            Assert.IsTrue(stub.CalledUpdateRelevantEvent);
-
         }
 
         [TestMethod]
@@ -115,7 +113,6 @@ namespace ControllerTester
 
             
             stub.FireSaveSpreadsheetEvent("");
-            Assert.IsTrue(stub.CalledSaveSpreadsheetEvent);
 
         }
 
@@ -138,12 +135,12 @@ namespace ControllerTester
         }
 
         [TestMethod]
+        [ExpectedException(typeof(System.IO.FileNotFoundException))]
         public void TestOpenSpreadsheetEvent()
         {
             SSWindowStub stub = new SSWindowStub();
             Controller controller = new Controller(stub);
-            stub.FireOpenSpreadsheetEvent("");
-            Assert.IsTrue(stub.CalledOpenSpreadsheetEvent);
+            stub.FireOpenSpreadsheetEvent("/tst.txt");
         }
 
         [TestMethod]
@@ -157,12 +154,13 @@ namespace ControllerTester
 
 
         [TestMethod]
-        public void DoCloseTest()
+        public void OpenSSWithPathTest()
         {
             SSWindowStub stub = new SSWindowStub();
-            Controller controller = new Controller(stub);
-            stub.DoClose();
-            Assert.IsTrue(stub.CalledDoClose);
+            string path = System.IO.Directory.GetCurrentDirectory();
+            Controller controller = new Controller(stub, path
+                .Remove(path.Length-10)
+                +"/Test_Files/OpenTest.ss");
         }
     }
 }
