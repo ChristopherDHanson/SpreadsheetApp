@@ -14,7 +14,7 @@ using System.Text.RegularExpressions;
 
 namespace SpreadsheetGUI
 {
-    class Controller
+    public class Controller
     {
         private Spreadsheet model;
         private ISSWindowView window;

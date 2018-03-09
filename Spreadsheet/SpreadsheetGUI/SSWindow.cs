@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -56,7 +57,7 @@ namespace SpreadsheetGUI
         public void OpenSS(string filename)
         {
             SSWindowApplicationContext.GetContext().RunNew(filename);
-        }
+           }
 
         public string TitleTextVal
         {
