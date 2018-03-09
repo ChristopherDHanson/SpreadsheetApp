@@ -32,6 +32,7 @@ namespace SpreadsheetGUI
         public event Action<string> OpenSpreadsheetEvent;
         public event Action<string, SSWindow> UpdateTitleTextEvent;
         public event Action UpdateAllNonEmptyEvent;
+        private bool saved = false;
 
         /// <summary>
         /// Creates new SSWindow
@@ -185,6 +186,8 @@ namespace SpreadsheetGUI
                     OpenSpreadsheetEvent(fileDialog.FileName);
                 }
             }
+
+            saved = false;
         }
 
         /// <summary>
@@ -207,6 +210,8 @@ namespace SpreadsheetGUI
                     UpdateTitleTextEvent(saveDialog.FileName, this);
                 }
             }
+
+            saved = true;
         }
 
         /// <summary>
@@ -241,6 +246,8 @@ namespace SpreadsheetGUI
             {
                 saveToolStripMenuItem_Click(sender, e);
             }
+
+            saved = true;
         }
 
         private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -371,6 +378,8 @@ namespace SpreadsheetGUI
             {
                 UpdateTitleTextEvent("test", this);
             }
+
+            saved = false;
         }
 
         public void ShowException(string message)
@@ -380,7 +389,14 @@ namespace SpreadsheetGUI
 
         private void closeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            if (saved == false)
+            {
+                MessageBox.Show("Please make sure to save your file before exiting");
+            }
+            else
+            {
+                Close();
+            }
         }
     }
 }
